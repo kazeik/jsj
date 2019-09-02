@@ -56,19 +56,76 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 new Container(
+                  margin: EdgeInsets.only(left: 20, right: 20),
                   child: new TextField(
                     maxLines: 1,
-
+                    decoration: const InputDecoration(
+                      hintText: "手机号",
+                      icon: Icon(Icons.add_circle_outline),
+                    ),
+                    onChanged: (str) {},
+                  ),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.all(
+                      new Radius.circular(5),
+                    ),
+                    color: const Color(0xfff6f6f6),
+                  ),
+                ),
+                new Container(
+                  margin: EdgeInsets.only(left: 20, top: 10, right: 20),
+                  child: new Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      new Expanded(
+                          flex: 1,
+                          child: new TextField(
+                            maxLines: 1,
+                            decoration: const InputDecoration(
+                              hintText: "验证码",
+                              icon: Icon(Icons.add_circle_outline),
+                            ),
+                            onChanged: (str) {},
+                          )),
+                      new Expanded(
+                        flex: 1,
+                        child: new Image(
+                          image: NetworkImage(
+                            Utils.getImgPath(""),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.all(
+                      new Radius.circular(5),
+                    ),
+                    color: const Color(0xfff6f6f6),
+                  ),
+                ),
+                new Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.only(top: 15, left: 25, right: 25),
+                  child: new RaisedButton(
+                    color: const Color(0xff0091ea),
+                    onPressed: () {},
+                    child: new Text(
+                      "登录",
+                      style: new TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 )
               ],
             ),
           ),
-          new Container(
-            width: 200,
-            height: 320,
-            child: new Image(image: AssetImage(Utils.getImgPath("login_icon"))),
-          ),
+//          new Container(
+//            width: 200,
+//            height: 320,
+//            child: new Image(image: AssetImage(Utils.getImgPath("login_icon"))),
+//          ),
         ],
       ),
     );
