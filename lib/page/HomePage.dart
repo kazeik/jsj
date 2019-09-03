@@ -13,6 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<String> allItems = new List<String>();
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -51,7 +53,9 @@ class _HomePageState extends State<HomePage> {
             color: Colors.white,
           ),
           new Container(
-            margin: EdgeInsets.all(10),
+            color: Colors.white,
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.only(top: 10),
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
@@ -68,34 +72,35 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-//          new Container(
-//            padding: EdgeInsets.all(10),
-//            width: MediaQuery.of(context).size.width,
-//            height: 100.0,
-//            child: new Container(
-//              decoration: new BoxDecoration(
-//                borderRadius: new BorderRadius.circular(10),
-//              ),
-//              child: Swiper(
-//                itemBuilder: _swiperBuilder,
-//                itemCount: 3,
-//                pagination: new SwiperPagination(
-//                    builder: DotSwiperPaginationBuilder(
-//                  color: Colors.black54,
-//                  activeColor: Colors.white,
-//                )),
-//                scrollDirection: Axis.horizontal,
-//                autoplay: true,
-//                onTap: (index) => print('点击了第$index个'),
-//              ),
-//            ),
-//            color: Colors.white,
-//          ),
-//          new ListView.builder(
-//            itemBuilder: _listitem,
-//            physics: new NeverScrollableScrollPhysics(),
-//            shrinkWrap: true,
-//          ),
+          new Container(
+            padding: EdgeInsets.all(10),
+            width: MediaQuery.of(context).size.width,
+            height: 100.0,
+            child: new Container(
+              decoration: new BoxDecoration(
+                borderRadius: new BorderRadius.circular(10),
+              ),
+              child: Swiper(
+                itemBuilder: _swiperBuilder,
+                itemCount: 3,
+                pagination: new SwiperPagination(
+                    builder: DotSwiperPaginationBuilder(
+                  color: Colors.black54,
+                  activeColor: Colors.white,
+                )),
+                scrollDirection: Axis.horizontal,
+                autoplay: true,
+                onTap: (index) => print('点击了第$index个'),
+              ),
+            ),
+            color: Colors.white,
+          ),
+          new ListView.builder(
+            itemBuilder: _listitem,
+            itemCount: 10,
+            physics: new NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+          ),
         ],
       ),
     );
@@ -109,7 +114,11 @@ class _HomePageState extends State<HomePage> {
         decoration: new BoxDecoration(
           borderRadius: new BorderRadius.circular(10),
         ),
-        child: new Image(image: NetworkImage("")),
+        child: new Image(
+          width: 120,
+          height: 90,
+          image: NetworkImage("http://via.placeholder.com/350x150"),
+        ),
       ),
     );
   }
