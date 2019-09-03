@@ -12,7 +12,7 @@ class PropertyPage extends StatefulWidget {
 }
 
 class _PropertyPageState extends State<PropertyPage> {
-  int groupValue = 0;
+  int groupValue = -1;
   List items = new List();
 
   @override
@@ -28,69 +28,79 @@ class _PropertyPageState extends State<PropertyPage> {
         elevation: 0,
       ),
       body: new Container(
+        color: Colors.white,
         margin: EdgeInsets.only(top: 10),
-        child: new ListView(
+        child: new Column(
           children: <Widget>[
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                new Expanded(
-                  flex: 1,
-                  child: new Column(
-                    children: <Widget>[
-                      new Text(
-                        "230.00",
-                        style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      new Text(
-                        "帐号余额(币)",
-                        style: TextStyle(fontSize: 13.0),
-                      ),
-                    ],
+            new Container(
+              margin: EdgeInsets.all(10),
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  new Expanded(
+                    flex: 1,
+                    child: new Column(
+                      children: <Widget>[
+                        new Text(
+                          "230.00",
+                          style: new TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18.0),
+                        ),
+                        new Text(
+                          "帐号余额(币)",
+                          style: TextStyle(fontSize: 13.0),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                new Expanded(
-                  flex: 1,
-                  child: new Column(
-                    children: <Widget>[
-                      new Text(
-                        "0.00",
-                        style: new TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      new Text(
-                        "冻结余额(币)",
-                        style: TextStyle(fontSize: 13.0),
-                      ),
-                    ],
+                  new Expanded(
+                    flex: 1,
+                    child: new Column(
+                      children: <Widget>[
+                        new Text(
+                          "0.00",
+                          style: new TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18.0),
+                        ),
+                        new Text(
+                          "冻结余额(币)",
+                          style: TextStyle(fontSize: 13.0),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             new Divider(
-              indent: 20,
-              endIndent: 20,
+              indent: 10,
+              endIndent: 10,
             ),
-//            new GridView.count(
-//              padding: EdgeInsets.all(5.0),
-//              //一行多少个
-//              crossAxisCount: 3,
-//              //滚动方向
-//              scrollDirection: Axis.vertical,
-//              // 左右间隔
-//              crossAxisSpacing: 10.0,
-//              // 上下间隔
-//              mainAxisSpacing: 15.0,
-//              //宽高比
-//              childAspectRatio: 1 / 0.4,
-//              shrinkWrap: true,
-//              physics: new NeverScrollableScrollPhysics(),
-//              children: listitem(),
-//            ),
-//            new ListView.builder(
-//              padding: EdgeInsets.all(0.0),
-//              itemBuilder: _buildListItem,
-//              itemCount: items.length,
-//            ),
+            new GridView.count(
+              padding: EdgeInsets.only(top: 5, right: 10, left: 10, bottom: 5),
+              //一行多少个
+              crossAxisCount: 3,
+              //滚动方向
+              scrollDirection: Axis.vertical,
+              // 左右间隔
+              crossAxisSpacing: 10.0,
+              // 上下间隔
+              mainAxisSpacing: 15.0,
+              //宽高比
+              childAspectRatio: 1 / 0.4,
+              shrinkWrap: true,
+              physics: new NeverScrollableScrollPhysics(),
+              children: listitem(),
+            ),
+            new Expanded(
+              child: new ListView.builder(
+                padding: EdgeInsets.all(0.0),
+                shrinkWrap: true,
+                itemBuilder: _buildListItem,
+                itemCount: 10,
+              ),
+              flex: 1,
+            )
           ],
         ),
       ),
@@ -103,10 +113,11 @@ class _PropertyPageState extends State<PropertyPage> {
         new ListTile(
           title: new Text("买币"),
           subtitle: new Text("2019-08-13"),
-          leading: new Text("+1500"),
+          trailing: new Text("+1500"),
         ),
         new Divider(
-          height: 1.0,
+          indent: 10,
+          endIndent: 10,
         ),
       ],
     );
