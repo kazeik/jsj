@@ -37,11 +37,12 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
 
-    void _startMain() {
+    void _startMain(BuildContext context) {
+      Utils.logs("响应了");
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(builder: (context) => new MainPage()),
-              (route) => route == null);
+          (route) => route == null);
     }
 
     return new Scaffold(
@@ -85,89 +86,16 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                new Container(
-                  margin: EdgeInsets.only(left: 20, right: 20),
-                  child: new TextField(
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      prefixIcon: new Image(
-                        width: 15,
-                        height: 15,
-                        image: AssetImage(
-                          Utils.getImgPath("username"),
-                        ),
-                      ),
-                    ),
-                    controller: TextEditingController.fromValue(
-                      TextEditingValue(
-                        text: username,
-                        selection: TextSelection.fromPosition(
-                          TextPosition(
-                              affinity: TextAffinity.downstream,
-                              offset: username.length),
-                        ),
-                      ),
-                    ),
-                    onChanged: (text) {},
-                  ),
-                  decoration: new BoxDecoration(
-                    borderRadius: new BorderRadius.all(
-                      new Radius.circular(5),
-                    ),
-                    color: const Color(0xfff6f6f6),
-                  ),
-                ),
-                new Container(
-                  margin: EdgeInsets.only(left: 20, top: 10, right: 20),
-                  child: new TextField(
-                    maxLines: 1,
-                    decoration: const InputDecoration(
-                      hintText: "密码",
-                      icon: Icon(Icons.add_circle_outline),
-                    ),
-                    onChanged: (str) {},
-                    obscureText: true,
-                  ),
-                  decoration: new BoxDecoration(
-                    borderRadius: new BorderRadius.all(
-                      new Radius.circular(5),
-                    ),
-                    color: const Color(0xfff6f6f6),
-                  ),
-                ),
-                new Container(
-                  margin: EdgeInsets.only(left: 20, top: 10, right: 20),
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      new Expanded(
-                          flex: 2,
-                          child: new TextField(
-                            maxLines: 1,
-                            decoration: const InputDecoration(
-                              hintText: "验证码",
-                              icon: Icon(Icons.add_circle_outline),
-                            ),
-                            onChanged: (str) {},
-                          )),
-                      new Expanded(flex: 1, child: _buildVerfiyCode()),
-                    ],
-                  ),
-                  decoration: new BoxDecoration(
-                    borderRadius: new BorderRadius.all(
-                      new Radius.circular(5),
-                    ),
-                    color: const Color(0xfff6f6f6),
-                  ),
-                ),
+                _buildInput("手机号","username",false),
+                _buildInput("登录密码","password",true),
+                _buildInput("验证码","verfiycode",false),
                 new Container(
                   width: double.infinity,
                   margin: EdgeInsets.only(top: 15, left: 25, right: 25),
                   child: new RaisedButton(
                     color: const Color(0xff0091ea),
                     onPressed: () {
-                      _startMain();
+                      _startMain(context);
                     },
                     child: new Text(
                       "登录",
@@ -187,6 +115,36 @@ class _LoginPageState extends State<LoginPage> {
 //          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildInput(String hint, String iconPath, bool isPass) {
+    return new Container(
+      child: new TextField(
+        decoration: new InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 1.0),
+          hintText: hint,
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide.none),
+          prefixIcon: new Padding(
+            padding: EdgeInsets.all(10),
+            child: new Image(
+              width: 1,
+              height: 1,
+              image: AssetImage(
+                Utils.getImgPath(iconPath),
+              ),
+            ),
+          ),
+        ),
+        obscureText: isPass,
+      ),
+      decoration: new BoxDecoration(
+        borderRadius: new BorderRadius.circular(5),
+        color: const Color(0xfff6f6f6),
+      ),
+      margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
     );
   }
 }

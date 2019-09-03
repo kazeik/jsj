@@ -69,20 +69,20 @@ class _MainPageState extends State<MainPage> {
      */
     tabImages = [
       [
-        getTabImage(Utils.getImgPath("ic_menu_home_black")),
+        getTabImage(Utils.getImgPath("ic_menu_home_select")),
         getTabImage(Utils.getImgPath("ic_menu_home_black"))
       ],
       [
-        getTabImage(Utils.getImgPath("ic_menu_chat_black")),
+        getTabImage(Utils.getImgPath("ic_menu_chat_select")),
         getTabImage(Utils.getImgPath("ic_menu_chat_black"))
       ],
       [
-        getTabImage(Utils.getImgPath("ic_menu_article_black")),
+        getTabImage(Utils.getImgPath("ic_menu_article_select")),
         getTabImage(Utils.getImgPath("ic_menu_article_black"))
       ],
       [
         getTabImage(Utils.getImgPath("username")),
-        getTabImage(Utils.getImgPath("username"))
+        getTabImage(Utils.getImgPath("username_normal"))
       ]
     ];
 

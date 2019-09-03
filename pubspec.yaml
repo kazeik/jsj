@@ -60,6 +60,13 @@ flutter:
     - assets/images/ic_menu_article_black.png
     - assets/images/ic_menu_chat_black.png
     - assets/images/ic_menu_home_black.png
+    - assets/images/ic_menu_article_select.png
+    - assets/images/ic_menu_chat_select.png
+    - assets/images/ic_menu_home_select.png
+    - assets/images/username_normal.png
+    - assets/images/usericon1.png
+    - assets/images/usericon.png
+    - assets/images/account.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

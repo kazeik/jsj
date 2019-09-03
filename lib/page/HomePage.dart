@@ -68,34 +68,34 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          new Container(
-            padding: EdgeInsets.all(10),
-            width: MediaQuery.of(context).size.width,
-            height: 100.0,
-            child: new Container(
-              decoration: new BoxDecoration(
-                borderRadius: new BorderRadius.circular(10),
-              ),
-              child: Swiper(
-                itemBuilder: _swiperBuilder,
-                itemCount: 3,
-                pagination: new SwiperPagination(
-                    builder: DotSwiperPaginationBuilder(
-                  color: Colors.black54,
-                  activeColor: Colors.white,
-                )),
-                scrollDirection: Axis.horizontal,
-                autoplay: true,
-                onTap: (index) => print('点击了第$index个'),
-              ),
-            ),
-            color: Colors.white,
-          ),
-          new ListView.builder(
-            itemBuilder: _listitem,
-            physics: new NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-          ),
+//          new Container(
+//            padding: EdgeInsets.all(10),
+//            width: MediaQuery.of(context).size.width,
+//            height: 100.0,
+//            child: new Container(
+//              decoration: new BoxDecoration(
+//                borderRadius: new BorderRadius.circular(10),
+//              ),
+//              child: Swiper(
+//                itemBuilder: _swiperBuilder,
+//                itemCount: 3,
+//                pagination: new SwiperPagination(
+//                    builder: DotSwiperPaginationBuilder(
+//                  color: Colors.black54,
+//                  activeColor: Colors.white,
+//                )),
+//                scrollDirection: Axis.horizontal,
+//                autoplay: true,
+//                onTap: (index) => print('点击了第$index个'),
+//              ),
+//            ),
+//            color: Colors.white,
+//          ),
+//          new ListView.builder(
+//            itemBuilder: _listitem,
+//            physics: new NeverScrollableScrollPhysics(),
+//            shrinkWrap: true,
+//          ),
         ],
       ),
     );
