@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jsj/page/DealInfoPage.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -114,6 +115,12 @@ class _PropertyPageState extends State<PropertyPage> {
           title: new Text("买币"),
           subtitle: new Text("2019-08-13"),
           trailing: new Text("+1500"),
+          onTap: (){
+            Navigator.of(context)
+                .push(new MaterialPageRoute(builder: (_) {
+              return new DealInfoPage();
+            }));
+          },
         ),
         new Divider(
           indent: 10,
