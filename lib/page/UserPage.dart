@@ -50,33 +50,58 @@ class _UserPageState extends State<UserPage> {
               ),
             ],
           ),
-          new ListView(
+          new Column(
             children: <Widget>[
               new Container(
                 margin: EdgeInsets.only(top: 30),
                 height: 150,
-                child: new Card(
-                  margin: EdgeInsets.only(left: 20, right: 20, top: 25),
-                  child: new Column(
-                    children: <Widget>[
-                      new Container(
-                        height: 20,
-                      ),
-                      new Divider(
-                        endIndent: 20,
-                        indent: 20,
-                      ),
-                      new Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                child: new Stack(
+                  children: <Widget>[
+                    new Card(
+                      margin: EdgeInsets.only(left: 20, right: 20, top: 35),
+                      child: new Column(
                         children: <Widget>[
-                          _buildAlertInfo("自动交易", Colors.green),
-                          _buildAlertInfo("正常买币", Colors.green),
-                          _buildAlertInfo("禁止卖币", Colors.pink)
+                          new Container(
+                            height: 20,
+                          ),
+                          new Divider(
+                            endIndent: 20,
+                            indent: 20,
+                          ),
+                          new Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              _buildAlertInfo("自动交易", Colors.green),
+                              _buildAlertInfo("正常买币", Colors.green),
+                              _buildAlertInfo("禁止卖币", Colors.pink)
+                            ],
+                          ),
                         ],
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                       ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  ),
+                    ),
+                    new Container(
+                      margin: EdgeInsets.only(left: 20),
+                      child: new ListTile(
+                        leading: new Image(
+                          image: AssetImage(
+                            Utils.getImgPath("usericon1"),
+                          ),
+                        ),
+                        title: new Text("ID:11111",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
+                        subtitle: new Row(
+                          children: <Widget>[
+                            _buildInfo("已激活帐号"),
+                            _buildInfo("已激活服务商"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               new Container(
@@ -90,19 +115,33 @@ class _UserPageState extends State<UserPage> {
               ),
             ],
           ),
-          new Container(
-            margin: EdgeInsets.only(top: 20, left: 20),
-            child: new ListTile(
-              leading: new Image(
-                image: AssetImage(
-                  Utils.getImgPath("usericon1"),
-                ),
-              ),
-              title: new Text("ID:11111",
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
-              subtitle: new Row(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfo(String title) {
+    return new Container(
+      decoration: new BoxDecoration(
+        borderRadius: new BorderRadius.circular(8),
+        color: Colors.black,
+      ),
+      margin: EdgeInsets.only(right: 5, top: 10),
+      padding: EdgeInsets.only(left: 2,right: 2),
+      child: new Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          new Image(
+            height: 20,
+            width: 20,
+            image: AssetImage(
+              Utils.getImgPath("guo"),
             ),
           ),
+          new Text(
+            title,
+            style: TextStyle(color: Colors.white),
+          )
         ],
       ),
     );
