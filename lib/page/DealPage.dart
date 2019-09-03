@@ -18,13 +18,18 @@ class _DealPageState extends State<DealPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("交易"),
+        title: new Text(
+          "交易",
+          style: TextStyle(color: Colors.black),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: new Column(
         children: <Widget>[
           new Container(
+            margin: EdgeInsets.only(top: 10),
             color: Colors.white,
             child: new Row(
               mainAxisSize: MainAxisSize.max,
@@ -71,7 +76,10 @@ class _DealPageState extends State<DealPage> {
           new DropdownButton(
               items: _buildDropdownItem(), onChanged: (index) {}),
           new Container(
-            margin: EdgeInsets.only(top: 10),
+            height: 10,
+            color: const Color(0xfffafafa),
+          ),
+          new Container(
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -95,7 +103,7 @@ class _DealPageState extends State<DealPage> {
                             hintText: "请输入金额",
                             hintStyle: new TextStyle(fontSize: 18.0),
                             contentPadding:
-                            const EdgeInsets.symmetric(vertical: 1.0),
+                                const EdgeInsets.symmetric(vertical: 1.0),
                             border: new OutlineInputBorder(
                                 borderSide: BorderSide.none),
                           ),
@@ -108,7 +116,7 @@ class _DealPageState extends State<DealPage> {
                 new Container(
                   alignment: Alignment.center,
                   margin:
-                  EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
+                      EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
                   child: new Text("本次最多可购买￥10000,赠送购买金额0.9%的币"),
                 ),
               ],
@@ -165,7 +173,7 @@ class _DealPageState extends State<DealPage> {
                             hintText: "请输入卖出金额",
                             hintStyle: new TextStyle(fontSize: 18.0),
                             contentPadding:
-                            const EdgeInsets.symmetric(vertical: 1.0),
+                                const EdgeInsets.symmetric(vertical: 1.0),
                             border: new OutlineInputBorder(
                                 borderSide: BorderSide.none),
                           ),
@@ -177,7 +185,7 @@ class _DealPageState extends State<DealPage> {
                 new Divider(),
                 new Container(
                   margin:
-                  EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
+                      EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
                   child: new Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
