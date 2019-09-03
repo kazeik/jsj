@@ -38,6 +38,9 @@ dev_dependencies:
   #toast
   fluttertoast: ^3.1.0
 
+  #banner
+  flutter_swiper: ^1.0.6
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -51,6 +54,12 @@ flutter:
 
   assets:
     - assets/images/login_icon.png
+    - assets/images/password.png
+    - assets/images/username.png
+    - assets/images/verfiycode.png
+    - assets/images/ic_menu_article_black.png
+    - assets/images/ic_menu_chat_black.png
+    - assets/images/ic_menu_home_black.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
