@@ -69,6 +69,7 @@ flutter:
     - assets/images/account.png
     - assets/images/guo.png
     - assets/images/invaite.png
+    - assets/images/cmb.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

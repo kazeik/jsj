@@ -32,7 +32,7 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("服务商"),
+        title: new Text("我的"),
         centerTitle: true,
         elevation: 0,
       ),
