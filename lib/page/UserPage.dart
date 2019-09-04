@@ -32,6 +32,25 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
+    String status = "未知";
+    switch (ApiUtils.loginData?.status) {
+      case 0:
+        status = "刚注册";
+        break;
+      case 1:
+        status = "申请中";
+        break;
+      case 2:
+        status = "正常";
+        break;
+      case 3:
+        status = "禁用";
+        break;
+      default:
+        status = "未知";
+        break;
+    }
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("我的"),
@@ -73,9 +92,21 @@ class _UserPageState extends State<UserPage> {
                           new Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              _buildAlertInfo("自动交易", Colors.green),
-                              _buildAlertInfo("正常买币", Colors.green),
-                              _buildAlertInfo("禁止卖币", Colors.pink)
+                              _buildAlertInfo(
+                                  ApiUtils.loginData?.can_order == 0
+                                      ? "禁止交易"
+                                      : "自动交易",
+                                  Colors.green),
+                              _buildAlertInfo(
+                                  ApiUtils.loginData?.can_recharge == 0
+                                      ? "禁止交易"
+                                      : "正常买币",
+                                  Colors.green),
+                              _buildAlertInfo(
+                                  ApiUtils.loginData?.can_withdraw == 0
+                                      ? "禁止卖币"
+                                      : "可以卖币",
+                                  Colors.pink)
                             ],
                           ),
                         ],
@@ -100,8 +131,10 @@ class _UserPageState extends State<UserPage> {
                                 fontWeight: FontWeight.bold)),
                         subtitle: new Row(
                           children: <Widget>[
-                            _buildInfo("已激活帐号"),
-                            _buildInfo("已激活服务商"),
+                            _buildInfo(status),
+                            _buildInfo(ApiUtils.loginData?.is_service == 0
+                                ? "未激活服务商"
+                                : "已激活服务商"),
                           ],
                         ),
                       ),

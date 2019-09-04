@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/AlipayModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
@@ -26,9 +29,10 @@ class _AlipayPageState extends State<AlipayPage> {
       "alipay_password": pass,
       "alipay_account": account,
     });
-    HttpNet.instance.request(
-        MethodTypes.POST, ApiUtils.post_bindalipay, (str) {},
-        data: formData);
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_bindalipay, (str) {
+      AlipayModel model = AlipayModel.fromJson(jsonDecode(str));
+      Utils.showToast(model.msg);
+    }, data: formData);
   }
 
   @override

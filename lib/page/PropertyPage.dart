@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:jsj/model/PropertyDataModel.dart';
+import 'package:jsj/model/PropertyModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealInfoPage.dart';
@@ -18,7 +22,10 @@ class PropertyPage extends StatefulWidget {
 
 class _PropertyPageState extends State<PropertyPage> {
   int groupValue = -1;
-  List items = new List();
+  List<PropertyDataModel> items = new List();
+  List<PropertyDataModel> buyItems = new List();
+  List<PropertyDataModel> sellItems = new List();
+  PropertyModel model;
 
   @override
   void initState() {
@@ -27,7 +34,18 @@ class _PropertyPageState extends State<PropertyPage> {
   }
 
   _getLastMoney() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_balance, (str) {});
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_balance, (str) {
+      model = PropertyModel.fromJson(jsonDecode(str));
+      items.addAll(model.data);
+      items.forEach((it) {
+        if (it.type == 1) {
+          buyItems.add(it);
+        } else if (it.type == 2) {
+          sellItems.add(it);
+        }
+      });
+      setState(() {});
+    });
   }
 
   @override
@@ -127,15 +145,22 @@ class _PropertyPageState extends State<PropertyPage> {
   }
 
   Widget _buildListItem(BuildContext context, int index) {
+    PropertyDataModel model = items[index];
+    var time = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(model.create_time) * 1000);
+    String timestr =
+        "${time.year}-${time.month}-${time.day} ${time.hour}:${time.minute}:${time.second}";
     return new Column(
       children: <Widget>[
         new ListTile(
-          title: new Text("买币"),
-          subtitle: new Text("2019-08-13"),
-          trailing: new Text("+1500"),
+          title: new Text(model.trans_type),
+          subtitle: new Text(timestr),
+          trailing: new Text("${model.type == 1 ? "+" : "-"}${model.amount}"),
           onTap: () {
             Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-              return new DealInfoPage();
+              return new DealInfoPage(
+                id: model.id,
+              );
             }));
           },
         ),
@@ -151,9 +176,16 @@ class _PropertyPageState extends State<PropertyPage> {
    * 更新按钮状态
    */
   void updateGroupValue(int v) {
-    setState(() {
-      groupValue = v;
-    });
+    groupValue = v;
+    items.clear();
+    if (v == 1) {
+      items.addAll(buyItems);
+    } else if (v == 2) {
+      items.addAll(sellItems);
+    } else if (v == 0) {
+      items.addAll(model.data);
+    }
+    setState(() {});
   }
 
   /*

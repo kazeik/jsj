@@ -1,4 +1,13 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/BaseModel.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
+import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
+import 'package:quiver/strings.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -13,6 +22,8 @@ class DealPage extends StatefulWidget {
 
 class _DealPageState extends State<DealPage> {
   bool _isBuy = true;
+  String _sellMoney;
+  String _buyMoney;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +71,33 @@ class _DealPageState extends State<DealPage> {
     );
   }
 
+  _buyCoin() {
+    if (isEmpty(_buyMoney)) {
+      Utils.showToast("购买金额不能为空");
+      return;
+    }
+    FormData formData =
+        new FormData.from({"amount": _sellMoney, "service_id": ""});
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_buycoin, (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      Utils.showToast(model.msg);
+    }, data: formData);
+  }
+
+  _sellCoin() {
+    if (isEmpty(_sellMoney)) {
+      Utils.showToast("金额不能为空");
+      return;
+    }
+    FormData formData = new FormData.from({
+      "amount": _sellMoney,
+    });
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_salecoin, (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      Utils.showToast(model.msg);
+    }, data: formData);
+  }
+
   Widget _buildTypeView() {
     return _isBuy ? _buildBuy() : _buildSell();
   }
@@ -69,9 +107,12 @@ class _DealPageState extends State<DealPage> {
       color: Colors.white,
       child: new Column(
         children: <Widget>[
-          new Text(
-            "订单编号:111111111",
-            style: TextStyle(fontSize: 16.0),
+          new Container(
+            margin: EdgeInsets.only(top: 20,bottom: 10),
+            child: new Text(
+              "订单编号:111111111",
+              style: TextStyle(fontSize: 16.0),
+            ),
           ),
           new Divider(
             endIndent: 20,
@@ -111,6 +152,9 @@ class _DealPageState extends State<DealPage> {
                             border: new OutlineInputBorder(
                                 borderSide: BorderSide.none),
                           ),
+                          onChanged: (str) {
+                            _buyMoney = str;
+                          },
                         ),
                       ),
                     ],
@@ -129,7 +173,9 @@ class _DealPageState extends State<DealPage> {
           new Container(
             margin: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
             child: new FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                _buyCoin();
+              },
               color: Colors.blue,
               child: new Text(
                 "发起交易",
@@ -181,6 +227,9 @@ class _DealPageState extends State<DealPage> {
                             border: new OutlineInputBorder(
                                 borderSide: BorderSide.none),
                           ),
+                          onChanged: (str) {
+                            _sellMoney = str;
+                          },
                         ),
                       ),
                     ],
@@ -211,7 +260,9 @@ class _DealPageState extends State<DealPage> {
           new Container(
             margin: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
             child: new FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                _sellCoin();
+              },
               color: Colors.blue,
               child: new Text(
                 "预计两小时到帐，确认卖出",

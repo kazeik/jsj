@@ -62,7 +62,6 @@ class HttpNet {
     }
 
     sValue.then((value) {
-      Utils.logs("成功 = ${value.toString()}");
       BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
       if (model.status == 200)
         success(value.data);
