@@ -62,7 +62,7 @@ class _AboutPageState extends State<DealInfoPage> {
             new Text(
               dataModel == null
                   ? ""
-                  : "${dataModel?.type == 1 ? "+" : "-"}${dataModel?.amount}",
+                  : "${dataModel?.type == "1" ? "+" : "-"}${dataModel?.amount}",
               style: TextStyle(fontSize: 18, color: Colors.black),
             ),
             new Text("交易金额"),

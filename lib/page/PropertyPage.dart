@@ -38,9 +38,9 @@ class _PropertyPageState extends State<PropertyPage> {
       model = PropertyModel.fromJson(jsonDecode(str));
       items.addAll(model.data);
       items.forEach((it) {
-        if (it.type == 1) {
+        if (it.type == "1") {
           buyItems.add(it);
-        } else if (it.type == 2) {
+        } else if (it.type == "2") {
           sellItems.add(it);
         }
       });
@@ -155,7 +155,7 @@ class _PropertyPageState extends State<PropertyPage> {
         new ListTile(
           title: new Text(model.trans_type),
           subtitle: new Text(timestr),
-          trailing: new Text("${model.type == 1 ? "+" : "-"}${model.amount}"),
+          trailing: new Text("${model.type == "1" ? "+" : "-"}${model.amount}"),
           onTap: () {
             Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
               return new DealInfoPage(
