@@ -1,4 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -7,6 +12,10 @@ import 'package:flutter/material.dart';
  */
 
 class DealInfoPage extends StatefulWidget {
+  String id;
+
+  DealInfoPage({Key key, this.id}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => new _AboutPageState();
 }
@@ -25,7 +34,7 @@ class _AboutPageState extends State<DealInfoPage> {
         elevation: 0,
       ),
       body: new Container(
-        padding: EdgeInsets.only(top: 20,right: 20,left: 20),
+        padding: EdgeInsets.only(top: 20, right: 20, left: 20),
         color: Colors.white,
         child: new Column(
           children: <Widget>[
@@ -74,5 +83,15 @@ class _AboutPageState extends State<DealInfoPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    HashMap<String, dynamic> data = new HashMap();
+    data['id'] = widget.id;
+    HttpNet.instance.request(
+        MethodTypes.GET, ApiUtils.get_balanceInfo, (str) {},
+        params: data);
   }
 }

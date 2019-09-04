@@ -18,6 +18,8 @@ class ServiceProviderPage extends StatefulWidget {
 class _ServiceProviderPageState extends State<ServiceProviderPage> {
   int groupValue = -1;
 
+  List<String> allItems = new List();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,7 +159,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                         // 上下间隔
                         mainAxisSpacing: 0.0,
                         //宽高比
-                        childAspectRatio: 1 / 0.4,
+                        childAspectRatio: 1 / 0.3,
                         shrinkWrap: true,
                         physics: new NeverScrollableScrollPhysics(),
                         children: listitem(),
@@ -167,7 +169,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                           padding: EdgeInsets.all(0.0),
                           shrinkWrap: true,
                           itemBuilder: _buildListItem,
-                          itemCount: 10,
+                          itemCount: allItems.length,
                         ),
                         flex: 1,
                       )
@@ -223,25 +225,25 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
       ..add("全部")
       ..add("收入")
       ..add("支出");
-    menuItems.forEach((it) {
+    for (int i = 0; i < menuItems.length; i++) {
       allWidget.add(
-        groupValue == 0
+        groupValue == i
             ? RaisedButton(
                 textColor: Colors.white,
-                color: const Color(0xff4cc4fd),
+                color: Colors.blue,
                 onPressed: () {
-                  updateGroupValue(0);
+                  updateGroupValue(i);
                 },
-                child: new Text(it),
+                child: new Text(menuItems[i]),
               )
             : new OutlineButton(
                 onPressed: () {
-                  updateGroupValue(0);
+                  updateGroupValue(i);
                 },
-                child: new Text(it),
+                child: new Text(menuItems[i]),
               ),
       );
-    });
+    }
     return allWidget;
   }
 }

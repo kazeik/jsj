@@ -35,13 +35,17 @@ class _DealPageState extends State<DealPage> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                new FlatButton(
+                new RaisedButton(
+                    textColor: _isBuy ? Colors.white : Colors.black,
+                    color: _isBuy ? Colors.blue : Colors.white,
                     onPressed: () {
                       _isBuy = true;
                       setState(() {});
                     },
                     child: new Text("买币")),
-                new FlatButton(
+                new RaisedButton(
+                    textColor: _isBuy ? Colors.black : Colors.white,
+                    color: _isBuy ? Colors.white : Colors.blue,
                     onPressed: () {
                       _isBuy = false;
                       setState(() {});

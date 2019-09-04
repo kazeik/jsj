@@ -20,17 +20,14 @@ class _PropertyPageState extends State<PropertyPage> {
   int groupValue = -1;
   List items = new List();
 
-
   @override
   void initState() {
     super.initState();
     _getLastMoney();
   }
-  
-  _getLastMoney(){
-      HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_balance, (str){
 
-      });
+  _getLastMoney() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_balance, (str) {});
   }
 
   @override
@@ -109,7 +106,7 @@ class _PropertyPageState extends State<PropertyPage> {
               // 上下间隔
               mainAxisSpacing: 15.0,
               //宽高比
-              childAspectRatio: 1 / 0.4,
+              childAspectRatio: 1 / 0.3,
               shrinkWrap: true,
               physics: new NeverScrollableScrollPhysics(),
               children: listitem(),
@@ -168,25 +165,26 @@ class _PropertyPageState extends State<PropertyPage> {
       ..add("全部")
       ..add("收入")
       ..add("支出");
-    menuItems.forEach((it) {
+
+    for (int i = 0; i < menuItems.length; i++) {
       allWidget.add(
-        groupValue == 0
+        groupValue == i
             ? RaisedButton(
                 textColor: Colors.white,
-                color: const Color(0xff4cc4fd),
+                color: Colors.blue,
                 onPressed: () {
-                  updateGroupValue(0);
+                  updateGroupValue(i);
                 },
-                child: new Text(it),
+                child: new Text(menuItems[i]),
               )
             : new OutlineButton(
                 onPressed: () {
-                  updateGroupValue(0);
+                  updateGroupValue(i);
                 },
-                child: new Text(it),
+                child: new Text(menuItems[i]),
               ),
       );
-    });
+    }
     return allWidget;
   }
 }
