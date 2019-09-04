@@ -1,6 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:jsj/model/HomeDataModel.dart';
+import 'package:jsj/model/HomeModel.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
+import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -14,6 +22,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> allItems = new List<String>();
+
+  @override
+  void initState() {
+    super.initState();
+    _getHomeData();
+  }
+
+  _getHomeData() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
+      HomeModel model = HomeModel.fromJson(jsonDecode(str));
+      ApiUtils.loginData = model.data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

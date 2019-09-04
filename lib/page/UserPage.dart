@@ -5,7 +5,9 @@ import 'package:jsj/page/BankCardPage.dart';
 import 'package:jsj/page/MessagePage.dart';
 import 'package:jsj/page/ServiceProviderPage.dart';
 import 'package:jsj/page/SharePage.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:quiver/strings.dart';
 import 'package:quiver/strings.dart';
 
 /**
@@ -88,7 +90,10 @@ class _UserPageState extends State<UserPage> {
                             Utils.getImgPath("usericon1"),
                           ),
                         ),
-                        title: new Text("ID:11111",
+                        title: new Text(
+                            isEmpty(ApiUtils.loginData?.id)
+                                ? "ID:"
+                                : "ID:${ApiUtils.loginData?.id}",
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.white,
@@ -127,7 +132,7 @@ class _UserPageState extends State<UserPage> {
         color: Colors.black,
       ),
       margin: EdgeInsets.only(right: 5, top: 10),
-      padding: EdgeInsets.only(left: 2,right: 2),
+      padding: EdgeInsets.only(left: 2, right: 2),
       child: new Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

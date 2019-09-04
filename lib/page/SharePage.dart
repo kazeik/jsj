@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:quiver/strings.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -50,7 +51,7 @@ class _ShatePageState extends State<SharePage> {
                                 new Container(
                                   margin: EdgeInsets.only(left: 10),
                                   child: new Text(
-                                    "ID:8252",
+                                    "ID:${isEmpty(ApiUtils.loginData?.id) ? "" : ApiUtils.loginData?.id}",
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 16),
                                   ),
@@ -67,7 +68,9 @@ class _ShatePageState extends State<SharePage> {
                             new Container(
                               margin: EdgeInsets.only(top: 10),
                               child: new Text(
-                                "49228.20",
+                                isEmpty(ApiUtils.loginData?.balance)
+                                    ? "0.00"
+                                    : ApiUtils.loginData?.balance,
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 20),
                               ),
@@ -98,7 +101,7 @@ class _ShatePageState extends State<SharePage> {
                     new Container(
                       margin: EdgeInsets.only(top: 10, bottom: 10),
                       child: new Text(
-                        "邀请码:C8252",
+                        "邀请码:${isEmpty(ApiUtils.loginData?.invite_code) ? "" : ApiUtils.loginData?.invite_code}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),

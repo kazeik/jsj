@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/page/AddCardPage.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
-
+import 'package:quiver/strings.dart';
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 14:08
@@ -31,32 +32,7 @@ class _BankCardPageState extends State<BankCardPage> {
         color: Colors.white,
         child: new Column(
           children: <Widget>[
-            new Container(
-              margin: EdgeInsets.all(10),
-              height: 120,
-              decoration: new BoxDecoration(
-                  borderRadius: new BorderRadius.circular(10),
-                  color: Colors.red),
-              child: ListTile(
-                title: new Text(
-                  "招商银行",
-                  style: TextStyle(color: Colors.white),
-                ),
-                subtitle: new Text(
-                  "储蓄卡",
-                  style: TextStyle(color: Colors.white),
-                ),
-                trailing: new Text(
-                  "**** 1234",
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-                leading: new Image(
-                  image: AssetImage(
-                    Utils.getImgPath("cmb", format: "jpg"),
-                  ),
-                ),
-              ),
-            ),
+            _buildCard(),
             new Container(
               margin: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
               child: new FlatButton(
@@ -80,5 +56,38 @@ class _BankCardPageState extends State<BankCardPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildCard() {
+    if (ApiUtils.loginData?.has_bank) {
+      return new Container(
+        margin: EdgeInsets.all(10),
+        height: 120,
+        decoration: new BoxDecoration(
+            borderRadius: new BorderRadius.circular(10), color: Colors.red),
+        child: ListTile(
+          title: new Text(
+            "招商银行",
+            style: TextStyle(color: Colors.white),
+          ),
+          subtitle: new Text(
+            "储蓄卡",
+            style: TextStyle(color: Colors.white),
+          ),
+          trailing: new Text(
+            "**** 1234",
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+          leading: new Image(
+            image: AssetImage(
+              Utils.getImgPath("cmb", format: "jpg"),
+            ),
+          ),
+        ),
+      );
+    } else {
+      Utils.showToast("请添加银行卡");
+      return new Container();
+    }
   }
 }

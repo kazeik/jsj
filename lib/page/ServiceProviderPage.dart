@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/page/DealInfoPage.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
-
+import 'package:quiver/strings.dart';
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 14:08
@@ -68,7 +69,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                                 child: new Column(
                                   children: <Widget>[
                                     new Text(
-                                      "230.00",
+                                      isEmpty(ApiUtils.loginData.balance)
+                                          ? "0.00"
+                                          : ApiUtils.loginData.balance,
                                       style: new TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18.0),
@@ -85,7 +88,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                                 child: new Column(
                                   children: <Widget>[
                                     new Text(
-                                      "0.00",
+                                      isEmpty(ApiUtils.loginData.lock_balance)
+                                          ? "0.00"
+                                          : ApiUtils.loginData.lock_balance,
                                       style: new TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18.0),
@@ -111,7 +116,10 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                             Utils.getImgPath("usericon1"),
                           ),
                         ),
-                        title: new Text("ID:11111",
+                        title: new Text(
+                            isEmpty(ApiUtils.loginData?.id)
+                                ? "ID:"
+                                : "ID:${ApiUtils.loginData?.id}",
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.white,

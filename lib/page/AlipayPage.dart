@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:quiver/strings.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -34,8 +36,22 @@ class _AlipayPageState extends State<AlipayPage> {
               margin: EdgeInsets.all(15),
               child: new Text("请注册并填入店员支付宝帐号及密码"),
             ),
-            _buildInput("帐号", "username", false),
-            _buildInput("密码", "password", true),
+            _buildInput(
+                "帐号",
+                "username",
+                false,
+                isEmpty(ApiUtils.loginData?.alipay_account)
+                    ? ""
+                    : ApiUtils.loginData?.alipay_account,
+                (str) {}),
+            _buildInput(
+                "密码",
+                "password",
+                true,
+                isEmpty(ApiUtils.loginData?.alipay_password)
+                    ? ""
+                    : ApiUtils.loginData?.alipay_password,
+                (str) {}),
             new Container(
               margin: EdgeInsets.only(left: 10, right: 10),
               child: new Row(
@@ -85,7 +101,8 @@ class _AlipayPageState extends State<AlipayPage> {
     );
   }
 
-  Widget _buildInput(String hint, String iconPath, bool isPass) {
+  Widget _buildInput(String hint, String iconPath, bool isPass,
+      String defaultStr, Function(String) callback) {
     return new Container(
       child: new TextField(
         decoration: new InputDecoration(
@@ -106,6 +123,18 @@ class _AlipayPageState extends State<AlipayPage> {
           ),
         ),
         obscureText: isPass,
+        onChanged: callback,
+        controller: TextEditingController.fromValue(
+          TextEditingValue(
+            // 设置内容
+            text: defaultStr,
+            // 保持光标在最后
+            selection: TextSelection.fromPosition(
+              TextPosition(
+                  affinity: TextAffinity.downstream, offset: defaultStr.length),
+            ),
+          ),
+        ),
       ),
       decoration: new BoxDecoration(
         borderRadius: new BorderRadius.circular(5),

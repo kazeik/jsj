@@ -1,6 +1,16 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/MainPage.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:quiver/strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -16,43 +26,75 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   TabController controller;
-  String username = "";
+  String _lPhone = "13900000000";
+  String _lPass = "123456";
+  String _lVerfiyCode = "";
+
+  String _rPhone = "";
+  String _rPass = "";
+  String _rSubPass = "";
+  String _rInvateCode = "";
 
   List<Tab> tabs = new List<Tab>()
     ..add(new Tab(text: "登录"))
     ..add(new Tab(text: "注册"));
   String verfiycode = "";
 
-  Widget _buildVerfiyCode() {
-    if (verfiycode == null || verfiycode.length == 0) {
-      return new Container(
-        child: new InkWell(
-          onTap: () {},
-          child: new Text("点击获取验证码"),
-        ),
-      );
-    } else {
-      return new Image(
-        image: NetworkImage(
-          Utils.getImgPath(""),
-        ),
-      );
-    }
-  }
+  Uint8List _imgbytes;
 
   @override
   void initState() {
     super.initState();
     controller =
         TabController(initialIndex: 0, length: tabs.length, vsync: this);
+
+    _getVerfiyCodeImg();
   }
 
-  _startMain(BuildContext context) {
-    Utils.logs("响应了");
-    Navigator.pushAndRemoveUntil(
-        context,
-        new MaterialPageRoute(builder: (context) => new MainPage()),
-        (route) => route == null);
+  _startLogin() {
+    if (isEmpty(_lPhone)) {
+      Utils.showToast("手机号不能为空");
+      return;
+    }
+    if (isEmpty(_lPass)) {
+      Utils.showToast("密码不能为空");
+      return;
+    }
+    if (isEmpty(_lVerfiyCode)) {
+      Utils.showToast("验证码不能为空");
+      return;
+    }
+    FormData formData = new FormData.from({
+      "phone": _lPhone,
+      "password": _lPass,
+      "invite_code": _lVerfiyCode,
+    });
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_login, (model) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          new MaterialPageRoute(builder: (context) => new MainPage()),
+          (route) => route == null);
+    }, data: formData);
+  }
+
+  _saveToken(String key, String value) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString(key, value);
+  }
+
+  _getVerfiyCodeImg() async {
+    var httpClient = new HttpClient();
+    var request = await httpClient
+        .getUrl(Uri.parse("${ApiUtils.baseUrl}${ApiUtils.get_verfiycode}"));
+    var response = await request.close();
+
+    response.cookies.forEach((cookieItem) {
+      ApiUtils.cookieValue = cookieItem.value;
+      _saveToken("token", cookieItem.value);
+    });
+
+    _imgbytes = await consolidateHttpClientResponseBytes(response);
+    setState(() {});
   }
 
   @override
@@ -108,44 +150,7 @@ class _LoginPageState extends State<LoginPage>
                       ),
                     ),
                   ],
-                )
-
-//            child: new Column(
-//              children: <Widget>[
-//                new Row(
-//                  children: <Widget>[
-//                    new Container(
-//                      margin: EdgeInsets.all(10),
-//                      child: new Text("登录"),
-//                    ),
-//                    new Container(
-//                      margin: EdgeInsets.all(10),
-//                      child: new Text("注册"),
-//                    ),
-//                  ],
-//                ),
-//                _buildInput("手机号","username",false),
-//                _buildInput("登录密码","password",true),
-//                _buildInput("验证码","verfiycode",false),
-//                new Container(
-//                  width: double.infinity,
-//                  margin: EdgeInsets.only(top: 15, left: 25, right: 25),
-//                  child: new RaisedButton(
-//                    color: const Color(0xff0091ea),
-//                    onPressed: () {
-//                      _startMain(context);
-//                    },
-//                    child: new Text(
-//                      "登录",
-//                      style: new TextStyle(
-//                        color: Colors.white,
-//                      ),
-//                    ),
-//                  ),
-//                ),
-//              ],
-//            ),
-                ),
+                )),
           ),
           new Container(
             alignment: Alignment.topRight,
@@ -166,16 +171,43 @@ class _LoginPageState extends State<LoginPage>
     List<Widget> widgets = new List();
     widgets.add(new Column(
       children: <Widget>[
-        _buildInput("手机号", "username", false),
-        _buildInput("登录密码", "password", true),
-        _buildInput("验证码", "verfiycode", false),
+        _buildInput("手机号", "username", false, (str) {
+          _lPhone = str;
+        }),
+        _buildInput("登录密码", "password", true, (str) {
+          _lPass = str;
+        }),
+        new Container(
+          margin: EdgeInsets.only(right: 15),
+          child: new Row(
+            children: <Widget>[
+              new Expanded(
+                child: _buildInput("验证码", "verfiycode", false, (str) {
+                  _lVerfiyCode = str;
+                }),
+                flex: 2,
+              ),
+              new Expanded(
+                child: new GestureDetector(
+                  onTap: () {
+                    _getVerfiyCodeImg();
+                  },
+                  child: _imgbytes == null
+                      ? new Container()
+                      : Image.memory(_imgbytes),
+                ),
+                flex: 1,
+              ),
+            ],
+          ),
+        ),
         new Container(
           width: double.infinity,
           margin: EdgeInsets.only(top: 15, left: 25, right: 25),
           child: new RaisedButton(
             color: const Color(0xff0091ea),
             onPressed: () {
-              _startMain(context);
+              _startLogin();
             },
             child: new Text(
               "登录",
@@ -189,10 +221,18 @@ class _LoginPageState extends State<LoginPage>
     ));
     widgets.add(new Column(
       children: <Widget>[
-        _buildInput("手机号", "username", false),
-        _buildInput("登录密码", "password", true),
-        _buildInput("再次输入密码", "password", true),
-        _buildInput("邀请码", "invaite", false),
+        _buildInput("手机号", "username", false, (str) {
+          _rPhone = str;
+        }),
+        _buildInput("登录密码", "password", true, (str) {
+          _rPass = str;
+        }),
+        _buildInput("再次输入密码", "password", true, (str) {
+          _rSubPass = str;
+        }),
+        _buildInput("邀请码", "invaite", false, (str) {
+          _rInvateCode = str;
+        }),
         new Container(
           width: double.infinity,
           margin: EdgeInsets.only(top: 15, left: 25, right: 25),
@@ -212,7 +252,8 @@ class _LoginPageState extends State<LoginPage>
     return widgets;
   }
 
-  Widget _buildInput(String hint, String iconPath, bool isPass) {
+  Widget _buildInput(
+      String hint, String iconPath, bool isPass, ValueChanged callback) {
     return new Container(
       child: new TextField(
         decoration: new InputDecoration(
@@ -233,6 +274,7 @@ class _LoginPageState extends State<LoginPage>
           ),
         ),
         obscureText: isPass,
+        onChanged: callback,
       ),
       decoration: new BoxDecoration(
         borderRadius: new BorderRadius.circular(5),
