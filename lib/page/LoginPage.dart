@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/MainPage.dart';
+import 'package:jsj/page/RegisterPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:jsj/views/MainInput.dart';
 import 'package:quiver/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,11 +31,6 @@ class _LoginPageState extends State<LoginPage>
   String _lPhone = "13900000000";
   String _lPass = "123456";
   String _lVerfiyCode = "";
-
-  String _rPhone = "";
-  String _rPass = "";
-  String _rSubPass = "";
-  String _rInvateCode = "";
 
   List<Tab> tabs = new List<Tab>()
     ..add(new Tab(text: "登录"))
@@ -145,6 +142,7 @@ class _LoginPageState extends State<LoginPage>
                     ),
                     new Expanded(
                       child: new TabBarView(
+                        physics: new NeverScrollableScrollPhysics(),
                         controller: controller,
                         children: _buildBarPage(),
                       ),
@@ -171,20 +169,33 @@ class _LoginPageState extends State<LoginPage>
     List<Widget> widgets = new List();
     widgets.add(new Column(
       children: <Widget>[
-        _buildInput("手机号", "username", false, (str) {
-          _lPhone = str;
-        }),
-        _buildInput("登录密码", "password", true, (str) {
-          _lPass = str;
-        }),
+        new MainInput(
+          hint: "手机号",
+          iconPath: "username",
+          isPass: true,
+          callback: (str) {
+            _lPhone = str;
+          },
+        ),
+        new MainInput(
+          hint: "登录密码",
+          iconPath: "password",
+          callback: (str) {
+            _lPass = str;
+          },
+        ),
         new Container(
           margin: EdgeInsets.only(right: 15),
           child: new Row(
             children: <Widget>[
               new Expanded(
-                child: _buildInput("验证码", "verfiycode", false, (str) {
-                  _lVerfiyCode = str;
-                }),
+                child: new MainInput(
+                  hint: "验证码",
+                  iconPath: "verfiycode",
+                  callback: (str) {
+                    _lVerfiyCode = str;
+                  },
+                ),
                 flex: 2,
               ),
               new Expanded(
@@ -219,36 +230,7 @@ class _LoginPageState extends State<LoginPage>
         ),
       ],
     ));
-    widgets.add(new Column(
-      children: <Widget>[
-        _buildInput("手机号", "username", false, (str) {
-          _rPhone = str;
-        }),
-        _buildInput("登录密码", "password", true, (str) {
-          _rPass = str;
-        }),
-        _buildInput("再次输入密码", "password", true, (str) {
-          _rSubPass = str;
-        }),
-        _buildInput("邀请码", "invaite", false, (str) {
-          _rInvateCode = str;
-        }),
-        new Container(
-          width: double.infinity,
-          margin: EdgeInsets.only(top: 15, left: 25, right: 25),
-          child: new RaisedButton(
-            color: const Color(0xff0091ea),
-            onPressed: () {},
-            child: new Text(
-              "立即注册",
-              style: new TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ],
-    ));
+    widgets.add(new RegisterPage());
     return widgets;
   }
 

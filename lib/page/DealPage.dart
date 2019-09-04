@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/model/BaseModel.dart';
+import 'package:jsj/model/BuyCoinInfoModel.dart';
+import 'package:jsj/model/BuyCoinModel.dart';
 import 'package:jsj/model/ServiceListModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
@@ -27,7 +29,7 @@ class _DealPageState extends State<DealPage> {
   String _buyMoney;
   ServiceListModel serviceListModel;
 
-  String orderId;
+  String orderId = "";
   var serviceValue;
 
   TextEditingController sellController = TextEditingController();
@@ -84,10 +86,11 @@ class _DealPageState extends State<DealPage> {
       return;
     }
     FormData formData =
-        new FormData.from({"amount": _sellMoney, "service_id": serviceValue});
+        new FormData.from({"amount": _buyMoney, "service_id": serviceValue});
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_buycoin, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
+      _getCurrentOrder();
     }, data: formData);
   }
 
@@ -102,6 +105,7 @@ class _DealPageState extends State<DealPage> {
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_salecoin, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
+      _getCurrentOrder();
     }, data: formData);
   }
 
@@ -119,10 +123,11 @@ class _DealPageState extends State<DealPage> {
     });
   }
 
-  _getCurrentOrder(){
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processbuycoin, (str) {
-//      serviceListModel = ServiceListModel.fromJson(jsonDecode(str));
-      orderId = "";
+  _getCurrentOrder() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processbuycoin,
+        (str) {
+      BuyCoinModel model= BuyCoinModel.fromJson(jsonDecode(str));
+      orderId = model.data.id;
       setState(() {});
     });
   }

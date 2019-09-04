@@ -24,6 +24,7 @@ class _BankCardPageState extends State<BankCardPage> {
   String _bankName;
   String _cardNo;
   String _cardType;
+  BankListModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +76,7 @@ class _BankCardPageState extends State<BankCardPage> {
 
   _getBankList() {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_banklist, (str) {
-      BankListModel model = BankListModel.fromJson(jsonDecode(str));
+      model = BankListModel.fromJson(jsonDecode(str));
       _cardNo = model.data[0].bank_account;
       _bankName = model.data[0].bank_name;
 
@@ -88,7 +89,12 @@ class _BankCardPageState extends State<BankCardPage> {
       return new GestureDetector(
         onTap: () {
           Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-            return new AddCardPage();
+            return new AddCardPage(
+                bankName: model.data[0]?.bank_name,
+                cardName: model.data[0]?.user_name,
+                cardNo: model.data[0]?.bank_account,
+                phone: model.data[0]?.bind_phone,
+                cardNameId: model.data[0]?.id_number);
           }));
         },
         child: new Container(

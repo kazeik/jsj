@@ -1,4 +1,8 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
@@ -16,6 +20,8 @@ class SharePage extends StatefulWidget {
 }
 
 class _ShatePageState extends State<SharePage> {
+  Uint8List _imgbytes;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +86,82 @@ class _ShatePageState extends State<SharePage> {
                       ),
                     ),
                     new Expanded(
-                      child: new Container(),
+                      child: new Container(
+                        alignment: Alignment.bottomRight,
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: new Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            new Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  new Container(
+                                    margin: EdgeInsets.only(right: 5),
+                                    padding: EdgeInsets.only(left: 8),
+                                    child: new Image(
+                                      width: 15,
+                                      height: 15,
+                                      image:
+                                          AssetImage(Utils.getImgPath("team")),
+                                    ),
+                                  ),
+                                  new Text(
+                                    "团队管理",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  new Icon(
+                                    Icons.chevron_right,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                              decoration: new BoxDecoration(
+                                color: const Color(0xffd04763),
+                                borderRadius: new BorderRadius.only(
+                                  topLeft: new Radius.circular(10),
+                                  bottomLeft: new Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                            new Container(
+                              margin: EdgeInsets.only(bottom: 5,top: 5),
+                              padding: EdgeInsets.only(left: 8),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  new Container(
+                                    margin: EdgeInsets.only(right: 5),
+                                    child: new Image(
+                                      width: 15,
+                                      height: 15,
+                                      image: AssetImage(
+                                          Utils.getImgPath("commission")),
+                                    ),
+                                  ),
+                                  new Text(
+                                    "可提现佣金${ApiUtils.loginData?.commission}元",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  new Icon(
+                                    Icons.chevron_right,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                              decoration: new BoxDecoration(
+                                color: const Color(0xffd04763),
+                                borderRadius: new BorderRadius.only(
+                                  topLeft: new Radius.circular(10),
+                                  bottomLeft: new Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       flex: 1,
                     ),
                   ],
@@ -91,17 +172,18 @@ class _ShatePageState extends State<SharePage> {
                 child: new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    new Image(
-                      width: 120,
-                      height: 120,
-                      image: AssetImage(
-                        Utils.getImgPath("qrcode"),
-                      ),
-                    ),
+//                    new Image(
+//                      width: 120,
+//                      height: 120,
+//                      image: Image.memory(_imgbytes),
+//                    ),
+                    _imgbytes == null
+                        ? new Container()
+                        : Image.memory(_imgbytes),
                     new Container(
                       margin: EdgeInsets.only(top: 10, bottom: 10),
                       child: new Text(
-                        "邀请码:${isEmpty(ApiUtils.loginData?.invite_code) ? "" : ApiUtils.loginData?.invite_code}",
+                        "邀请码:C${ApiUtils.loginData?.id}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
@@ -118,5 +200,20 @@ class _ShatePageState extends State<SharePage> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+//    _getQrcode();
+  }
+
+  _getQrcode() async {
+    var httpClient = new HttpClient();
+    var request = await httpClient
+        .getUrl(Uri.parse("${ApiUtils.baseUrl}${ApiUtils.get_qrcode}"));
+    var response = await request.close();
+    _imgbytes = await consolidateHttpClientResponseBytes(response);
+    setState(() {});
   }
 }

@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/OrderDataModel.dart';
+import 'package:jsj/model/OrderModel.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
@@ -18,7 +24,31 @@ class ServiceProviderPage extends StatefulWidget {
 class _ServiceProviderPageState extends State<ServiceProviderPage> {
   int groupValue = -1;
 
-  List<String> allItems = new List();
+  List<OrderDataModel> allItems = new List();
+  List<OrderDataModel> buyItems = new List();
+  List<OrderDataModel> sellItems = new List();
+  OrderModel model;
+
+  @override
+  void initState() {
+    super.initState();
+    _getOrderList();
+  }
+
+  _getOrderList() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_order, (str) {
+      model = OrderModel.fromJson(jsonDecode(str));
+      allItems.addAll(model.data);
+      allItems.forEach((it) {
+        if (it.type == "1") {
+          buyItems.add(it);
+        } else if (it.type == "2") {
+          sellItems.add(it);
+        }
+      });
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,22 +219,44 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
    * 更新按钮状态
    */
   void updateGroupValue(int v) {
+    allItems.clear();
+    if (v == 0) {
+      allItems.addAll(model.data);
+    } else if (v == 1) {
+      allItems.addAll(buyItems);
+    } else if (v == 2) {
+      allItems.addAll(sellItems);
+    }
     setState(() {
       groupValue = v;
     });
   }
 
   Widget _buildListItem(BuildContext context, int index) {
+    OrderDataModel dataModel = allItems[index];
+    var dateTiem = new DateTime(int.parse(dataModel?.create_time) * 1000);
+    String time =
+        "${dateTiem.year}-${dateTiem.month}-${dateTiem.day} ${dateTiem.hour}:${dateTiem.minute}:${dateTiem.second}";
+    String status = "";
+    if (dataModel.status == "1") {
+      status = "进行中";
+    } else if (dataModel.status == "2") {
+      status = "已完成";
+    } else if (dataModel.status == "0") {
+      status = "抢单";
+    }
     return new Column(
       children: <Widget>[
         new ListTile(
-          title: new Text("买币"),
+          title: new Text("${dataModel?.trans_type}"),
           subtitle: new Text(
-              "订单编号:1231312312313123\n佣金:0.6 金额:600\n时间:2019-08-13 19:23:13\n用户ID:12121\n持卡人:苏赤"),
-          trailing: new Text("交易失败"),
+              "订单编号:${dataModel.order_no}\n金额:${dataModel?.amount}\n时间:$time\n用户ID:${dataModel.app_user_id}\n"),
+          trailing: new Text("$status"),
           onTap: () {
             Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-              return new DealInfoPage();
+              return new DealInfoPage(
+                id: dataModel.id,
+              );
             }));
           },
         ),
