@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/model/BaseModel.dart';
+import 'package:jsj/model/ServiceListModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
@@ -24,6 +25,12 @@ class _DealPageState extends State<DealPage> {
   bool _isBuy = true;
   String _sellMoney;
   String _buyMoney;
+  ServiceListModel serviceListModel;
+
+  String orderId;
+  var serviceValue;
+
+  TextEditingController sellController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +84,7 @@ class _DealPageState extends State<DealPage> {
       return;
     }
     FormData formData =
-        new FormData.from({"amount": _sellMoney, "service_id": ""});
+        new FormData.from({"amount": _sellMoney, "service_id": serviceValue});
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_buycoin, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
@@ -98,6 +105,28 @@ class _DealPageState extends State<DealPage> {
     }, data: formData);
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _getServiceList();
+    _getCurrentOrder();
+  }
+
+  _getServiceList() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_service, (str) {
+      serviceListModel = ServiceListModel.fromJson(jsonDecode(str));
+      setState(() {});
+    });
+  }
+
+  _getCurrentOrder(){
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processbuycoin, (str) {
+//      serviceListModel = ServiceListModel.fromJson(jsonDecode(str));
+      orderId = "";
+      setState(() {});
+    });
+  }
+
   Widget _buildTypeView() {
     return _isBuy ? _buildBuy() : _buildSell();
   }
@@ -108,9 +137,9 @@ class _DealPageState extends State<DealPage> {
       child: new Column(
         children: <Widget>[
           new Container(
-            margin: EdgeInsets.only(top: 20,bottom: 10),
+            margin: EdgeInsets.only(top: 20, bottom: 10),
             child: new Text(
-              "订单编号:111111111",
+              "订单编号:$orderId",
               style: TextStyle(fontSize: 16.0),
             ),
           ),
@@ -119,7 +148,14 @@ class _DealPageState extends State<DealPage> {
             indent: 20,
           ),
           new DropdownButton(
-              items: _buildDropdownItem(), onChanged: (index) {}),
+            items: _buildDropdownItem(),
+            onChanged: (index) {
+              serviceValue = index;
+              setState(() {});
+            },
+            hint: new Text("请选择购买服务商"),
+            value: serviceValue,
+          ),
           new Container(
             height: 10,
             color: const Color(0xfffafafa),
@@ -165,7 +201,8 @@ class _DealPageState extends State<DealPage> {
                   alignment: Alignment.center,
                   margin:
                       EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
-                  child: new Text("本次最多可购买￥10000,赠送购买金额0.9%的币"),
+                  child: new Text(
+                      "本次最多可购买￥${ApiUtils.loginData?.balance},赠送购买金额0.9%的币"),
                 ),
               ],
             ),
@@ -191,7 +228,20 @@ class _DealPageState extends State<DealPage> {
     );
   }
 
-  List<Widget> _buildDropdownItem() {}
+  List<Widget> _buildDropdownItem() {
+    List<DropdownMenuItem> downItems = new List();
+    if (null != serviceListModel) {
+      for (int i = 0; i < serviceListModel?.data?.length; i++) {
+        downItems.add(
+          new DropdownMenuItem(
+            child: new Text(serviceListModel?.data[i].id),
+            value: serviceListModel?.data[i].id,
+          ),
+        );
+      }
+    }
+    return downItems;
+  }
 
   Widget _buildSell() {
     return new Container(
@@ -230,6 +280,7 @@ class _DealPageState extends State<DealPage> {
                           onChanged: (str) {
                             _sellMoney = str;
                           },
+                          controller: sellController,
                         ),
                       ),
                     ],
@@ -243,9 +294,12 @@ class _DealPageState extends State<DealPage> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      new Text("可卖出余额0币，手续费1%+10币"),
+                      new Text(
+                          "可卖出余额￥${ApiUtils.loginData?.balance}币，手续费1%+10币"),
                       new InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          sellController.text = ApiUtils.loginData?.balance;
+                        },
                         child: new Text(
                           "全部卖出",
                           style: TextStyle(color: Colors.blue),

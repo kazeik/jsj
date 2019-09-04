@@ -109,5 +109,10 @@ class ApiUtils{
    */
   static String post_upload_img="/Userapi/upload";
 
+  /**
+   * 获取服务商列表
+   */
+  static String get_service = "/Userapi/Services";
+
 
 }
