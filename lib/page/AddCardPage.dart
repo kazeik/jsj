@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:dio/dio.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
+import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
+import 'package:quiver/strings.dart';
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 15:24
@@ -7,11 +12,57 @@ import 'package:flutter/material.dart';
  */
 
 class AddCardPage extends StatefulWidget {
+  String bankName;
+  String cardNo;
+  String cardName;
+  String cardNameId;
+  String phone;
+
+  AddCardPage(
+      {Key key, this.bankName, this.cardName, this.cardNo, this.cardNameId, this.phone})
+      :super(key: key);
+
   @override
   State<StatefulWidget> createState() => new _AddCardPageState();
 }
 
 class _AddCardPageState extends State<AddCardPage> {
+
+
+  _submitAddCard() {
+    if (isEmpty(widget.bankName)) {
+      Utils.showToast("银行名不能为空");
+      return;
+    }
+    if (isEmpty(widget.cardNo)) {
+      Utils.showToast("银行卡号不能为空");
+      return;
+    }
+    if (isEmpty(widget.cardName)) {
+      Utils.showToast("持卡人姓名不能为空");
+      return;
+    }
+    if (isEmpty(widget.cardNameId)) {
+      Utils.showToast("身份证号码不能为空");
+      return;
+    }
+    if (isEmpty(widget.phone)) {
+      Utils.showToast("手机号不能为空");
+      return;
+    }
+
+    FormData formData = new FormData.from({
+      "bank_name": widget.bankName,
+      "bank_account": widget.cardNo,
+      "user_name": widget.cardName,
+      "id_number": widget.cardNameId,
+      "bind_phone": widget.phone,
+    });
+
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_addbank, (str) {},
+        data: formData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,13 +81,17 @@ class _AddCardPageState extends State<AddCardPage> {
             margin: EdgeInsets.only(top: 10, bottom: 10),
             child: new Column(
               children: <Widget>[
-                _buildCell("银行", "请输入银行"),
+                _buildCell("银行", "请输入银行", (str) {
+                  widget.bankName = str;
+                }),
                 new Divider(
                   height: 1,
                   endIndent: 10,
                   indent: 10,
                 ),
-                _buildCell("卡号", "请输入卡号"),
+                _buildCell("卡号", "请输入卡号", (str) {
+                  widget.cardNo = str;
+                }),
               ],
             ),
           ),
@@ -50,24 +105,31 @@ class _AddCardPageState extends State<AddCardPage> {
             margin: EdgeInsets.only(top: 10, bottom: 10),
             child: new Column(
               children: <Widget>[
-                _buildCell("持卡人", "请输入持卡人"),
+                _buildCell("持卡人", "请输入持卡人", (str) {
+                  widget.cardName = str;
+                }),
                 new Divider(
                   height: 1,
                   endIndent: 10,
                   indent: 10,
                 ),
-                _buildCell("身份证", "请输入身份证"),
+                _buildCell("身份证", "请输入身份证", (str) {
+                  widget.cardNameId = str;
+                }),
                 new Divider(
                   height: 1,
                   endIndent: 10,
                   indent: 10,
                 ),
-                _buildCell("手机号", "请输入手机号"),
-
+                _buildCell("手机号", "请输入手机号", (str) {
+                  widget.phone = str;
+                }),
                 new Container(
-                  margin: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+                  margin:
+                  EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
                   child: new FlatButton(
                     onPressed: () {
+                      _submitAddCard();
                     },
                     color: Colors.blue,
                     child: new Text(
@@ -87,7 +149,7 @@ class _AddCardPageState extends State<AddCardPage> {
     );
   }
 
-  Widget _buildCell(String title, String hint) {
+  Widget _buildCell(String title, String hint, Function(String) callback) {
     return new Container(
       color: Colors.white,
       padding: EdgeInsets.only(
@@ -107,8 +169,10 @@ class _AddCardPageState extends State<AddCardPage> {
             width: 250,
             child: new TextField(
               decoration: new InputDecoration(
-                  hintText: hint,
-                  border: new OutlineInputBorder(borderSide: BorderSide.none)),
+                hintText: hint,
+                border: new OutlineInputBorder(borderSide: BorderSide.none),
+              ),
+              onChanged: callback,
             ),
           )
         ],

@@ -64,8 +64,10 @@ class HttpNet {
     sValue.then((value) {
       Utils.logs("成功 = ${value.toString()}");
       BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
-      if (model.status == 200) success(value.data);
-      Utils.showToast(model.msg);
+      if (model.status == 200)
+        success(value.data);
+      else
+        Utils.showToast(model.msg);
     }).catchError((error) {
       Utils.logs("错误 = ${error.toString()}");
       if (null != error) {

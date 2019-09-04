@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:quiver/strings.dart';
-
+import 'package:dio/dio.dart';
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 14:08
@@ -16,6 +18,19 @@ class AlipayPage extends StatefulWidget {
 }
 
 class _AlipayPageState extends State<AlipayPage> {
+  String account;
+  String pass;
+
+  _bindAlipay() {
+    FormData formData = new FormData.from({
+      "alipay_password": pass,
+      "alipay_account": account,
+    });
+    HttpNet.instance.request(
+        MethodTypes.POST, ApiUtils.post_bindalipay, (str) {},
+        data: formData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,16 +57,18 @@ class _AlipayPageState extends State<AlipayPage> {
                 false,
                 isEmpty(ApiUtils.loginData?.alipay_account)
                     ? ""
-                    : ApiUtils.loginData?.alipay_account,
-                (str) {}),
+                    : ApiUtils.loginData?.alipay_account, (str) {
+              account = str;
+            }),
             _buildInput(
                 "密码",
                 "password",
                 true,
                 isEmpty(ApiUtils.loginData?.alipay_password)
                     ? ""
-                    : ApiUtils.loginData?.alipay_password,
-                (str) {}),
+                    : ApiUtils.loginData?.alipay_password, (str) {
+              pass = str;
+            }),
             new Container(
               margin: EdgeInsets.only(left: 10, right: 10),
               child: new Row(
@@ -60,7 +77,9 @@ class _AlipayPageState extends State<AlipayPage> {
                     child: new Container(
                       margin: EdgeInsets.all(5),
                       child: new FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _bindAlipay();
+                        },
                         child: new Text("修改"),
                         color: Colors.blue,
                         textColor: Colors.white,
@@ -72,7 +91,9 @@ class _AlipayPageState extends State<AlipayPage> {
                     child: new Container(
                       margin: EdgeInsets.all(5),
                       child: new FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _bindAlipay();
+                        },
                         child: new Text("保存"),
                         color: Colors.blue,
                         textColor: Colors.white,

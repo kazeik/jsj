@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:quiver/strings.dart';
@@ -17,6 +19,19 @@ class PropertyPage extends StatefulWidget {
 class _PropertyPageState extends State<PropertyPage> {
   int groupValue = -1;
   List items = new List();
+
+
+  @override
+  void initState() {
+    super.initState();
+    _getLastMoney();
+  }
+  
+  _getLastMoney(){
+      HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_balance, (str){
+
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +119,7 @@ class _PropertyPageState extends State<PropertyPage> {
                 padding: EdgeInsets.all(0.0),
                 shrinkWrap: true,
                 itemBuilder: _buildListItem,
-                itemCount: 10,
+                itemCount: items.length,
               ),
               flex: 1,
             )

@@ -62,6 +62,10 @@ class HomeDataModel {
   String service_balance;
 
   /**
+   * 1、注册2、激活，3、绑定支付宝，4、绑定银行卡，5、自动交易
+   */
+  int step;
+  /**
    * 服务商冻结余额
    */
   String service_lock_balance;

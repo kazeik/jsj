@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/BankListModel.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/AddCardPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
@@ -16,6 +21,10 @@ class BankCardPage extends StatefulWidget {
 }
 
 class _BankCardPageState extends State<BankCardPage> {
+  String _bankName;
+  String _cardNo;
+  String _cardType;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,35 +67,59 @@ class _BankCardPageState extends State<BankCardPage> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _getBankList();
+  }
+
+  _getBankList() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_banklist, (str) {
+      BankListModel model = BankListModel.fromJson(jsonDecode(str));
+      _cardNo = model.data[0].bank_account;
+      _bankName = model.data[0].bank_name;
+
+      setState(() {});
+    });
+  }
+
   Widget _buildCard() {
-    if (ApiUtils.loginData?.has_bank) {
-      return new Container(
-        margin: EdgeInsets.all(10),
-        height: 120,
-        decoration: new BoxDecoration(
-            borderRadius: new BorderRadius.circular(10), color: Colors.red),
-        child: ListTile(
-          title: new Text(
-            "招商银行",
-            style: TextStyle(color: Colors.white),
-          ),
-          subtitle: new Text(
-            "储蓄卡",
-            style: TextStyle(color: Colors.white),
-          ),
-          trailing: new Text(
-            "**** 1234",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-          leading: new Image(
-            image: AssetImage(
-              Utils.getImgPath("cmb", format: "jpg"),
+    if (ApiUtils.loginData?.has_bank != null && ApiUtils.loginData?.has_bank) {
+      return new GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+            return new AddCardPage();
+          }));
+        },
+        child: new Container(
+          margin: EdgeInsets.all(10),
+          height: 120,
+          decoration: new BoxDecoration(
+              borderRadius: new BorderRadius.circular(10), color: Colors.red),
+          child: ListTile(
+            title: new Text(
+              isEmpty(_bankName) ? "未知银行" : _bankName,
+              style: TextStyle(color: Colors.white),
+            ),
+            subtitle: new Text(
+              "储蓄卡",
+              style: TextStyle(color: Colors.white),
+            ),
+            trailing: new Text(
+              isEmpty(_cardNo)
+                  ? "**** 0000"
+                  : "**** ${_cardNo.substring(_cardNo.length - 4, _cardNo.length)}",
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+            leading: new Image(
+              image: AssetImage(
+                Utils.getImgPath("cmb", format: "jpg"),
+              ),
             ),
           ),
         ),
       );
     } else {
-      Utils.showToast("请添加银行卡");
       return new Container();
     }
   }
