@@ -41,6 +41,9 @@ dev_dependencies:
   #banner
   flutter_swiper: ^1.0.6
 
+  #自定义形状
+  flutter_custom_clippers: ^1.0.4
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
