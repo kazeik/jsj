@@ -177,18 +177,20 @@ class _AddCardPageState extends State<AddCardPage> {
                 border: new OutlineInputBorder(borderSide: BorderSide.none),
               ),
               onChanged: callback,
-              controller: TextEditingController.fromValue(
-                TextEditingValue(
-                  // 设置内容
-                  text: defaultStr,
-                  // 保持光标在最后
-                  selection: TextSelection.fromPosition(
-                    TextPosition(
-                        affinity: TextAffinity.downstream,
-                        offset: defaultStr.length),
-                  ),
-                ),
-              ),
+              controller: isEmpty(defaultStr)
+                  ? null
+                  : TextEditingController.fromValue(
+                      TextEditingValue(
+                        // 设置内容
+                        text: defaultStr,
+                        // 保持光标在最后
+                        selection: TextSelection.fromPosition(
+                          TextPosition(
+                              affinity: TextAffinity.downstream,
+                              offset: defaultStr.length),
+                        ),
+                      ),
+                    ),
             ),
           )
         ],
