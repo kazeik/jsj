@@ -1,11 +1,7 @@
-import 'dart:collection';
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/page/DealPage.dart';
 import 'package:jsj/page/HomePage.dart';
+import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/page/PropertyPage.dart';
 import 'package:jsj/page/UserPage.dart';
 import 'package:jsj/utils/Utils.dart';
@@ -58,7 +54,20 @@ class _MainPageState extends State<MainPage> {
     return tabImages[curIndex][1];
   }
 
-/*
+  @override
+  void initState() {
+    super.initState();
+    DateTime time = DateTime(2019,9,15,23,59,59);
+    DateTime nowTime = DateTime.now();
+    if (nowTime.isAfter(time)) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          new MaterialPageRoute(builder: (context) => new LoginPage()),
+              (route) => route == null);
+    }
+  }
+
+  /*
    * 存储的四个页面，和Fragment一样
    */
   var _bodys;
