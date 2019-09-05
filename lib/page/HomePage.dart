@@ -71,10 +71,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.white,
+//        backgroundColor: Colors.white,
         title: new Text(
           "首页",
-          style: TextStyle(color: Colors.black),
+//          style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         elevation: 0,

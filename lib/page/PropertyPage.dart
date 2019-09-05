@@ -52,10 +52,10 @@ class _PropertyPageState extends State<PropertyPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        backgroundColor: Colors.white,
+//        backgroundColor: Colors.white,
         title: new Text(
           "资产",
-          style: TextStyle(color: Colors.black),
+//          style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         elevation: 0,
