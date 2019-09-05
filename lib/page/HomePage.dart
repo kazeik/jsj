@@ -10,6 +10,7 @@ import 'package:jsj/model/NewsModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/LoadingCustomPainter.dart';
 import 'package:jsj/views/RhombusCustomPainter.dart';
 
@@ -28,9 +29,15 @@ class _HomePageState extends State<HomePage> {
   List<ImagesDataModel> allImages = new List<ImagesDataModel>();
   List<ImagesDataModel> allBanner = new List<ImagesDataModel>();
 
+  String menuInfo = "恭喜你完成注册";
+
+  int tempStep = 0;
+
   @override
   void initState() {
     super.initState();
+    tempStep = ApiUtils.loginData?.step;
+    Utils.logs("当前步数 = $tempStep");
     _getImages();
     _getNews();
     _getBanner();
@@ -107,12 +114,12 @@ class _HomePageState extends State<HomePage> {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 new Text(
-                  "恭喜你完成注册",
+                  "$menuInfo",
                   style:
                       new TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 new Text(
-                  "2/5",
+                  "$tempStep/5",
                   style: TextStyle(fontSize: 15),
                 )
               ],
@@ -130,11 +137,15 @@ class _HomePageState extends State<HomePage> {
                     clipper: LoadingCustomPainter(),
                     child: Container(
                       width: 50,
-                      color: const Color(0xfff6f6f6),
+                      color:
+                          tempStep == 1 ? Colors.blue : const Color(0xfff6f6f6),
                       child: Center(
                         child: Text(
                           "注册",
-                          style: TextStyle(fontSize: 13.0),
+                          style: TextStyle(
+                              fontSize: 13.0,
+                              color:
+                                  tempStep == 1 ? Colors.white : Colors.black),
                         ),
                       ),
                     ),
@@ -143,11 +154,15 @@ class _HomePageState extends State<HomePage> {
                     clipper: RhombusCustomPainter(),
                     child: Container(
                       width: 80,
-                      color: Colors.blue,
+                      color:
+                          tempStep == 2 ? Colors.blue : const Color(0xfff6f6f6),
                       child: Center(
                         child: Text(
                           "激活帐号",
-                          style: TextStyle(fontSize: 13.0),
+                          style: TextStyle(
+                              fontSize: 13.0,
+                              color:
+                                  tempStep == 2 ? Colors.white : Colors.black),
                         ),
                       ),
                     ),
@@ -156,11 +171,15 @@ class _HomePageState extends State<HomePage> {
                     clipper: RhombusCustomPainter(),
                     child: Container(
                       width: 80,
-                      color: const Color(0xfff6f6f6),
+                      color:
+                          tempStep == 3 ? Colors.blue : const Color(0xfff6f6f6),
                       child: Center(
                         child: Text(
                           "绑定支付宝",
-                          style: TextStyle(fontSize: 13.0),
+                          style: TextStyle(
+                              fontSize: 13.0,
+                              color:
+                                  tempStep == 3 ? Colors.white : Colors.black),
                         ),
                       ),
                     ),
@@ -169,11 +188,15 @@ class _HomePageState extends State<HomePage> {
                     clipper: RhombusCustomPainter(),
                     child: Container(
                       width: 80,
-                      color: const Color(0xfff6f6f6),
+                      color:
+                          tempStep == 4 ? Colors.blue : const Color(0xfff6f6f6),
                       child: Center(
                         child: Text(
                           "绑定银行卡",
-                          style: TextStyle(fontSize: 13.0),
+                          style: TextStyle(
+                              fontSize: 13.0,
+                              color:
+                                  tempStep == 4 ? Colors.white : Colors.black),
                         ),
                       ),
                     ),
@@ -182,11 +205,15 @@ class _HomePageState extends State<HomePage> {
                     clipper: LoadingCustomPainter(reverse: true),
                     child: Container(
                       width: 80,
-                      color: const Color(0xfff6f6f6),
+                      color:
+                          tempStep == 5 ? Colors.blue : const Color(0xfff6f6f6),
                       child: Center(
                         child: Text(
                           "自动交易",
-                          style: TextStyle(fontSize: 13.0),
+                          style: TextStyle(
+                              fontSize: 13.0,
+                              color:
+                                  tempStep == 5 ? Colors.white : Colors.black),
                         ),
                       ),
                     ),
