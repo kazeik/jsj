@@ -127,7 +127,7 @@ class _ShatePageState extends State<SharePage> {
                               ),
                             ),
                             new Container(
-                              margin: EdgeInsets.only(bottom: 5,top: 5),
+                              margin: EdgeInsets.only(bottom: 5, top: 5),
                               padding: EdgeInsets.only(left: 8),
                               child: new Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -172,14 +172,15 @@ class _ShatePageState extends State<SharePage> {
                 child: new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-//                    new Image(
-//                      width: 120,
-//                      height: 120,
-//                      image: Image.memory(_imgbytes),
-//                    ),
-                    _imgbytes == null
-                        ? new Container()
-                        : Image.memory(_imgbytes),
+                    new Image(
+                      width: 120,
+                      height: 120,
+                      image: NetworkImage(
+                          "${ApiUtils.baseUrl}${ApiUtils.get_qrcode}",
+                          headers: {
+                            "Cookie": "PHPSESSID=${ApiUtils.cookieValue}"
+                          }),
+                    ),
                     new Container(
                       margin: EdgeInsets.only(top: 10, bottom: 10),
                       child: new Text(
