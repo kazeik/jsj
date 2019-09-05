@@ -72,11 +72,12 @@ class _AddCardPageState extends State<AddCardPage> {
       appBar: new AppBar(
         title: new Text(
           "添加银行卡",
-//          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black),
         ),
-//        backgroundColor: Colors.white,
-//        iconTheme: new IconThemeData.fallback(),
+        backgroundColor: Colors.white,
+        iconTheme: new IconThemeData.fallback(),
         elevation: 0,
+        brightness: Brightness.light,
       ),
       body: new Column(
         children: <Widget>[

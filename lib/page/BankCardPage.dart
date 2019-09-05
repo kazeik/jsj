@@ -32,11 +32,12 @@ class _BankCardPageState extends State<BankCardPage> {
       appBar: new AppBar(
         title: new Text(
           "我的银行卡",
-//          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black),
         ),
-//        backgroundColor: Colors.white,
-//        iconTheme: new IconThemeData.fallback(),
+        backgroundColor: Colors.white,
+        iconTheme: new IconThemeData.fallback(),
         elevation: 0,
+        brightness: Brightness.light,
       ),
       body: new Container(
         color: Colors.white,

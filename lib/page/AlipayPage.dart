@@ -41,10 +41,11 @@ class _AlipayPageState extends State<AlipayPage> {
       appBar: new AppBar(
         title: new Text(
           "支付宝管理",
-//          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black),
         ),
-//        backgroundColor: Colors.white,
-//        iconTheme: new IconThemeData.fallback(),
+        backgroundColor: Colors.white,
+        iconTheme: new IconThemeData.fallback(),
+        brightness: Brightness.light,
         elevation: 0,
       ),
       body: new Container(

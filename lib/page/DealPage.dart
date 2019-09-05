@@ -40,11 +40,12 @@ class _DealPageState extends State<DealPage> {
       appBar: new AppBar(
         title: new Text(
           "交易",
-//          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-//        backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         elevation: 0,
+        brightness: Brightness.light,
       ),
       body: new Column(
         children: <Widget>[
