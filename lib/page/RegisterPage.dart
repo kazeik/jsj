@@ -94,7 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         new Container(
           width: double.infinity,
-          margin: EdgeInsets.only(top: 15, left: 25, right: 25),
+          margin: EdgeInsets.only(top: 10, left: 25, right: 25),
           child: new RaisedButton(
             color: const Color(0xff0091ea),
             onPressed: () {

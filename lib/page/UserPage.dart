@@ -74,7 +74,7 @@ class _UserPageState extends State<UserPage> {
           new Column(
             children: <Widget>[
               new Container(
-                margin: EdgeInsets.only(top: 30),
+                margin: EdgeInsets.only(top: 20),
                 height: 150,
                 child: new Stack(
                   children: <Widget>[
@@ -145,7 +145,7 @@ class _UserPageState extends State<UserPage> {
               new Container(
                 child: new Card(
                   margin:
-                      EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 20),
+                      EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
                   child: new Column(
                     children: _buildCell(),
                   ),

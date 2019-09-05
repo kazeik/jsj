@@ -102,25 +102,27 @@ class _LoginPageState extends State<LoginPage>
         elevation: 0,
         title: new Text("登录"),
       ),
+      resizeToAvoidBottomPadding: false,
       body: new Stack(
         children: <Widget>[
-          new Column(
-            children: <Widget>[
-              new Container(
-                color: Colors.blue,
-                height: 200,
-                child: new Container(),
-              ),
-              new Container(
-                color: Colors.white,
-              ),
-            ],
+          new Container(
+            child: new Column(
+              children: <Widget>[
+                new Container(
+                  color: Colors.blue,
+                  height: 200,
+                ),
+                new Container(
+                  color: Colors.white,
+                ),
+              ],
+            ),
           ),
           new Container(
-            margin: EdgeInsets.only(top: 50),
+            margin: EdgeInsets.only(top: 40),
             child: new Card(
                 margin:
-                    EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 50),
+                    EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 20),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(14.0),
@@ -128,6 +130,7 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 child: new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     new Container(
                       margin: EdgeInsets.all(20),
@@ -153,7 +156,6 @@ class _LoginPageState extends State<LoginPage>
           new Container(
             alignment: Alignment.topRight,
             child: new Image(
-//              width: 150,
               height: 200,
               image: AssetImage(
                 Utils.getImgPath("login_icon"),
@@ -214,7 +216,7 @@ class _LoginPageState extends State<LoginPage>
         ),
         new Container(
           width: double.infinity,
-          margin: EdgeInsets.only(top: 15, left: 25, right: 25),
+          margin: EdgeInsets.only(top: 10, left: 25, right: 25),
           child: new RaisedButton(
             color: const Color(0xff0091ea),
             onPressed: () {
@@ -232,37 +234,5 @@ class _LoginPageState extends State<LoginPage>
     ));
     widgets.add(new RegisterPage());
     return widgets;
-  }
-
-  Widget _buildInput(
-      String hint, String iconPath, bool isPass, ValueChanged callback) {
-    return new Container(
-      child: new TextField(
-        decoration: new InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 1.0),
-          hintText: hint,
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide.none),
-          prefixIcon: new Padding(
-            padding: EdgeInsets.all(10),
-            child: new Image(
-              width: 1,
-              height: 1,
-              image: AssetImage(
-                Utils.getImgPath(iconPath),
-              ),
-            ),
-          ),
-        ),
-        obscureText: isPass,
-        onChanged: callback,
-      ),
-      decoration: new BoxDecoration(
-        borderRadius: new BorderRadius.circular(5),
-        color: const Color(0xfff6f6f6),
-      ),
-      margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
-    );
   }
 }
