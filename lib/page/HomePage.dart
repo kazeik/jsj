@@ -121,81 +121,78 @@ class _HomePageState extends State<HomePage> {
           new Container(
             color: Colors.white,
             padding: EdgeInsets.only(bottom: 10),
-            child: new Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                ClipPath(
-                  clipper: LoadingCustomPainter(),
-                  child: Container(
-                    height: 40,
-                    width: 50,
-                    color: const Color(0xfff6f6f6),
-                    child: Center(
-                      child: Text(
-                        "注册",
-                        style: TextStyle(fontSize: 13.0),
+            child: new Container(
+              height: 40,
+              child: new ListView(
+                scrollDirection: Axis.horizontal,
+                children: <Widget>[
+                  ClipPath(
+                    clipper: LoadingCustomPainter(),
+                    child: Container(
+                      width: 50,
+                      color: const Color(0xfff6f6f6),
+                      child: Center(
+                        child: Text(
+                          "注册",
+                          style: TextStyle(fontSize: 13.0),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                ClipPath(
-                  clipper: RhombusCustomPainter(),
-                  child: Container(
-                    height: 40,
-                    width: 80,
-                    color: Colors.blue,
-                    child: Center(
-                      child: Text(
-                        "激活帐号",
-                        style: TextStyle(fontSize: 13.0),
+                  ClipPath(
+                    clipper: RhombusCustomPainter(),
+                    child: Container(
+                      width: 80,
+                      color: Colors.blue,
+                      child: Center(
+                        child: Text(
+                          "激活帐号",
+                          style: TextStyle(fontSize: 13.0),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                ClipPath(
-                  clipper: RhombusCustomPainter(),
-                  child: Container(
-                    height: 40,
-                    width: 80,
-                    color: const Color(0xfff6f6f6),
-                    child: Center(
-                      child: Text(
-                        "绑定支付宝",
-                        style: TextStyle(fontSize: 13.0),
+                  ClipPath(
+                    clipper: RhombusCustomPainter(),
+                    child: Container(
+                      width: 80,
+                      color: const Color(0xfff6f6f6),
+                      child: Center(
+                        child: Text(
+                          "绑定支付宝",
+                          style: TextStyle(fontSize: 13.0),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                ClipPath(
-                  clipper: RhombusCustomPainter(),
-                  child: Container(
-                    height: 40,
-                    width: 80,
-                    color: const Color(0xfff6f6f6),
-                    child: Center(
-                      child: Text(
-                        "绑定银行卡",
-                        style: TextStyle(fontSize: 13.0),
+                  ClipPath(
+                    clipper: RhombusCustomPainter(),
+                    child: Container(
+                      width: 80,
+                      color: const Color(0xfff6f6f6),
+                      child: Center(
+                        child: Text(
+                          "绑定银行卡",
+                          style: TextStyle(fontSize: 13.0),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                ClipPath(
-                  clipper: LoadingCustomPainter(reverse: true),
-                  child: Container(
-                    height: 40,
-                    width: 80,
-                    color: const Color(0xfff6f6f6),
-                    child: Center(
-                      child: Text(
-                        "自动交易",
-                        style: TextStyle(fontSize: 13.0),
+                  ClipPath(
+                    clipper: LoadingCustomPainter(reverse: true),
+                    child: Container(
+                      width: 80,
+                      color: const Color(0xfff6f6f6),
+                      child: Center(
+                        child: Text(
+                          "自动交易",
+                          style: TextStyle(fontSize: 13.0),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           new Container(
