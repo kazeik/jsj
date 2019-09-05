@@ -121,8 +121,8 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     initData();
     return new MaterialApp(
-      theme: ThemeData(
-          primaryColor: const Color(0xff0091ea), platform: TargetPlatform.iOS),
+//      theme: ThemeData(
+//          primaryColor: Colors.blue, platform: TargetPlatform.iOS),
       home: new Scaffold(
         body: _bodys[_tabIndex],
         bottomNavigationBar: new BottomNavigationBar(

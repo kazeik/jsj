@@ -13,7 +13,6 @@ import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/LoadingCustomPainter.dart';
 import 'package:jsj/views/RhombusCustomPainter.dart';
-import 'package:quiver/strings.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
