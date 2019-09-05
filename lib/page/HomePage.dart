@@ -86,12 +86,13 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: _swiperBuilder,
                 itemCount: allImages.length,
                 pagination: new SwiperPagination(
-                    builder: DotSwiperPaginationBuilder(
-                  color: Colors.black54,
-                  activeColor: Colors.white,
-                )),
+                  builder: DotSwiperPaginationBuilder(
+                    color: Colors.black54,
+                    activeColor: Colors.white,
+                  ),
+                ),
                 scrollDirection: Axis.horizontal,
-                autoplay: true,
+                autoplay: allImages.length != 0,
                 onTap: (index) => print('点击了第$index个'),
               ),
             ),
@@ -119,6 +120,7 @@ class _HomePageState extends State<HomePage> {
           ),
           new Container(
             color: Colors.white,
+            padding: EdgeInsets.only(bottom: 10),
             child: new Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,6 +199,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           new Container(
+            margin: EdgeInsets.only(top: 10),
             padding: EdgeInsets.all(10),
             width: MediaQuery.of(context).size.width,
             height: 100.0,
@@ -208,22 +211,30 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: _bannerBuilder,
                 itemCount: allBanner.length,
                 pagination: new SwiperPagination(
-                    builder: DotSwiperPaginationBuilder(
-                  color: Colors.black54,
-                  activeColor: Colors.white,
-                )),
+                  builder: DotSwiperPaginationBuilder(
+                    color: Colors.black54,
+                    activeColor: Colors.white,
+                  ),
+                ),
                 scrollDirection: Axis.horizontal,
-                autoplay: true,
+                autoplay: allBanner.length != 0,
                 onTap: (index) => print('点击了第$index个'),
               ),
             ),
             color: Colors.white,
           ),
-          new ListView.builder(
-            itemBuilder: _listitem,
-            itemCount: allItems.length,
-            physics: new NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
+          new Container(
+            margin: EdgeInsets.only(top: 10),
+            color: Colors.white,
+            child: new ListView.separated(
+              itemBuilder: _listitem,
+              separatorBuilder: (context, index) {
+                return new Divider();
+              },
+              itemCount: allItems.length,
+              physics: new NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+            ),
           ),
         ],
       ),
