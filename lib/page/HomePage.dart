@@ -13,6 +13,7 @@ import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/LoadingCustomPainter.dart';
 import 'package:jsj/views/RhombusCustomPainter.dart';
+import 'package:quiver/strings.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -120,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                       new TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 new Text(
-                  "$tempStep/5",
+                  "${null == tempStep ? 0 : tempStep}/5",
                   style: TextStyle(fontSize: 15),
                 )
               ],
