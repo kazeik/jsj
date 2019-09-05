@@ -165,6 +165,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                             "可接用户买币卖币以及平台商户售卖订单",
                             maxLines: 1,
                             style: TextStyle(color: Colors.white),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),

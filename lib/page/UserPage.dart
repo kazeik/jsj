@@ -146,8 +146,11 @@ class _UserPageState extends State<UserPage> {
                 child: new Card(
                   margin:
                       EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-                  child: new Column(
-                    children: _buildCell(),
+                  child: new Container(
+                    margin: EdgeInsets.all(5),
+                    child: new Column(
+                      children: _buildCell(),
+                    ),
                   ),
                 ),
               ),
