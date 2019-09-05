@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:jsj/model/HomeModel.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealPage.dart';
 import 'package:jsj/page/HomePage.dart';
 import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/page/PropertyPage.dart';
 import 'package:jsj/page/UserPage.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 
 /*
@@ -57,6 +63,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    _getHomeData();
     DateTime time = DateTime(2019,9,15,23,59,59);
     DateTime nowTime = DateTime.now();
     if (nowTime.isAfter(time)) {
@@ -65,6 +72,13 @@ class _MainPageState extends State<MainPage> {
           new MaterialPageRoute(builder: (context) => new LoginPage()),
               (route) => route == null);
     }
+  }
+
+  _getHomeData() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
+      HomeModel model = HomeModel.fromJson(jsonDecode(str));
+      ApiUtils.loginData = model.data;
+    });
   }
 
   /*

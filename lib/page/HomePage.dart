@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:jsj/model/HomeModel.dart';
+import 'package:jsj/model/ImagesDataModel.dart';
+import 'package:jsj/model/ImagesModel.dart';
+import 'package:jsj/model/NewsDataModel.dart';
+import 'package:jsj/model/NewsModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:jsj/views/LoadingCustomPainter.dart';
 import 'package:jsj/views/RhombusCustomPainter.dart';
 
@@ -22,18 +24,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> allItems = new List<String>();
+  List<NewsDataModel> allItems = new List<NewsDataModel>();
+  List<ImagesDataModel> allImages = new List<ImagesDataModel>();
+  List<ImagesDataModel> allBanner = new List<ImagesDataModel>();
 
   @override
   void initState() {
     super.initState();
-    _getHomeData();
+    _getImages();
+    _getNews();
+    _getBanner();
   }
 
-  _getHomeData() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
-      HomeModel model = HomeModel.fromJson(jsonDecode(str));
-      ApiUtils.loginData = model.data;
+  _getNews() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_news, (str) {
+      NewsModel model = NewsModel.fromJson(jsonDecode(str));
+      allItems.add(model.data);
+      setState(() {});
+    });
+  }
+
+  _getImages() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_images, (str) {
+      ImagesModel model = ImagesModel.fromJson(jsonDecode(str));
+      allImages.addAll(model.data);
+      setState(() {});
+    });
+  }
+
+  _getBanner() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_banner, (str) {
+      ImagesModel model = ImagesModel.fromJson(jsonDecode(str));
+      allBanner.addAll(model.data);
+      setState(() {});
     });
   }
 
@@ -61,7 +84,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Swiper(
                 itemBuilder: _swiperBuilder,
-                itemCount: 3,
+                itemCount: allImages.length,
                 pagination: new SwiperPagination(
                     builder: DotSwiperPaginationBuilder(
                   color: Colors.black54,
@@ -156,7 +179,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-
                 ClipPath(
                   clipper: LoadingCustomPainter(reverse: true),
                   child: Container(
@@ -174,7 +196,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-
           new Container(
             padding: EdgeInsets.all(10),
             width: MediaQuery.of(context).size.width,
@@ -184,8 +205,8 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: new BorderRadius.circular(10),
               ),
               child: Swiper(
-                itemBuilder: _swiperBuilder,
-                itemCount: 3,
+                itemBuilder: _bannerBuilder,
+                itemCount: allBanner.length,
                 pagination: new SwiperPagination(
                     builder: DotSwiperPaginationBuilder(
                   color: Colors.black54,
@@ -200,7 +221,7 @@ class _HomePageState extends State<HomePage> {
           ),
           new ListView.builder(
             itemBuilder: _listitem,
-            itemCount: 10,
+            itemCount: allItems.length,
             physics: new NeverScrollableScrollPhysics(),
             shrinkWrap: true,
           ),
@@ -210,26 +231,42 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _listitem(BuildContext context, int index) {
-    return new ListTile(
-      title: new Text("公告"),
-      subtitle: new Text("这是一段长长长长的公告，呆会用于数据替换的"),
-      leading: new Container(
-        decoration: new BoxDecoration(
-          borderRadius: new BorderRadius.circular(10),
+    if (allItems.isNotEmpty) {
+      NewsDataModel model = allItems[index];
+      return new ListTile(
+        title: new Text("${model?.title}"),
+        subtitle: new Text("${model?.content}"),
+        leading: new Container(
+          decoration: new BoxDecoration(
+            borderRadius: new BorderRadius.circular(10),
+          ),
+          child: new Image(
+            width: 120,
+            height: 90,
+            image: NetworkImage("${model?.image}"),
+          ),
         ),
-        child: new Image(
-          width: 120,
-          height: 90,
-          image: NetworkImage("http://via.placeholder.com/350x150"),
-        ),
-      ),
-    );
+      );
+    }
   }
 
   Widget _swiperBuilder(BuildContext context, int index) {
-    return (Image.network(
-      "http://via.placeholder.com/350x150",
-      fit: BoxFit.fill,
-    ));
+    if (!allImages.isEmpty) {
+      ImagesDataModel model = allImages[index];
+      return (Image.network(
+        "${model.image_url}",
+        fit: BoxFit.fill,
+      ));
+    }
+  }
+
+  Widget _bannerBuilder(BuildContext context, int index) {
+    if (!allBanner.isEmpty) {
+      ImagesDataModel model = allBanner[index];
+      return (Image.network(
+        "${model.image_url}",
+        fit: BoxFit.fill,
+      ));
+    }
   }
 }
