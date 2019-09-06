@@ -53,6 +53,7 @@ class _AboutPageState extends State<DealInfoPage> {
           style: TextStyle(color: Colors.black),
         ),
         elevation: 0,
+        brightness: Brightness.light,
       ),
       body: new Container(
         padding: EdgeInsets.only(top: 20, right: 20, left: 20),

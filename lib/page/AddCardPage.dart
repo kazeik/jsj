@@ -84,6 +84,7 @@ class _AddCardPageState extends State<AddCardPage> {
           new Container(
             margin: EdgeInsets.only(top: 10, bottom: 10),
             child: new Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 _buildCell("银行", "请输入银行", widget.bankName, (str) {
                   widget.bankName = str;
@@ -158,8 +159,8 @@ class _AddCardPageState extends State<AddCardPage> {
     return new Container(
       color: Colors.white,
       padding: EdgeInsets.only(
-        left: 20,
-        right: 20,
+        left: 10,
+        right: 10,
       ),
       child: new Row(
         children: <Widget>[
@@ -171,7 +172,7 @@ class _AddCardPageState extends State<AddCardPage> {
             ),
           ),
           new Container(
-            width: 250,
+            width: 240,
             child: new TextField(
               decoration: new InputDecoration(
                 hintText: hint,
