@@ -121,37 +121,37 @@ class _LoginPageState extends State<LoginPage>
           new Container(
             margin: EdgeInsets.only(top: 40),
             child: new Card(
-                margin:
-                    EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 20),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(14.0),
-                  ),
+              margin: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 20),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(14.0),
                 ),
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    new Container(
-                      margin: EdgeInsets.all(20),
-                      child: new TabBar(
-                        labelColor: Colors.blue,
-                        unselectedLabelColor: Colors.grey,
-                        controller: controller,
-                        isScrollable: true,
-                        tabs: tabs,
-                        indicatorSize: TabBarIndicatorSize.label,
-                      ),
+              ),
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.all(20),
+                    child: new TabBar(
+                      labelColor: Colors.blue,
+                      unselectedLabelColor: Colors.grey,
+                      controller: controller,
+                      isScrollable: true,
+                      tabs: tabs,
+                      indicatorSize: TabBarIndicatorSize.label,
                     ),
-                    new Expanded(
-                      child: new TabBarView(
-                        physics: new NeverScrollableScrollPhysics(),
-                        controller: controller,
-                        children: _buildBarPage(),
-                      ),
+                  ),
+                  new Expanded(
+                    child: new TabBarView(
+                      physics: new NeverScrollableScrollPhysics(),
+                      controller: controller,
+                      children: _buildBarPage(),
                     ),
-                  ],
-                )),
+                  ),
+                ],
+              ),
+            ),
           ),
           new Container(
             alignment: Alignment.topRight,
@@ -169,69 +169,71 @@ class _LoginPageState extends State<LoginPage>
 
   List<Widget> _buildBarPage() {
     List<Widget> widgets = new List();
-    widgets.add(new Column(
-      children: <Widget>[
-        new MainInput(
-          hint: "手机号",
-          iconPath: "username",
-          isPass: true,
-          callback: (str) {
-            _lPhone = str;
-          },
-        ),
-        new MainInput(
-          hint: "登录密码",
-          iconPath: "password",
-          callback: (str) {
-            _lPass = str;
-          },
-        ),
-        new Container(
-          margin: EdgeInsets.only(right: 15),
-          child: new Row(
-            children: <Widget>[
-              new Expanded(
-                child: new MainInput(
-                  hint: "验证码",
-                  iconPath: "verfiycode",
-                  callback: (str) {
-                    _lVerfiyCode = str;
-                  },
-                ),
-                flex: 2,
-              ),
-              new Expanded(
-                child: new GestureDetector(
-                  onTap: () {
-                    _getVerfiyCodeImg();
-                  },
-                  child: _imgbytes == null
-                      ? new Container()
-                      : Image.memory(_imgbytes),
-                ),
-                flex: 1,
-              ),
-            ],
-          ),
-        ),
-        new Container(
-          width: double.infinity,
-          margin: EdgeInsets.only(top: 10, left: 25, right: 25),
-          child: new RaisedButton(
-            color: const Color(0xff0091ea),
-            onPressed: () {
-              _startLogin();
+    widgets.add(
+      new Column(
+        children: <Widget>[
+          new MainInput(
+            hint: "手机号",
+            iconPath: "username",
+            callback: (str) {
+              _lPhone = str;
             },
-            child: new Text(
-              "登录",
-              style: new TextStyle(
-                color: Colors.white,
+          ),
+          new MainInput(
+            hint: "登录密码",
+            iconPath: "password",
+            isPass: true,
+            callback: (str) {
+              _lPass = str;
+            },
+          ),
+          new Container(
+            margin: EdgeInsets.only(right: 15),
+            child: new Row(
+              children: <Widget>[
+                new Expanded(
+                  child: new MainInput(
+                    hint: "验证码",
+                    iconPath: "verfiycode",
+                    callback: (str) {
+                      _lVerfiyCode = str;
+                    },
+                  ),
+                  flex: 2,
+                ),
+                new Expanded(
+                  child: new GestureDetector(
+                    onTap: () {
+                      _getVerfiyCodeImg();
+                    },
+                    child: _imgbytes == null
+                        ? new Container()
+                        : Image.memory(_imgbytes),
+                  ),
+                  flex: 1,
+                ),
+              ],
+            ),
+          ),
+          new Container(
+            width: double.infinity,
+            margin: EdgeInsets.only(top: 10, left: 25, right: 25),
+            child: new RaisedButton(
+              color: const Color(0xff0091ea),
+              onPressed: () {
+                _startLogin();
+              },
+              child: new Text(
+                "登录",
+                style: new TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
     widgets.add(new RegisterPage());
     return widgets;
   }
