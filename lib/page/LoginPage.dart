@@ -80,18 +80,41 @@ class _LoginPageState extends State<LoginPage>
   }
 
   _getVerfiyCodeImg() async {
-    var httpClient = new HttpClient();
-    var request = await httpClient
-        .getUrl(Uri.parse("${ApiUtils.baseUrl}${ApiUtils.get_verfiycode}"));
-    var response = await request.close();
+    try {
+//      Dio dio = new Dio();
+//      dio.options.responseType = ResponseType.stream;
+//      String url = "${ApiUtils.baseUrl}${ApiUtils.get_verfiycode}";
+//      Response response = await dio.get(url);
+//      HttpClientResponse resp = response.data;
+//
+//      resp.cookies.forEach((cookieItem) {
+//        ApiUtils.cookieValue = cookieItem.value;
+//        _saveToken("token", cookieItem.value);
+//      });
+//
+//      var imgbyte = await consolidateHttpClientResponseBytes(resp);
 
-    response.cookies.forEach((cookieItem) {
-      ApiUtils.cookieValue = cookieItem.value;
-      _saveToken("token", cookieItem.value);
-    });
+      var httpClient = new HttpClient();
+      var request = await httpClient
+          .getUrl(Uri.parse("${ApiUtils.baseUrl}${ApiUtils.get_verfiycode}"));
+      var response = await request.close();
 
-    _imgbytes = await consolidateHttpClientResponseBytes(response);
-    setState(() {});
+      response.cookies.forEach((cookieItem) {
+        ApiUtils.cookieValue = cookieItem.value;
+        _saveToken("token", cookieItem.value);
+      });
+
+      var imgbyte = await consolidateHttpClientResponseBytes(response);
+
+      if (null == imgbyte) {
+        Utils.showToast("图片获取失败");
+      }
+      setState(() {
+        this._imgbytes = imgbyte;
+      });
+    } catch (e) {
+      Utils.showToast("图片获取失败1 $e");
+    }
   }
 
   @override
@@ -207,7 +230,15 @@ class _LoginPageState extends State<LoginPage>
                       _getVerfiyCodeImg();
                     },
                     child: _imgbytes == null
-                        ? new Container()
+                        ? new InkWell(
+                            onTap: () {
+                              _getVerfiyCodeImg();
+                            },
+                            child: new Text(
+                              "获取验证码",
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          )
                         : Image.memory(_imgbytes),
                   ),
                   flex: 1,
