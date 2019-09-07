@@ -195,7 +195,7 @@ class _AddCardPageState extends State<AddCardPage> {
                       ),
                     ),
             ),
-          )
+          ),
         ],
       ),
     );

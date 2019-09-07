@@ -78,8 +78,8 @@ class _BankCardPageState extends State<BankCardPage> {
   _getBankList() {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_banklist, (str) {
       model = BankListModel.fromJson(jsonDecode(str));
-      _cardNo = model.data[0].bank_account;
-      _bankName = model.data[0].bank_name;
+      _cardNo = model?.data[0].bank_account;
+      _bankName = model?.data[0].bank_name;
 
       setState(() {});
     });
@@ -91,11 +91,11 @@ class _BankCardPageState extends State<BankCardPage> {
         onTap: () {
           Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
             return new AddCardPage(
-                bankName: model.data[0]?.bank_name,
-                cardName: model.data[0]?.user_name,
-                cardNo: model.data[0]?.bank_account,
-                phone: model.data[0]?.bind_phone,
-                cardNameId: model.data[0]?.id_number);
+                bankName: model?.data[0]?.bank_name,
+                cardName: model?.data[0]?.user_name,
+                cardNo: model?.data[0]?.bank_account,
+                phone: model?.data[0]?.bind_phone,
+                cardNameId: model?.data[0]?.id_number);
           }));
         },
         child: new Container(

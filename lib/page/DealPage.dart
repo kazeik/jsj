@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/BuyCoinModel.dart';
 import 'package:jsj/model/ServiceListModel.dart';
@@ -185,6 +187,7 @@ class _DealPageState extends State<DealPage> {
                       new Container(
                         width: 200,
                         child: new TextField(
+                          keyboardType: TextInputType.numberWithOptions(signed:false,decimal: true),
                           decoration: new InputDecoration(
                             hintText: "请输入金额",
                             hintStyle: new TextStyle(fontSize: 18.0),
@@ -193,6 +196,9 @@ class _DealPageState extends State<DealPage> {
                             border: new OutlineInputBorder(
                                 borderSide: BorderSide.none),
                           ),
+//                          inputFormatters: <TextInputFormatter>[
+//                            WhitelistingTextInputFormatter.digitsOnly
+//                          ],
                           onChanged: (str) {
                             _buyMoney = str;
                           },
@@ -274,6 +280,7 @@ class _DealPageState extends State<DealPage> {
                       new Container(
                         width: 200,
                         child: new TextField(
+                          keyboardType: TextInputType.numberWithOptions(signed:false,decimal: true),
                           decoration: new InputDecoration(
                             hintText: "请输入卖出金额",
                             hintStyle: new TextStyle(fontSize: 18.0),
@@ -282,6 +289,8 @@ class _DealPageState extends State<DealPage> {
                             border: new OutlineInputBorder(
                                 borderSide: BorderSide.none),
                           ),
+//                          inputFormatters: <TextInputFormatter>[
+//                          ],
                           onChanged: (str) {
                             _sellMoney = str;
                           },
@@ -291,7 +300,7 @@ class _DealPageState extends State<DealPage> {
                     ],
                   ),
                 ),
-                new Divider(),
+                new Divider(indent: 20,endIndent: 20,),
                 new Container(
                   margin:
                       EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
