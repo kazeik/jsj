@@ -50,7 +50,7 @@ class _AlipayPageState extends State<AlipayPage> {
       ),
       body: new Container(
         color: Colors.white,
-        child: new Column(
+        child: new ListView(
           children: <Widget>[
             new Container(
               margin: EdgeInsets.all(15),

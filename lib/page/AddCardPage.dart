@@ -79,7 +79,7 @@ class _AddCardPageState extends State<AddCardPage> {
         elevation: 0,
         brightness: Brightness.light,
       ),
-      body: new Column(
+      body: new ListView(
         children: <Widget>[
           new Container(
             margin: EdgeInsets.only(top: 10, bottom: 10),
@@ -104,6 +104,7 @@ class _AddCardPageState extends State<AddCardPage> {
             child: new Text(
               "提醒:后续只能通过该卡提现，且不可修改",
               style: TextStyle(color: Colors.blue),
+              textAlign: TextAlign.center,
             ),
           ),
           new Container(

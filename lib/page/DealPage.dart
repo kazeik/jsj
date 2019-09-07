@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/model/BaseModel.dart';
-import 'package:jsj/model/BuyCoinInfoModel.dart';
 import 'package:jsj/model/BuyCoinModel.dart';
 import 'package:jsj/model/ServiceListModel.dart';
 import 'package:jsj/net/HttpNet.dart';
@@ -47,7 +46,7 @@ class _DealPageState extends State<DealPage> {
         elevation: 0,
         brightness: Brightness.light,
       ),
-      body: new Column(
+      body: new ListView(
         children: <Widget>[
           new Container(
             margin: EdgeInsets.only(top: 10),
