@@ -40,10 +40,10 @@ android {
             keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
-
-//            minifyEnabled false
-//            multiDexEnabled = true
-//            zipAlignEnabled = true
+//
+////            minifyEnabled false
+////            multiDexEnabled = true
+////            zipAlignEnabled = true
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
                     outputFileName = new Date().format('yyyyMMdd') + '_v' + defaultConfig.versionName + '_' + variant.buildType.name + '.apk'

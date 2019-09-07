@@ -235,9 +235,10 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
 
   Widget _buildListItem(BuildContext context, int index) {
     OrderDataModel dataModel = allItems[index];
-    var dateTiem = new DateTime(int.parse(dataModel?.create_time) * 1000);
-    String time =
-        "${dateTiem.year}-${dateTiem.month}-${dateTiem.day} ${dateTiem.hour}:${dateTiem.minute}:${dateTiem.second}";
+    var time = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(dataModel.create_time) * 1000);
+    var _time =
+    "${time.year}-${time.month}-${time.day} ${time.hour}:${time.minute}:${time.second}";
     String status = "";
     if (dataModel.status == "1") {
       status = "进行中";
@@ -251,7 +252,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
         new ListTile(
           title: new Text("${dataModel?.trans_type}"),
           subtitle: new Text(
-              "订单编号:${dataModel.order_no}\n金额:${dataModel?.amount}\n时间:$time\n用户ID:${dataModel.app_user_id}\n"),
+              "订单编号:${dataModel.order_no}\n金额:${dataModel?.amount}\n时间:$_time\n用户ID:${dataModel.app_user_id}\n"),
           trailing: new Text("$status"),
           onTap: () {
             Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
