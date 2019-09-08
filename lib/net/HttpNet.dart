@@ -2,11 +2,13 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:jsj/model/BaseModel.dart';
-import 'package:jsj/model/BaseModel.dart' as prefix0;
 import 'package:jsj/net/MethodTyps.dart';
+import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpNet {
   // 工厂模式
@@ -20,6 +22,13 @@ class HttpNet {
   //初始化
   HttpNet._internal() {
     _initDio();
+  }
+
+  bool _frist = false;
+  BuildContext _context;
+
+  set(BuildContext context) {
+    this._context = context;
   }
 
   static HttpNet _getInstance() {
@@ -65,7 +74,17 @@ class HttpNet {
       BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
       if (model.status == 200)
         success(value.data);
-      else
+      else if (model.status == 302) {
+        if (!_frist) {
+          _frist = true;
+          _clearToken().then((flag) {
+            Navigator.pushAndRemoveUntil(
+                _context,
+                new MaterialPageRoute(builder: (context) => new LoginPage()),
+                (route) => route == null);
+          });
+        }
+      } else
         Utils.showToast(model.msg);
     }).catchError((error) {
       Utils.logs("错误 = ${error.toString()}");
@@ -75,6 +94,11 @@ class HttpNet {
         errorCallback(errorStr.response.data);
       }
     });
+  }
+
+  Future<bool> _clearToken() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.remove("token");
   }
 
 //  /*

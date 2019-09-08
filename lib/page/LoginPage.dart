@@ -42,10 +42,29 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
+    HttpNet.instance.set(context);
     controller =
         TabController(initialIndex: 0, length: tabs.length, vsync: this);
 
-    _getVerfiyCodeImg();
+    _check();
+  }
+
+  Future<String> _getLoginState() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString("token");
+  }
+
+  _check() {
+    _getLoginState().then((token) {
+      if (token == null || isEmpty(token)) {
+        _getVerfiyCodeImg();
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            new MaterialPageRoute(builder: (context) => new MainPage()),
+            (route) => route == null);
+      }
+    });
   }
 
   _startLogin() {
@@ -113,8 +132,9 @@ class _LoginPageState extends State<LoginPage>
       setState(() {
         this._imgbytes = imgbyte;
       });
-    } catch (e) {
+    } on Error catch (e) {
       Utils.showToast("图片获取失败1 $e");
+      Utils.logs("$e");
     }
   }
 
@@ -266,7 +286,9 @@ class _LoginPageState extends State<LoginPage>
         ],
       ),
     );
-    widgets.add(new RegisterPage(tabController: this.controller,));
+    widgets.add(new RegisterPage(
+      tabController: this.controller,
+    ));
     return widgets;
   }
 }

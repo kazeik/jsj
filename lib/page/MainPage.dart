@@ -11,6 +11,8 @@ import 'package:jsj/page/PropertyPage.dart';
 import 'package:jsj/page/UserPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quiver/strings.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -63,15 +65,15 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    _getHomeData();
-    DateTime time = DateTime(2019,9,15,23,59,59);
+    DateTime time = DateTime(2019, 9, 25, 23, 59, 59);
     DateTime nowTime = DateTime.now();
     if (nowTime.isAfter(time)) {
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(builder: (context) => new LoginPage()),
-              (route) => route == null);
-    }
+          (route) => route == null);
+    } else
+      _getHomeData();
   }
 
   _getHomeData() {
