@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Swiper(
                 itemBuilder: _swiperBuilder,
-                itemCount: allImages.length,
+                itemCount: allImages == null ? 0 : allImages.length,
                 pagination: new SwiperPagination(
                   builder: DotSwiperPaginationBuilder(
                     color: Colors.black54,
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 scrollDirection: Axis.horizontal,
-                autoplay: allImages.length != 0,
+                autoplay: allImages != null && allImages.length != 0,
                 onTap: (index) => print('点击了第$index个'),
               ),
             ),
@@ -234,7 +234,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Swiper(
                 itemBuilder: _bannerBuilder,
-                itemCount: allBanner.length,
+                itemCount: allBanner == null ? 0 : allBanner.length,
                 pagination: new SwiperPagination(
                   builder: DotSwiperPaginationBuilder(
                     color: Colors.black54,
@@ -242,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 scrollDirection: Axis.horizontal,
-                autoplay: allBanner.length != 0,
+                autoplay: allBanner != null && allBanner.length != 0,
                 onTap: (index) => print('点击了第$index个'),
               ),
             ),

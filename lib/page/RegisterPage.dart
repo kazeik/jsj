@@ -1,13 +1,15 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
-import 'package:jsj/page/MainPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/MainInput.dart';
 import 'package:quiver/strings.dart';
-import 'package:dio/dio.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -16,6 +18,10 @@ import 'package:dio/dio.dart';
  */
 
 class RegisterPage extends StatefulWidget {
+  TabController tabController;
+
+  RegisterPage({Key key, this.tabController}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => new _RegisterPageState();
 }
@@ -48,11 +54,17 @@ class _RegisterPageState extends State<RegisterPage> {
       "password": _rPass,
       "invite_code": _rInvateCode,
     });
-    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_register, (model) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          new MaterialPageRoute(builder: (context) => new MainPage()),
-          (route) => route == null);
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_register, (data) {
+//      Navigator.pushAndRemoveUntil(
+//          context,
+//          new MaterialPageRoute(builder: (context) => new MainPage()),
+//          (route) => route == null);
+      BaseModel model = BaseModel.fromJson(jsonDecode(data));
+      if (model.status == 200) {
+        if (null != widget.tabController) {
+          widget.tabController.index = 0;
+        }
+      }
     }, data: formData);
   }
 

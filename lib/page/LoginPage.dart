@@ -102,6 +102,7 @@ class _LoginPageState extends State<LoginPage>
       response.cookies.forEach((cookieItem) {
         ApiUtils.cookieValue = cookieItem.value;
         _saveToken("token", cookieItem.value);
+        Utils.logs("获取到的token = ${cookieItem.value}");
       });
 
       var imgbyte = await consolidateHttpClientResponseBytes(response);
@@ -265,7 +266,7 @@ class _LoginPageState extends State<LoginPage>
         ],
       ),
     );
-    widgets.add(new RegisterPage());
+    widgets.add(new RegisterPage(tabController: this.controller,));
     return widgets;
   }
 }
