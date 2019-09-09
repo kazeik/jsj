@@ -56,9 +56,12 @@ class _LoginPageState extends State<LoginPage>
     SharedPreferences preferences = await SharedPreferences.getInstance();
     _lPhone = preferences.getString("phone");
     _lPass = preferences.getString("pass");
-    isSave = preferences.getBool("isSave");
-    if (!isSave) {
+    bool flag = preferences.getBool("isSave");
+    if (flag == null || !flag) {
       _lPass = "";
+      isSave = false;
+    } else {
+      isSave = flag;
     }
   }
 
@@ -253,6 +256,7 @@ class _LoginPageState extends State<LoginPage>
                   child: new MainInput(
                     hint: "验证码",
                     iconPath: "verfiycode",
+                    defaultStr: _lVerfiyCode,
                     callback: (str) {
                       _lVerfiyCode = str;
                     },
@@ -292,9 +296,7 @@ class _LoginPageState extends State<LoginPage>
               new InkWell(
                 onTap: () {
                   this.isSave = !isSave;
-                  setState(() {
-
-                  });
+                  setState(() {});
                 },
                 child: new Text(
                   "记住密码",
