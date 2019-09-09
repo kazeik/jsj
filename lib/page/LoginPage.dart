@@ -4,11 +4,13 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/MainPage.dart';
 import 'package:jsj/page/RegisterPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/ApiUtils.dart' as prefix1;
 import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/MainInput.dart';
 import 'package:quiver/strings.dart';
@@ -42,11 +44,11 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
-    HttpNet.instance.set(context);
     controller =
         TabController(initialIndex: 0, length: tabs.length, vsync: this);
 
-    _check();
+//    _check();
+    _getVerfiyCodeImg();
   }
 
   Future<String> _getLoginState() async {
@@ -59,6 +61,7 @@ class _LoginPageState extends State<LoginPage>
       if (token == null || isEmpty(token)) {
         _getVerfiyCodeImg();
       } else {
+        ApiUtils.cookieValue = token;
         Navigator.pushAndRemoveUntil(
             context,
             new MaterialPageRoute(builder: (context) => new MainPage()),
@@ -119,6 +122,7 @@ class _LoginPageState extends State<LoginPage>
       var response = await request.close();
 
       response.cookies.forEach((cookieItem) {
+        ApiUtils.cookieKey = cookieItem.name;
         ApiUtils.cookieValue = cookieItem.value;
         _saveToken("token", cookieItem.value);
         Utils.logs("获取到的token = ${cookieItem.value}");

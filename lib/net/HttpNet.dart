@@ -53,7 +53,7 @@ class HttpNet {
       dynamic data,
       HashMap<String, dynamic> headers}) {
     if (headers == null) headers = new HashMap();
-    headers['Cookie'] = "PHPSESSID=${ApiUtils.cookieValue}";
+    headers['Cookie'] = "${ApiUtils.cookieKey}=${ApiUtils.cookieValue}";
     var options = new Options(headers: headers);
 
     Future<Response<String>> sValue;
@@ -72,20 +72,21 @@ class HttpNet {
 
     sValue.then((value) {
       BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
-      if (model.status == 200)
+      if (model.status == 200) {
         success(value.data);
-      else if (model.status == 302) {
-        if (!_frist) {
-          _frist = true;
-          _clearToken().then((flag) {
-            Navigator.pushAndRemoveUntil(
-                _context,
-                new MaterialPageRoute(builder: (context) => new LoginPage()),
-                (route) => route == null);
-          });
-        }
-      } else
+//      else if (model.status == 302) {
+//        if (!_frist) {
+//          _frist = true;
+//          _clearToken().then((flag) {
+//            Navigator.pushAndRemoveUntil(
+//                _context,
+//                new MaterialPageRoute(builder: (context) => new LoginPage()),
+//                (route) => route == null);
+//          });
+//        }
+      } else {
         Utils.showToast(model.msg);
+      }
     }).catchError((error) {
       Utils.logs("错误 = ${error.toString()}");
       if (null != error) {
@@ -98,7 +99,7 @@ class HttpNet {
 
   Future<bool> _clearToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.remove("token");
+    return preferences.remove("token");
   }
 
 //  /*

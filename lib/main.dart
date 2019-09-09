@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/page/LoginPage.dart';
 
 void main() => runApp(MyApp());
@@ -7,6 +8,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    HttpNet.instance.set(context);
     return MaterialApp(
       title: 'jsj钱包',
       theme: ThemeData(

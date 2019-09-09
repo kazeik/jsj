@@ -8,6 +8,7 @@ import 'package:jsj/model/HomeDataModel.dart';
 
 class ApiUtils {
   static String cookieValue = "";
+  static String cookieKey = "";
 
   static HomeDataModel loginData;
 
