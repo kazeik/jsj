@@ -49,6 +49,11 @@ class _RegisterPageState extends State<RegisterPage> {
       Utils.showToast("两次密码不一致");
       return;
     }
+
+    if (isEmpty(_rInvateCode)) {
+      Utils.showToast("邀请码不能为空");
+      return;
+    }
     FormData formData = new FormData.from({
       "phone": _rPhone,
       "password": _rPass,

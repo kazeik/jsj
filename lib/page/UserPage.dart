@@ -24,7 +24,7 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   List<String> title = new List<String>()
     ..add("分享")
-    ..add("申请服务商")
+    ..add("服务商平台")
     ..add("支付宝管理")
     ..add("我的银行卡")
     ..add("常见问题")
@@ -33,24 +33,15 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     String status = "未知";
-    switch (ApiUtils.loginData?.status) {
-      case 0:
-        status = "刚注册";
-        break;
-      case 1:
-        status = "申请中";
-        break;
-      case 2:
-        status = "正常";
-        break;
-      case 3:
-        status = "禁用";
-        break;
-      default:
-        status = "未知";
-        break;
+    if (ApiUtils.loginData?.status == "0") {
+      status = "刚注册";
+    } else if (ApiUtils.loginData?.status == "1") {
+      status = "申请中";
+    } else if (ApiUtils.loginData?.status == "2") {
+      status = "正常";
+    } else if (ApiUtils.loginData?.status == "3") {
+      status = "禁用";
     }
-
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("我的"),
@@ -105,7 +96,7 @@ class _UserPageState extends State<UserPage> {
                               _buildAlertInfo(
                                   ApiUtils.loginData?.can_withdraw == 0
                                       ? "禁止卖币"
-                                      : "可以卖币",
+                                      : "正常卖币",
                                   Colors.pink)
                             ],
                           ),
@@ -147,7 +138,7 @@ class _UserPageState extends State<UserPage> {
                   margin:
                       EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
                   child: new Container(
-                    margin: EdgeInsets.only(left: 5,right: 5,top: 5),
+                    margin: EdgeInsets.only(left: 5, right: 5, top: 5),
                     child: new Column(
                       children: _buildCell(),
                     ),
@@ -165,7 +156,7 @@ class _UserPageState extends State<UserPage> {
     return new Container(
       decoration: new BoxDecoration(
         borderRadius: new BorderRadius.circular(8),
-        color: Colors.black,
+        color: Colors.yellow,
       ),
       margin: EdgeInsets.only(right: 5, top: 10),
       padding: EdgeInsets.only(left: 2, right: 2),
@@ -181,7 +172,7 @@ class _UserPageState extends State<UserPage> {
           ),
           new Text(
             title,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.black),
           )
         ],
       ),

@@ -55,7 +55,8 @@ class HomeDataModel {
   /**
    * 状态 0刚注册 1申请中 2正常 3禁用
    */
-  int status;
+  String status;
+
   /**
    * 服务商余额
    */
@@ -65,6 +66,7 @@ class HomeDataModel {
    * 1、注册2、激活，3、绑定支付宝，4、绑定银行卡，5、自动交易
    */
   int step;
+
   /**
    * 服务商冻结余额
    */
@@ -92,6 +94,7 @@ class HomeDataModel {
       this.lock_balance,
       this.phone,
       this.reply,
+      this.status,
       this.service_balance,
       this.service_lock_balance,
       this.total_commission})
@@ -115,6 +118,7 @@ class HomeDataModel {
       lock_balance: json['lock_balance'],
       phone: json['phone'],
       reply: json['reply'],
+      status: json['status'],
       service_balance: json['service_balance'],
       service_lock_balance: json['service_lock_balance'],
       total_commission: json['total_commission'],
@@ -139,6 +143,7 @@ class HomeDataModel {
     data['lock_balance'] = this.lock_balance;
     data['phone'] = this.phone;
     data['reply'] = this.reply;
+    data['status'] = this.status;
     data['service_balance'] = this.service_balance;
     data['service_lock_balance'] = this.service_lock_balance;
     data['total_commission'] = this.total_commission;

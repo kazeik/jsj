@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/page/WithDrawPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:quiver/strings.dart';
@@ -93,39 +94,39 @@ class _ShatePageState extends State<SharePage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
-                            new Container(
-                              margin: EdgeInsets.only(bottom: 5),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  new Container(
-                                    margin: EdgeInsets.only(right: 5),
-                                    padding: EdgeInsets.only(left: 8),
-                                    child: new Image(
-                                      width: 15,
-                                      height: 15,
-                                      image:
-                                          AssetImage(Utils.getImgPath("team")),
-                                    ),
-                                  ),
-                                  new Text(
-                                    "团队管理",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  new Icon(
-                                    Icons.chevron_right,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ),
-                              decoration: new BoxDecoration(
-                                color: const Color(0xffd04763),
-                                borderRadius: new BorderRadius.only(
-                                  topLeft: new Radius.circular(10),
-                                  bottomLeft: new Radius.circular(10),
-                                ),
-                              ),
-                            ),
+//                            new Container(
+//                              margin: EdgeInsets.only(bottom: 5),
+//                              child: new Row(
+//                                mainAxisSize: MainAxisSize.min,
+//                                children: <Widget>[
+//                                  new Container(
+//                                    margin: EdgeInsets.only(right: 5),
+//                                    padding: EdgeInsets.only(left: 8),
+//                                    child: new Image(
+//                                      width: 15,
+//                                      height: 15,
+//                                      image:
+//                                          AssetImage(Utils.getImgPath("team")),
+//                                    ),
+//                                  ),
+//                                  new Text(
+//                                    "团队管理",
+//                                    style: TextStyle(color: Colors.white),
+//                                  ),
+//                                  new Icon(
+//                                    Icons.chevron_right,
+//                                    color: Colors.white,
+//                                  ),
+//                                ],
+//                              ),
+//                              decoration: new BoxDecoration(
+//                                color: const Color(0xffd04763),
+//                                borderRadius: new BorderRadius.only(
+//                                  topLeft: new Radius.circular(10),
+//                                  bottomLeft: new Radius.circular(10),
+//                                ),
+//                              ),
+//                            ),
                             new Container(
                               margin: EdgeInsets.only(bottom: 5, top: 5),
                               padding: EdgeInsets.only(left: 8),
@@ -172,13 +173,29 @@ class _ShatePageState extends State<SharePage> {
                 child: new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    new FlatButton(
+                      color: const Color(0xff0091ea),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(new MaterialPageRoute(builder: (_) {
+                          return new WithDrawPage();
+                        }));
+                      },
+                      child: new Text(
+                        "立即提现",
+                        style: new TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                     new Image(
                       width: 120,
                       height: 120,
                       image: NetworkImage(
                           "${ApiUtils.baseUrl}${ApiUtils.get_qrcode}",
                           headers: {
-                            "Cookie": "PHPSESSID=${ApiUtils.cookieValue}"
+                            "Cookie":
+                                "${ApiUtils.cookieKey}=${ApiUtils.cookieValue}"
                           }),
                     ),
                     new Container(

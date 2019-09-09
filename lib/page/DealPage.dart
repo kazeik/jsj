@@ -220,7 +220,7 @@ class _DealPageState extends State<DealPage> {
                   margin:
                       EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
                   child: new Text(
-                      "本次最多可购买￥${selectModel == null ? "0" : selectModel?.balance},赠送购买金额0.9%的币"),
+                      "本次最多可购买￥${ApiUtils.loginData?.balance},赠送购买金额0.9%的币"),
                 ),
               ],
             ),
@@ -252,7 +252,7 @@ class _DealPageState extends State<DealPage> {
       for (int i = 0; i < serviceListModel?.data?.length; i++) {
         downItems.add(
           new DropdownMenuItem(
-            child: new Text(serviceListModel?.data[i].id),
+            child: new Text("${serviceListModel?.data[i].id}(${serviceListModel?.data[i].balance})"),
             value: serviceListModel?.data[i].id,
           ),
         );

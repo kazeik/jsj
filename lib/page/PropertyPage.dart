@@ -83,7 +83,7 @@ class _PropertyPageState extends State<PropertyPage> {
                               fontWeight: FontWeight.bold, fontSize: 18.0),
                         ),
                         new Text(
-                          "帐号余额(币)",
+                          "帐户余额(币)",
                           style: TextStyle(fontSize: 13.0),
                         ),
                       ],
@@ -158,11 +158,13 @@ class _PropertyPageState extends State<PropertyPage> {
           subtitle: new Text(timestr),
           trailing: new Text("${model.type == "1" ? "+" : "-"}${model.amount}"),
           onTap: () {
-            Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-              return new DealInfoPage(
-                id: model.id,
-              );
-            }));
+            Navigator.of(context).push(
+              new MaterialPageRoute(builder: (_) {
+                return new DealInfoPage(
+                  id: model.id,
+                );
+              }),
+            );
           },
         ),
         new Divider(

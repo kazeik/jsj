@@ -54,8 +54,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: new Text("服务商"),
+        title: new Text("服务商平台"),
         elevation: 0,
+        centerTitle: true,
       ),
       body: new Stack(
         children: <Widget>[
@@ -109,7 +110,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                                           fontSize: 18.0),
                                     ),
                                     new Text(
-                                      "帐号余额(币)",
+                                      "服务商余额(币)",
                                       style: TextStyle(fontSize: 13.0),
                                     ),
                                   ],
@@ -245,7 +246,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
     } else if (dataModel.status == "2") {
       status = "已完成";
     } else if (dataModel.status == "0") {
-      status = "等待抢单";
+      status = "抢单";
+    } else if (dataModel.status == "3") {
+      status = "交易失败";
     }
     return new Column(
       children: <Widget>[
