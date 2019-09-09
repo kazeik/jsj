@@ -220,7 +220,7 @@ class _DealPageState extends State<DealPage> {
                   margin:
                       EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
                   child: new Text(
-                      "本次最多可购买￥${selectModel == null ? "" : selectModel?.balance},赠送购买金额0.9%的币"),
+                      "本次最多可购买￥${selectModel == null ? "0" : selectModel?.balance},赠送购买金额0.9%的币"),
                 ),
               ],
             ),
@@ -320,10 +320,13 @@ class _DealPageState extends State<DealPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       new Text(
-                          "可卖出余额￥${ApiUtils.loginData?.balance}币，手续费1%+10币"),
+                          "可卖出余额￥${isEmpty(ApiUtils.loginData?.balance) ? "0" : ApiUtils.loginData?.balance}币，手续费1%+10币"),
                       new InkWell(
                         onTap: () {
-                          sellController.text = ApiUtils.loginData?.balance;
+                          _sellMoney = isEmpty(ApiUtils.loginData?.balance)
+                              ? "0"
+                              : ApiUtils.loginData?.balance;
+                          sellController.text = _sellMoney;
                         },
                         child: new Text(
                           "全部卖出",
