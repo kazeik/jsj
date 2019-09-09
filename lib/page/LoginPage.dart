@@ -4,19 +4,17 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/MainPage.dart';
 import 'package:jsj/page/RegisterPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
-import 'package:jsj/utils/ApiUtils.dart' as prefix1;
 import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/MainInput.dart';
 import 'package:quiver/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 10:32
  * 类说明:
@@ -41,6 +39,8 @@ class _LoginPageState extends State<LoginPage>
 
   Uint8List _imgbytes;
 
+  bool isSave = false;
+
   @override
   void initState() {
     super.initState();
@@ -49,26 +49,33 @@ class _LoginPageState extends State<LoginPage>
 
 //    _check();
     _getVerfiyCodeImg();
+    _getLoginState();
   }
 
-  Future<String> _getLoginState() async {
+  _getLoginState() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    return preferences.getString("token");
+    _lPhone = preferences.getString("phone");
+    _lPass = preferences.getString("pass");
+    isSave = preferences.getBool("isSave");
+    if (!isSave) {
+      _lPass = "";
+    }
   }
 
-  _check() {
-    _getLoginState().then((token) {
-      if (token == null || isEmpty(token)) {
-        _getVerfiyCodeImg();
-      } else {
-        ApiUtils.cookieValue = token;
-        Navigator.pushAndRemoveUntil(
-            context,
-            new MaterialPageRoute(builder: (context) => new MainPage()),
-            (route) => route == null);
-      }
-    });
-  }
+//
+//  _check() {
+//    _getLoginState().then((token) {
+//      if (token == null || isEmpty(token)) {
+//        _getVerfiyCodeImg();
+//      } else {
+//        ApiUtils.cookieValue = token;
+//        Navigator.pushAndRemoveUntil(
+//            context,
+//            new MaterialPageRoute(builder: (context) => new MainPage()),
+//            (route) => route == null);
+//      }
+//    });
+//  }
 
   _startLogin() {
     if (isEmpty(_lPhone)) {
@@ -89,16 +96,16 @@ class _LoginPageState extends State<LoginPage>
       "invite_code": _lVerfiyCode,
     });
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_login, (model) {
+      Utils.saveInfo("phone", _lPhone);
+      Utils.saveBoolInfo("isSave", isSave);
+      if (isSave) {
+        Utils.saveInfo("pass", _lPass);
+      }
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(builder: (context) => new MainPage()),
           (route) => route == null);
     }, data: formData);
-  }
-
-  _saveToken(String key, String value) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString(key, value);
   }
 
   _getVerfiyCodeImg() async {
@@ -124,8 +131,9 @@ class _LoginPageState extends State<LoginPage>
       response.cookies.forEach((cookieItem) {
         ApiUtils.cookieKey = cookieItem.name;
         ApiUtils.cookieValue = cookieItem.value;
-        _saveToken("token", cookieItem.value);
-        Utils.logs("获取到的token = ${cookieItem.value}");
+        Utils.saveInfo("token", cookieItem.value);
+        Utils.saveInfo("tokenKey", cookieItem.name);
+        Utils.logs("获取到的token = $cookieItem");
       });
 
       var imgbyte = await consolidateHttpClientResponseBytes(response);
@@ -222,6 +230,7 @@ class _LoginPageState extends State<LoginPage>
         children: <Widget>[
           new MainInput(
             hint: "手机号",
+            defaultStr: _lPhone,
             iconPath: "username",
             callback: (str) {
               _lPhone = str;
@@ -230,6 +239,7 @@ class _LoginPageState extends State<LoginPage>
           new MainInput(
             hint: "登录密码",
             iconPath: "password",
+            defaultStr: _lPass == null ? "" : _lPass,
             isPass: true,
             callback: (str) {
               _lPass = str;
@@ -271,9 +281,23 @@ class _LoginPageState extends State<LoginPage>
               ],
             ),
           ),
+          new Row(
+            children: <Widget>[
+              new Checkbox(
+                  value: isSave == null ? false : isSave,
+                  onChanged: (flag) {
+                    isSave = flag;
+                    setState(() {});
+                  }),
+              new Text(
+                "记住密码",
+                style: new TextStyle(fontSize: 13),
+              ),
+            ],
+          ),
           new Container(
             width: double.infinity,
-            margin: EdgeInsets.only(top: 10, left: 25, right: 25),
+            margin: EdgeInsets.only(left: 25, right: 25),
             child: new RaisedButton(
               color: const Color(0xff0091ea),
               onPressed: () {

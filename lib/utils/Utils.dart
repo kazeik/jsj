@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jsj/views/LoadingDialog.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 类说明:
@@ -25,6 +25,15 @@ class Utils {
     if (isDebug) {
       print(msg);
     }
+  }
+
+  static saveInfo(String key, String value) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString(key, value);
+  }
+  static saveBoolInfo(String key, bool value) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setBool(key, value);
   }
 
   static showToast(String msg) {
