@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jsj/views/LoadingDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quiver/strings.dart';
+
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 类说明:
@@ -31,6 +33,7 @@ class Utils {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString(key, value);
   }
+
   static saveBoolInfo(String key, bool value) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setBool(key, value);
@@ -49,7 +52,7 @@ class Utils {
 
   static Widget loading(BuildContext context, {String text}) {
     String _text = '数据加载中...';
-    if (text != null && text != "") {
+    if (isNotEmpty(text)) {
       _text = text;
     }
     showDialog<Null>(

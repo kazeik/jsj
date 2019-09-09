@@ -36,7 +36,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
   }
 
   _getOrderList() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_order, (str) {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_balance, (str) {
       model = OrderModel.fromJson(jsonDecode(str));
       allItems.addAll(model.data);
       allItems.forEach((it) {
@@ -101,9 +101,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                                 child: new Column(
                                   children: <Widget>[
                                     new Text(
-                                      isEmpty(ApiUtils.loginData.balance)
+                                      isEmpty(ApiUtils.loginData.service_balance)
                                           ? "0.00"
-                                          : ApiUtils.loginData.balance,
+                                          : ApiUtils.loginData.service_balance,
                                       style: new TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18.0),
@@ -120,9 +120,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                                 child: new Column(
                                   children: <Widget>[
                                     new Text(
-                                      isEmpty(ApiUtils.loginData.lock_balance)
+                                      isEmpty(ApiUtils.loginData.service_lock_balance)
                                           ? "0.00"
-                                          : ApiUtils.loginData.lock_balance,
+                                          : ApiUtils.loginData.service_lock_balance,
                                       style: new TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18.0),
@@ -245,7 +245,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
     } else if (dataModel.status == "2") {
       status = "已完成";
     } else if (dataModel.status == "0") {
-      status = "抢单";
+      status = "等待抢单";
     }
     return new Column(
       children: <Widget>[
@@ -276,9 +276,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
   List<Widget> listitem() {
     List<Widget> allWidget = new List();
     List<String> menuItems = new List<String>()
-      ..add("全部")
-      ..add("收入")
-      ..add("支出");
+      ..add("订单")
+      ..add("进行中")
+      ..add("已完成");
     for (int i = 0; i < menuItems.length; i++) {
       allWidget.add(
         groupValue == i
