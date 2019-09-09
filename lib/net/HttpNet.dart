@@ -90,9 +90,12 @@ class HttpNet {
     }).catchError((error) {
       Utils.logs("错误 = ${error.toString()}");
       if (null != error) {
-        var errorStr = error as DioError;
-        Utils.showToast(errorStr.response.data);
-        errorCallback(errorStr.response.data);
+        bool dioError = error is DioError;
+        if (dioError) {
+          var errorStr = error as DioError;
+          Utils.showToast(errorStr.response.data);
+          errorCallback(errorStr.response.data);
+        }
       }
     });
   }

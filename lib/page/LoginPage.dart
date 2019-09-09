@@ -289,10 +289,18 @@ class _LoginPageState extends State<LoginPage>
                     isSave = flag;
                     setState(() {});
                   }),
-              new Text(
-                "记住密码",
-                style: new TextStyle(fontSize: 13),
-              ),
+              new InkWell(
+                onTap: () {
+                  this.isSave = !isSave;
+                  setState(() {
+
+                  });
+                },
+                child: new Text(
+                  "记住密码",
+                  style: new TextStyle(fontSize: 13),
+                ),
+              )
             ],
           ),
           new Container(

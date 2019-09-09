@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/BuyCoinModel.dart';
+import 'package:jsj/model/ServiceItemModel.dart';
 import 'package:jsj/model/ServiceListModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
@@ -32,6 +32,7 @@ class _DealPageState extends State<DealPage> {
 
   String orderId = "";
   var serviceValue;
+  ServiceItemModel selectModel;
 
   TextEditingController sellController = TextEditingController();
 
@@ -128,7 +129,7 @@ class _DealPageState extends State<DealPage> {
   _getCurrentOrder() {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processbuycoin,
         (str) {
-      BuyCoinModel model= BuyCoinModel.fromJson(jsonDecode(str));
+      BuyCoinModel model = BuyCoinModel.fromJson(jsonDecode(str));
       orderId = model.data.id;
       setState(() {});
     });
@@ -158,6 +159,11 @@ class _DealPageState extends State<DealPage> {
             items: _buildDropdownItem(),
             onChanged: (index) {
               serviceValue = index;
+              serviceListModel.data.forEach((it) {
+                if (it.id == index) {
+                  selectModel = it;
+                }
+              });
               setState(() {});
             },
             hint: new Text("请选择购买服务商"),
@@ -187,7 +193,8 @@ class _DealPageState extends State<DealPage> {
                       new Container(
                         width: 200,
                         child: new TextField(
-                          keyboardType: TextInputType.numberWithOptions(signed:false,decimal: true),
+                          keyboardType: TextInputType.numberWithOptions(
+                              signed: false, decimal: true),
                           decoration: new InputDecoration(
                             hintText: "请输入金额",
                             hintStyle: new TextStyle(fontSize: 18.0),
@@ -213,7 +220,7 @@ class _DealPageState extends State<DealPage> {
                   margin:
                       EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
                   child: new Text(
-                      "本次最多可购买￥${ApiUtils.loginData?.balance},赠送购买金额0.9%的币"),
+                      "本次最多可购买￥${selectModel == null ? "" : selectModel?.balance},赠送购买金额0.9%的币"),
                 ),
               ],
             ),
@@ -280,7 +287,8 @@ class _DealPageState extends State<DealPage> {
                       new Container(
                         width: 200,
                         child: new TextField(
-                          keyboardType: TextInputType.numberWithOptions(signed:false,decimal: true),
+                          keyboardType: TextInputType.numberWithOptions(
+                              signed: false, decimal: true),
                           decoration: new InputDecoration(
                             hintText: "请输入卖出金额",
                             hintStyle: new TextStyle(fontSize: 18.0),
@@ -300,7 +308,10 @@ class _DealPageState extends State<DealPage> {
                     ],
                   ),
                 ),
-                new Divider(indent: 20,endIndent: 20,),
+                new Divider(
+                  indent: 20,
+                  endIndent: 20,
+                ),
                 new Container(
                   margin:
                       EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
