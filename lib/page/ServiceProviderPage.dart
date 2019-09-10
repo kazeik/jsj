@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -26,29 +27,46 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
   int groupValue = 0;
 
   List<OrderDataModel> allItems = new List();
-  List<OrderDataModel> buyItems = new List();
-  List<OrderDataModel> sellItems = new List();
-  OrderModel model;
+//  List<OrderDataModel> buyItems = new List();
+//  List<OrderDataModel> sellItems = new List();
+
+  _getOrderList() {
+    allItems.clear();
+    HttpNet.instance.request(
+      MethodTypes.GET,
+      ApiUtils.get_order,
+      (str) {
+        OrderModel model = OrderModel.fromJson(jsonDecode(str));
+        allItems.addAll(model.data);
+        setState(() {});
+      },
+    );
+  }
+
+  _getOrderListByStatus() {
+    HashMap<String, Object> params = new HashMap();
+    params["status"] = groupValue;
+    HttpNet.instance.request(
+      MethodTypes.GET,
+      ApiUtils.get_order,
+      (str) {
+        OrderModel model = OrderModel.fromJson(jsonDecode(str));
+        allItems.clear();
+        if (groupValue == 1) {
+          allItems.addAll(model.data);
+        } else if (groupValue == 2) {
+          allItems.addAll(model.data);
+        }
+        setState(() {});
+      },
+      params: params,
+    );
+  }
 
   @override
   void initState() {
     super.initState();
     _getOrderList();
-  }
-
-  _getOrderList() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_order, (str) {
-      model = OrderModel.fromJson(jsonDecode(str));
-      allItems.addAll(model.data);
-      allItems.forEach((it) {
-        if (it.type == "1") {
-          buyItems.add(it);
-        } else if (it.type == "2") {
-          sellItems.add(it);
-        }
-      });
-      setState(() {});
-    });
   }
 
   @override
@@ -225,17 +243,21 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
    * 更新按钮状态
    */
   void updateGroupValue(int v) {
-    allItems.clear();
-    if (v == 0) {
-      allItems.addAll(model.data);
-    } else if (v == 1) {
-      allItems.addAll(buyItems);
-    } else if (v == 2) {
-      allItems.addAll(sellItems);
-    }
+//
+//    if (v == 0) {
+//      allItems.addAll(model.data);
+//    } else if (v == 1) {
+//      allItems.addAll(buyItems);
+//    } else if (v == 2) {
+//      allItems.addAll(sellItems);
+//    }
     setState(() {
       groupValue = v;
     });
+    if (v == 0)
+      _getOrderList();
+    else
+      _getOrderListByStatus();
   }
 
   Widget _buildListItem(BuildContext context, int index) {
@@ -269,77 +291,90 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
   }
 
   Widget _buildTrailing(OrderDataModel dataModel) {
-    if (dataModel.is_admin == "1") {
-      //平台发布
-      return new Container(
-        height: 40,
-        child: new OutlineButton(
-          onPressed: () {
-            showDialog<Null>(
-                context: context, //BuildContext对象
-                barrierDismissible: true,
-                builder: (BuildContext _context) {
-                  return new AlertDialog(
-                    title: new Text("认购额度"),
-                    content: new MainInput(
-                      hint: "请输入认购金额",
-                      callback: (str) {},
-                    ),
-                    actions: <Widget>[
-                      new FlatButton(
-                        onPressed: () {
-                          Navigator.of(_context).pop();
-                        },
-                        child: new Text("取消"),
+    if (groupValue == 0) {
+      if (dataModel.is_admin == "1") {
+        //平台发布
+        return new Container(
+          height: 40,
+          child: new OutlineButton(
+            onPressed: () {
+              showDialog<Null>(
+                  context: context, //BuildContext对象
+                  barrierDismissible: true,
+                  builder: (BuildContext _context) {
+                    return new AlertDialog(
+                      title: new Text("认购额度"),
+                      content: new MainInput(
+                        hint: "请输入认购金额",
+                        callback: (str) {},
+                        defaultStr: dataModel?.amount,
                       ),
-                      new FlatButton(
-                        onPressed: () {
-                          Navigator.of(_context).pop();
+                      actions: <Widget>[
+                        new FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: new Text("取消"),
+                        ),
+                        new FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
 //                          Navigator.pushAndRemoveUntil(
 //                              context,
 //                              new MaterialPageRoute(builder: (context) => new LoginPage()),
 //                                  (route) => route == null);
-                        },
-                        child: new Text("确定"),
-                      ),
-                    ],
-                  );
-                });
-          },
-          child: new Text("认购"),
-        ),
-      );
-    } else if (dataModel.is_admin == "0") {
-      //用户发布
-      if (dataModel.type == "1") {
-        //买入
-        return new Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            new Container(
-              child: new OutlineButton(
-                onPressed: () {},
-                child: new Text("马上接"),
-              ),
-              height: 25,
-            ),
-            new Container(
-              child: new OutlineButton(
-                onPressed: () {},
-                child: new Text("拒单"),
-              ),
-              height: 25,
-            ),
-          ],
+                          },
+                          child: new Text("确定"),
+                        ),
+                      ],
+                    );
+                  });
+            },
+            child: new Text("认购"),
+          ),
         );
-      } else if (dataModel.type == "2") {
-        //卖出
-        new OutlineButton(
-          onPressed: () {},
-          child: new Text("马上认购"),
-        );
+      } else if (dataModel.is_admin == "0") {
+        //用户发布
+        if (dataModel.type == "1") {
+          //买入
+          return new Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              new Container(
+                child: new OutlineButton(
+                  onPressed: () {},
+                  child: new Text("马上接"),
+                ),
+                height: 25,
+              ),
+              new Container(
+                child: new OutlineButton(
+                  onPressed: () {},
+                  child: new Text("拒单"),
+                ),
+                height: 25,
+              ),
+            ],
+          );
+        } else if (dataModel.type == "2") {
+          //卖出
+          new OutlineButton(
+            onPressed: () {},
+            child: new Text("马上认购"),
+          );
+        }
       }
+    } else if (groupValue == 1) {
+    } else if (groupValue == 2) {
+      String stats = "";
+      if (dataModel?.status == "2") {
+        stats = "交易完成";
+      } else if (dataModel?.status == "3") {
+        stats = "交易失败";
+      }
+
+      return new Text(stats);
     }
   }
 
