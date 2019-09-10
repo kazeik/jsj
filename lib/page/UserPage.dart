@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jsj/page/AboutPage.dart';
 import 'package:jsj/page/AlipayPage.dart';
+import 'package:jsj/page/BalanceInfoPage.dart';
 import 'package:jsj/page/BankCardPage.dart';
 import 'package:jsj/page/MessagePage.dart';
 import 'package:jsj/page/ServiceProviderPage.dart';
@@ -27,8 +28,8 @@ class _UserPageState extends State<UserPage> {
     ..add("服务商平台")
     ..add("支付宝管理")
     ..add("我的银行卡")
-    ..add("常见问题")
-    ..add("联系我们");
+    ..add("余额明细")
+    ..add("常见问题") ;
 
   @override
   Widget build(BuildContext context) {
@@ -226,13 +227,13 @@ class _UserPageState extends State<UserPage> {
                     case 4:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
-                        return new MessagePage();
+                        return new BalanceInfoPage();
                       }));
                       break;
                     case 5:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
-                        return new AboutPage();
+                        return new MessagePage();
                       }));
                       break;
                   }
