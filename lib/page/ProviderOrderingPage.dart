@@ -11,6 +11,7 @@ import 'package:jsj/page/DealInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 
 import 'package:quiver/strings.dart';
+import 'package:image_picker/image_picker.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -25,6 +26,7 @@ class ProviderOrderingPage extends StatefulWidget {
 
 class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
   List<OrderDataModel> allItems = new List();
+
   @override
   void initState() {
     super.initState();
@@ -33,19 +35,23 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
 
   _getOrderListByStatus() {
     HashMap<String, Object> params = new HashMap();
-    params["status"] = 2;
+    params["status"] = 1;
     HttpNet.instance.request(
       MethodTypes.GET,
       ApiUtils.get_order,
-          (str) {
+      (str) {
         OrderModel model = OrderModel.fromJson(jsonDecode(str));
         allItems.clear();
         allItems.addAll(model.data);
+        if (!mounted) {
+          return;
+        }
         setState(() {});
       },
       params: params,
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return new ListView.separated(
@@ -85,19 +91,54 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
       children: <Widget>[
         new Container(
           child: new OutlineButton(
-            onPressed: () {},
+            onPressed: () {
+              if (dataModel.bank == null) {
+                return;
+              }
+              showDialog<Null>(
+                  context: context, //BuildContext对象
+                  barrierDismissible: true,
+                  builder: (BuildContext _context) {
+                    return new AlertDialog(
+                      title: new Text("银行卡"),
+                      content: new Text(
+                        "${dataModel.bank?.bank_name}\n${dataModel?.bank.bank_account}",
+                      ),
+                      actions: <Widget>[
+                        new FlatButton(
+                          onPressed: () {
+                            Navigator.of(_context).pop();
+                          },
+                          child: new Text("取消"),
+                        ),
+                        new FlatButton(
+                          onPressed: () {
+                            Navigator.of(_context).pop();
+                          },
+                          child: new Text("确定"),
+                        ),
+                      ],
+                    );
+                  });
+            },
             child: new Text("收款银行卡"),
           ),
           height: 25,
         ),
         new Container(
           child: new OutlineButton(
-            onPressed: () {},
+            onPressed: () {
+              _getSelectImage();
+            },
             child: new Text("上传截图"),
           ),
           height: 25,
         ),
       ],
     );
+  }
+
+  _getSelectImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
   }
 }

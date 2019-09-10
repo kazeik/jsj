@@ -129,7 +129,9 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
           children: <Widget>[
             new Container(
               child: new OutlineButton(
-                onPressed: () {},
+                onPressed: () {
+                  _userSureCoin(dataModel?.id);
+                },
                 child: new Text("马上接"),
               ),
               height: 25,

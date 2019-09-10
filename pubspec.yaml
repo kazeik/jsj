@@ -44,6 +44,9 @@ dev_dependencies:
   #自定义形状
   flutter_custom_clippers: ^1.0.4
 
+  #拍照和图片选择
+  image_picker: ^0.6.1+4
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
