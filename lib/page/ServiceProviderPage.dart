@@ -27,6 +27,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
   int groupValue = 0;
 
   List<OrderDataModel> allItems = new List();
+
 //  List<OrderDataModel> buyItems = new List();
 //  List<OrderDataModel> sellItems = new List();
 
@@ -359,9 +360,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
           );
         } else if (dataModel.type == "2") {
           //卖出
-          new OutlineButton(
+          return new OutlineButton(
             onPressed: () {},
-            child: new Text("马上认购"),
+            child: new Text("认购"),
           );
         }
       }
