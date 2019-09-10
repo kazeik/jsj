@@ -362,7 +362,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
           //卖出
           return new OutlineButton(
             onPressed: () {},
-            child: new Text("认购"),
+            child: new Text("马上接"),
           );
         }
       }
