@@ -1,6 +1,6 @@
 import 'package:jsj/model/HomeDataModel.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 10:50
  * 类说明:
@@ -117,7 +117,7 @@ class ApiUtils {
   /*
    * 用户打款
    */
-  static String get_paycoin = "/Userapi/payCoin ";
+  static String get_paycoin = "/Userapi/payCoin";
 
   /*
    * 用户确认到帐
