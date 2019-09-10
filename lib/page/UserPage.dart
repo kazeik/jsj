@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jsj/page/AboutPage.dart';
 import 'package:jsj/page/AlipayPage.dart';
 import 'package:jsj/page/BalanceInfoPage.dart';
 import 'package:jsj/page/BankCardPage.dart';
@@ -8,7 +7,6 @@ import 'package:jsj/page/ServiceProviderPage.dart';
 import 'package:jsj/page/SharePage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
-import 'package:quiver/strings.dart';
 import 'package:quiver/strings.dart';
 
 /**
@@ -24,7 +22,7 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   List<String> title = new List<String>()
-    ..add("分享")
+    ..add("代理分享")
     ..add("服务商平台")
     ..add("支付宝管理")
     ..add("我的银行卡")
@@ -39,7 +37,7 @@ class _UserPageState extends State<UserPage> {
     } else if (ApiUtils.loginData?.status == "1") {
       status = "申请中";
     } else if (ApiUtils.loginData?.status == "2") {
-      status = "正常";
+      status = "已激活帐号";
     } else if (ApiUtils.loginData?.status == "3") {
       status = "禁用";
     }
@@ -106,7 +104,7 @@ class _UserPageState extends State<UserPage> {
                       ),
                     ),
                     new Container(
-                      margin: EdgeInsets.only(left: 20),
+                      margin: EdgeInsets.only(left: 10),
                       child: new ListTile(
                         leading: new Image(
                           image: AssetImage(
@@ -157,7 +155,7 @@ class _UserPageState extends State<UserPage> {
     return new Container(
       decoration: new BoxDecoration(
         borderRadius: new BorderRadius.circular(8),
-        color: Colors.yellow,
+        color: const Color(0xfffdd72b),
       ),
       margin: EdgeInsets.only(right: 5, top: 10),
       padding: EdgeInsets.only(left: 2, right: 2),
@@ -173,7 +171,7 @@ class _UserPageState extends State<UserPage> {
           ),
           new Text(
             title,
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.white,fontSize: 13),
           )
         ],
       ),

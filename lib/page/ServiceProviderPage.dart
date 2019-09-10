@@ -9,6 +9,7 @@ import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:jsj/views/MainInput.dart';
 import 'package:quiver/strings.dart';
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -22,7 +23,7 @@ class ServiceProviderPage extends StatefulWidget {
 }
 
 class _ServiceProviderPageState extends State<ServiceProviderPage> {
-  int groupValue = -1;
+  int groupValue = 0;
 
   List<OrderDataModel> allItems = new List();
   List<OrderDataModel> buyItems = new List();
@@ -36,7 +37,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
   }
 
   _getOrderList() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_balance, (str) {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_order, (str) {
       model = OrderModel.fromJson(jsonDecode(str));
       allItems.addAll(model.data);
       allItems.forEach((it) {
@@ -102,7 +103,8 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                                 child: new Column(
                                   children: <Widget>[
                                     new Text(
-                                      isEmpty(ApiUtils.loginData.service_balance)
+                                      isEmpty(ApiUtils
+                                              .loginData.service_balance)
                                           ? "0.00"
                                           : ApiUtils.loginData.service_balance,
                                       style: new TextStyle(
@@ -121,9 +123,11 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                                 child: new Column(
                                   children: <Widget>[
                                     new Text(
-                                      isEmpty(ApiUtils.loginData.service_lock_balance)
+                                      isEmpty(ApiUtils
+                                              .loginData.service_lock_balance)
                                           ? "0.00"
-                                          : ApiUtils.loginData.service_lock_balance,
+                                          : ApiUtils
+                                              .loginData.service_lock_balance,
                                       style: new TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18.0),
@@ -165,7 +169,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
                           child: new Text(
                             "可接用户买币卖币以及平台商户售卖订单",
                             maxLines: 1,
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white, fontSize: 13),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -239,24 +243,15 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
     var time = DateTime.fromMillisecondsSinceEpoch(
         int.parse(dataModel.create_time) * 1000);
     var _time =
-    "${time.year}-${time.month}-${time.day} ${time.hour}:${time.minute}:${time.second}";
-    String status = "";
-    if (dataModel.status == "1") {
-      status = "进行中";
-    } else if (dataModel.status == "2") {
-      status = "已完成";
-    } else if (dataModel.status == "0") {
-      status = "抢单";
-    } else if (dataModel.status == "3") {
-      status = "交易失败";
-    }
+        "${time.year}-${time.month}-${time.day} ${time.hour}:${time.minute}:${time.second}";
     return new Column(
       children: <Widget>[
         new ListTile(
           title: new Text("${dataModel?.trans_type}"),
           subtitle: new Text(
-              "订单编号:${dataModel.order_no}\n金额:${dataModel?.amount}\n时间:$_time\n用户ID:${dataModel.app_user_id}\n"),
-          trailing: new Text("$status"),
+              "订单编号:${dataModel.order_no}\n佣金:${double.parse(dataModel?.amount) / 1000} 订单金额:${dataModel?.amount}\n时间:$_time\n"
+              "持卡人:${isEmpty(dataModel.bank?.user_name) ? "" : dataModel.bank.user_name}"),
+          trailing: _buildTrailing(dataModel),
           onTap: () {
             Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
               return new DealInfoPage(
@@ -271,6 +266,81 @@ class _ServiceProviderPageState extends State<ServiceProviderPage> {
         ),
       ],
     );
+  }
+
+  Widget _buildTrailing(OrderDataModel dataModel) {
+    if (dataModel.is_admin == "1") {
+      //平台发布
+      return new Container(
+        height: 40,
+        child: new OutlineButton(
+          onPressed: () {
+            showDialog<Null>(
+                context: context, //BuildContext对象
+                barrierDismissible: true,
+                builder: (BuildContext _context) {
+                  return new AlertDialog(
+                    title: new Text("认购额度"),
+                    content: new MainInput(
+                      hint: "请输入认购金额",
+                      callback: (str) {},
+                    ),
+                    actions: <Widget>[
+                      new FlatButton(
+                        onPressed: () {
+                          Navigator.of(_context).pop();
+                        },
+                        child: new Text("取消"),
+                      ),
+                      new FlatButton(
+                        onPressed: () {
+                          Navigator.of(_context).pop();
+//                          Navigator.pushAndRemoveUntil(
+//                              context,
+//                              new MaterialPageRoute(builder: (context) => new LoginPage()),
+//                                  (route) => route == null);
+                        },
+                        child: new Text("确定"),
+                      ),
+                    ],
+                  );
+                });
+          },
+          child: new Text("认购"),
+        ),
+      );
+    } else if (dataModel.is_admin == "0") {
+      //用户发布
+      if (dataModel.type == "1") {
+        //买入
+        return new Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            new Container(
+              child: new OutlineButton(
+                onPressed: () {},
+                child: new Text("马上接"),
+              ),
+              height: 25,
+            ),
+            new Container(
+              child: new OutlineButton(
+                onPressed: () {},
+                child: new Text("拒单"),
+              ),
+              height: 25,
+            ),
+          ],
+        );
+      } else if (dataModel.type == "2") {
+        //卖出
+        new OutlineButton(
+          onPressed: () {},
+          child: new Text("马上认购"),
+        );
+      }
+    }
   }
 
   /*

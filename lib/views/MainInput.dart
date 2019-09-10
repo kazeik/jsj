@@ -50,21 +50,24 @@ class _MainInputState extends State<MainInput> {
                 ),
               ),
         decoration: new InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(vertical: 1.0),
+          contentPadding: const EdgeInsets.symmetric(
+              vertical:10.0),
           hintText: widget.hint,
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide.none),
-          prefixIcon: new Padding(
-            padding: EdgeInsets.all(10),
-            child: new Image(
-              width: 1,
-              height: 1,
-              image: AssetImage(
-                Utils.getImgPath(widget.iconPath),
-              ),
-            ),
-          ),
+          prefixIcon: isEmpty(widget.iconPath)
+              ? null
+              : new Padding(
+                  padding: EdgeInsets.all(10),
+                  child: new Image(
+                    width: 1,
+                    height: 1,
+                    image: AssetImage(
+                      Utils.getImgPath(widget.iconPath),
+                    ),
+                  ),
+                ),
         ),
         obscureText: widget.isPass,
         onChanged: widget.callback,

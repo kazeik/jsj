@@ -104,6 +104,7 @@ class _LoginPageState extends State<LoginPage>
       if (isSave) {
         Utils.saveInfo("pass", _lPass);
       }
+      Utils.showToast("登录成功");
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(builder: (context) => new MainPage()),

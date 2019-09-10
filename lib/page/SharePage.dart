@@ -27,7 +27,7 @@ class _ShatePageState extends State<SharePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: new Text("分享"),
+        title: new Text("代理分享"),
         elevation: 0,
       ),
       body: new Stack(
@@ -75,9 +75,9 @@ class _ShatePageState extends State<SharePage> {
                             new Container(
                               margin: EdgeInsets.only(top: 10),
                               child: new Text(
-                                isEmpty(ApiUtils.loginData?.balance)
+                                isEmpty(ApiUtils.loginData?.total_commission)
                                     ? "0.00"
-                                    : ApiUtils.loginData?.balance,
+                                    : ApiUtils.loginData?.total_commission,
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 20),
                               ),
@@ -201,7 +201,7 @@ class _ShatePageState extends State<SharePage> {
                     new Container(
                       margin: EdgeInsets.only(top: 10, bottom: 10),
                       child: new Text(
-                        "邀请码:C${ApiUtils.loginData?.id}",
+                        "会员ID:${ApiUtils.loginData?.id}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
