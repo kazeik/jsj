@@ -252,7 +252,7 @@ class _DealPageState extends State<DealPage> {
       for (int i = 0; i < serviceListModel?.data?.length; i++) {
         downItems.add(
           new DropdownMenuItem(
-            child: new Text("${serviceListModel?.data[i].id}(${serviceListModel?.data[i].balance})"),
+            child: new Text("ID:${serviceListModel?.data[i].id}(￥${serviceListModel?.data[i].balance})"),
             value: serviceListModel?.data[i].id,
           ),
         );

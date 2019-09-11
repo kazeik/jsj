@@ -48,10 +48,11 @@ class _BankCardPageState extends State<BankCardPage> {
               margin: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
               child: new FlatButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .push(new MaterialPageRoute(builder: (_) {
-                    return new AddCardPage();
-                  }));
+                  Navigator.of(context).push(
+                    new MaterialPageRoute(builder: (_) {
+                      return new AddCardPage();
+                    }),
+                  );
                 },
                 color: Colors.blue,
                 child: new Text(
@@ -62,7 +63,7 @@ class _BankCardPageState extends State<BankCardPage> {
                 ),
               ),
               width: double.infinity,
-            )
+            ),
           ],
         ),
       ),
@@ -89,14 +90,16 @@ class _BankCardPageState extends State<BankCardPage> {
     if (ApiUtils.loginData?.has_bank != null && ApiUtils.loginData?.has_bank) {
       return new GestureDetector(
         onTap: () {
-          Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-            return new AddCardPage(
-                bankName: model?.data[0]?.bank_name,
-                cardName: model?.data[0]?.user_name,
-                cardNo: model?.data[0]?.bank_account,
-                phone: model?.data[0]?.bind_phone,
-                cardNameId: model?.data[0]?.id_number);
-          }));
+          Navigator.of(context).push(
+            new MaterialPageRoute(builder: (_) {
+              return new AddCardPage(
+                  bankName: model?.data[0]?.bank_name,
+                  cardName: model?.data[0]?.user_name,
+                  cardNo: model?.data[0]?.bank_account,
+                  phone: model?.data[0]?.bind_phone,
+                  cardNameId: model?.data[0]?.id_number);
+            }),
+          );
         },
         child: new Container(
           margin: EdgeInsets.all(10),
