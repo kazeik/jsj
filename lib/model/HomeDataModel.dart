@@ -50,7 +50,7 @@ class HomeDataModel {
    * 手机
    */
   String phone;
-  String reply;
+  dynamic reply;
 
   /**
    * 状态 0刚注册 1申请中 2正常 3禁用
