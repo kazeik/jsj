@@ -144,7 +144,7 @@ class _ShatePageState extends State<SharePage> {
                                   ),
                                   new Text(
                                     "可提现佣金${ApiUtils.loginData?.commission}元",
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: Colors.white,fontSize: 13),
                                   ),
                                   new Icon(
                                     Icons.chevron_right,

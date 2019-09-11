@@ -111,16 +111,16 @@ class _AlipayPageState extends State<AlipayPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
               ),
             ),
-            new Container(
-              margin: EdgeInsets.only(top: 15),
-              color: Colors.white,
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: new Text(
-                "店员支付宝帐号设置教程",
-                style: new TextStyle(color: Colors.blue),
-              ),
-            )
+//            new Container(
+//              margin: EdgeInsets.only(top: 15),
+//              color: Colors.white,
+//              width: double.infinity,
+//              alignment: Alignment.center,
+//              child: new Text(
+//                "店员支付宝帐号设置教程",
+//                style: new TextStyle(color: Colors.blue),
+//              ),
+//            )
           ],
         ),
       ),

@@ -152,6 +152,7 @@ class _ServiceProviderPageState extends State<ServiceProviderPage>
                           child: new Text(
                             "可接用户买币卖币以及平台商户售卖订单",
                             maxLines: 1,
+                            textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white, fontSize: 13),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -164,11 +165,14 @@ class _ServiceProviderPageState extends State<ServiceProviderPage>
               new Expanded(
                 child: new Column(
                   children: <Widget>[
-                    new TabBar(
-                      labelColor: Colors.blue,
-                      unselectedLabelColor: Colors.grey,
-                      controller: controller,
-                      tabs: tabs,
+                    new Container(
+                      color: Colors.white,
+                      child: new TabBar(
+                        labelColor: Colors.blue,
+                        unselectedLabelColor: Colors.grey,
+                        controller: controller,
+                        tabs: tabs,
+                      ),
                     ),
                     new Expanded(
                       child: new TabBarView(
