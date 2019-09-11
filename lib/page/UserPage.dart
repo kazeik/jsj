@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jsj/page/ActivatePage.dart';
+import 'package:jsj/page/ActivateServicePage.dart';
 import 'package:jsj/page/AlipayPage.dart';
 import 'package:jsj/page/BalanceInfoPage.dart';
 import 'package:jsj/page/BankCardPage.dart';
@@ -29,11 +31,18 @@ class _UserPageState extends State<UserPage> {
     ..add("余额明细")
     ..add("常见问题");
 
+//  List<String> unregister = new List<String>()
+//    ..add("激活帐号")
+//    ..add("激活服务商")
+//    ..add("申请服务商")
+//    ..add("申请代理")
+//    ..add("常见问题");
+
   @override
   Widget build(BuildContext context) {
     String status = "未知";
     if (ApiUtils.loginData?.status == "0") {
-      status = "刚注册";
+      status = "激活帐号";
     } else if (ApiUtils.loginData?.status == "1") {
       status = "申请中";
     } else if (ApiUtils.loginData?.status == "2") {
@@ -127,10 +136,29 @@ class _UserPageState extends State<UserPage> {
                                 fontWeight: FontWeight.bold)),
                         subtitle: new Row(
                           children: <Widget>[
-                            _buildInfo(status),
-                            _buildInfo(ApiUtils.loginData?.is_service == 0
-                                ? "未激活服务商"
-                                : "已激活服务商"),
+                            new GestureDetector(
+                              child: _buildInfo(status),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  new MaterialPageRoute(builder: (_) {
+                                    return new ActivatePage();
+                                  }),
+                                );
+                              },
+                            ),
+                            new GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  new MaterialPageRoute(builder: (_) {
+                                    return new ActivateServicePage();
+                                  }),
+                                );
+                              },
+                              child: _buildInfo(
+                                  ApiUtils.loginData?.is_service == "0"
+                                      ? "激活服务商"
+                                      : "已激活服务商"),
+                            ),
                           ],
                         ),
                       ),
@@ -161,7 +189,9 @@ class _UserPageState extends State<UserPage> {
     return new Container(
       decoration: new BoxDecoration(
         borderRadius: new BorderRadius.circular(8),
-        color: const Color(0xfffdd72b),
+        color: ApiUtils.loginData?.status == "0"
+            ? Colors.red
+            : const Color(0xfffdd72b),
       ),
       margin: EdgeInsets.only(right: 5, top: 10),
       padding: EdgeInsets.only(left: 2, right: 2),
@@ -255,6 +285,78 @@ class _UserPageState extends State<UserPage> {
     }
     return widgets;
   }
+
+//  List<Widget> _buildUnRegisterCell() {
+//    List<Widget> widgets = new List<Widget>();
+//    for (int i = 0; i < unregister.length; i++) {
+//      widgets.add(
+//        new Container(
+//          child: new Column(
+//            children: <Widget>[
+//              new InkWell(
+//                child: new Row(
+//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                  children: <Widget>[
+//                    new Container(
+//                      child: new Text(unregister[i]),
+//                      margin: EdgeInsets.all(5),
+//                    ),
+//                    new Icon(Icons.chevron_right),
+//                  ],
+//                ),
+//                onTap: () {
+//                  switch (i) {
+//                    case 0:
+////                      Navigator.of(context)
+////                          .push(new MaterialPageRoute(builder: (_) {
+////                        return new SharePage();
+////                      }));
+//                      break;
+//                    case 1:
+////                      Navigator.of(context)
+////                          .push(new MaterialPageRoute(builder: (_) {
+////                        return new ServiceProviderPage();
+////                      }));
+//                      break;
+//                    case 2:
+////                      Navigator.of(context)
+////                          .push(new MaterialPageRoute(builder: (_) {
+////                        return new AlipayPage();
+////                      }));
+//                      break;
+//                    case 3:
+////                      Navigator.of(context)
+////                          .push(new MaterialPageRoute(builder: (_) {
+////                        return new BankCardPage();
+////                      }));
+//                      break;
+//                    case 4:
+////                      Navigator.of(context)
+////                          .push(new MaterialPageRoute(builder: (_) {
+////                        return new BalanceInfoPage();
+////                      }));
+//                      break;
+//                    case 5:
+//                      Navigator.of(context)
+//                          .push(new MaterialPageRoute(builder: (_) {
+//                        return new MessagePage();
+//                      }));
+//                      break;
+//                  }
+//                },
+//              ),
+//              i != title.length - 1
+//                  ? new Divider()
+//                  : new Container(
+//                      height: 5,
+//                    ),
+//            ],
+//          ),
+//        ),
+//      );
+//    }
+//    return widgets;
+//  }
 
   Widget _buildAlertInfo(String msg, Color backcolor) {
     return new Container(

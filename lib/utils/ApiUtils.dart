@@ -145,4 +145,6 @@ class ApiUtils {
   static String get_images = "/Userapi/images";
   static String get_banner = "/Userapi/banner";
   static String get_refuseOrder = "/Userapi/refuseOrder";
+  static String post_activateAccount = "/Userapi/activateAccount";
+  static String post_activateService = "/Userapi/activateService";
 }

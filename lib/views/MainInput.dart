@@ -16,6 +16,7 @@ class MainInput extends StatefulWidget {
   bool isPass;
   Function(String) callback;
   String defaultStr;
+  Function tapCallback;
 
   MainInput(
       {Key key,
@@ -23,7 +24,7 @@ class MainInput extends StatefulWidget {
       this.iconPath,
       this.isPass = false,
       this.callback,
-      this.defaultStr})
+      this.defaultStr,this.tapCallback})
       : super(key: key);
 
   @override
@@ -35,6 +36,7 @@ class _MainInputState extends State<MainInput> {
   Widget build(BuildContext context) {
     return new Container(
       child: new TextField(
+        onTap: widget.tapCallback,
         controller: isEmpty(widget.defaultStr)
             ? new TextEditingController()
             : TextEditingController.fromValue(
