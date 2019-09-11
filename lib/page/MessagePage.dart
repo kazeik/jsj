@@ -43,7 +43,10 @@ class _MessagePageState extends State<MessagePage> {
     return ListTile(
       onTap: () {
         Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-          return new MessageInfoPage(title: items[index]);
+          return new MessageInfoPage(
+            title: items[index],
+            index: index,
+          );
         }));
       },
       title: new Text(items[index]),
