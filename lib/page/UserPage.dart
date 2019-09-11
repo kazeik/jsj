@@ -27,7 +27,7 @@ class _UserPageState extends State<UserPage> {
     ..add("支付宝管理")
     ..add("我的银行卡")
     ..add("余额明细")
-    ..add("常见问题") ;
+    ..add("常见问题");
 
   @override
   Widget build(BuildContext context) {
@@ -83,20 +83,26 @@ class _UserPageState extends State<UserPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               _buildAlertInfo(
-                                  ApiUtils.loginData?.can_order == 0
+                                  ApiUtils.loginData?.can_order == "0"
                                       ? "禁止交易"
                                       : "自动交易",
-                                  Colors.green),
+                                  ApiUtils.loginData?.can_order == "0"
+                                      ? Colors.pink
+                                      : Colors.green),
                               _buildAlertInfo(
-                                  ApiUtils.loginData?.can_recharge == 0
+                                  ApiUtils.loginData?.can_recharge == "0"
                                       ? "禁止交易"
                                       : "正常买币",
-                                  Colors.green),
+                                  ApiUtils.loginData?.can_recharge == "0"
+                                      ? Colors.pink
+                                      : Colors.green),
                               _buildAlertInfo(
-                                  ApiUtils.loginData?.can_withdraw == 0
+                                  ApiUtils.loginData?.can_withdraw == "0"
                                       ? "禁止卖币"
                                       : "正常卖币",
-                                  Colors.pink)
+                                  ApiUtils.loginData?.can_withdraw == "0"
+                                      ? Colors.pink
+                                      : Colors.green),
                             ],
                           ),
                         ],
@@ -171,7 +177,7 @@ class _UserPageState extends State<UserPage> {
           ),
           new Text(
             title,
-            style: TextStyle(color: Colors.white,fontSize: 13),
+            style: TextStyle(color: Colors.white, fontSize: 13),
           )
         ],
       ),

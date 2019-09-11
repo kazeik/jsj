@@ -2,27 +2,27 @@ class HomeDataModel {
   String alipay_account;
   String alipay_password;
 
-  /**
+  /*
    * '余额
    */
   String balance;
 
-  /**
+  /*
    * 是否可接单 0 1
    */
   String can_order;
 
-  /**
+  /*
    * 是否可充值 0 1
    */
   String can_recharge;
 
-  /**
+  /*
    * 是否可提现 0 1
    */
   String can_withdraw;
 
-  /**
+  /*
    * 可提现佣金
    */
   String commission;
