@@ -84,24 +84,24 @@ class _UserPageState extends State<UserPage> {
                             children: <Widget>[
                               _buildAlertInfo(
                                   ApiUtils.loginData?.can_order == "0"
-                                      ? "禁止交易"
+                                      ? "停止交易"
                                       : "自动交易",
                                   ApiUtils.loginData?.can_order == "0"
-                                      ? Colors.pink
+                                      ? Colors.red
                                       : Colors.green),
                               _buildAlertInfo(
                                   ApiUtils.loginData?.can_recharge == "0"
                                       ? "禁止交易"
                                       : "正常买币",
                                   ApiUtils.loginData?.can_recharge == "0"
-                                      ? Colors.pink
+                                      ? Colors.red
                                       : Colors.green),
                               _buildAlertInfo(
                                   ApiUtils.loginData?.can_withdraw == "0"
                                       ? "禁止卖币"
                                       : "正常卖币",
                                   ApiUtils.loginData?.can_withdraw == "0"
-                                      ? Colors.pink
+                                      ? Colors.red
                                       : Colors.green),
                             ],
                           ),
