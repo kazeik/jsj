@@ -1,19 +1,23 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/OrderDataModel.dart';
 import 'package:jsj/model/OrderModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
 
 import 'package:quiver/strings.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:dio/dio.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-10 16:57
  * 类说明:
@@ -102,15 +106,9 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
                     return new AlertDialog(
                       title: new Text("银行卡"),
                       content: new Text(
-                        "${dataModel.bank?.bank_name}\n${dataModel?.bank.bank_account}",
+                        "银行:${dataModel.bank?.bank_name}\n卡号:${dataModel?.bank.bank_account}\n户名:${dataModel?.bank.user_name}",
                       ),
                       actions: <Widget>[
-                        new FlatButton(
-                          onPressed: () {
-                            Navigator.of(_context).pop();
-                          },
-                          child: new Text("取消"),
-                        ),
                         new FlatButton(
                           onPressed: () {
                             Navigator.of(_context).pop();
@@ -140,5 +138,20 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
 
   _getSelectImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    _upFile(image);
+  }
+
+  _upFile(File file) {
+    var name =
+        file.path.substring(file.path.lastIndexOf("/") + 1, file.path.length);
+    var suffix = name.substring(name.lastIndexOf(".") + 1, name.length);
+    FormData formData = new FormData.from({
+      "file": new UploadFileInfo(file, name,
+          contentType: ContentType.parse("image/$suffix"))
+    });
+
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_upload_img, (str) {
+      Utils.showToast("上传成功");
+    }, data: formData);
   }
 }

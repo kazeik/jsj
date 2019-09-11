@@ -14,7 +14,7 @@ import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/MainInput.dart';
 import 'package:quiver/strings.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-10 16:57
  * 类说明:
@@ -27,6 +27,7 @@ class ProviderOrderPage extends StatefulWidget {
 
 class _ProviderOrderPageState extends State<ProviderOrderPage> {
   List<OrderDataModel> allItems = new List();
+  String buyMoney = "0";
 
   @override
   void initState() {
@@ -66,16 +67,10 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
     return new ListTile(
       title: new Text("${dataModel?.trans_type}"),
       subtitle: new Text(
-          "订单编号:${dataModel.order_no}\n佣金:￥${double.parse(dataModel?.amount) / 1000} 订单金额:￥${dataModel?.amount}\n时间:$_time\n"
+          "订单编号:${dataModel.order_no}\n佣金:￥${double.parse(dataModel?.amount) / 1000} 订单金额:￥${dataModel?.amount}"
+          "\n剩余额度:￥${dataModel.real_amount}\n时间:$_time\n"
           "持卡人:${isEmpty(dataModel.bank?.user_name) ? "" : dataModel.bank.user_name}"),
       trailing: _buildTrailing(dataModel),
-      onTap: () {
-//        Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-//          return new DealInfoPage(
-//            id: dataModel.id,
-//          );
-//        }));
-      },
     );
   }
 
@@ -94,8 +89,10 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
                     title: new Text("认购额度"),
                     content: new MainInput(
                       hint: "请输入认购金额",
-                      callback: (str) {},
-                      defaultStr: dataModel?.amount,
+                      callback: (str) {
+                        buyMoney = str;
+                      },
+                      defaultStr: dataModel?.real_amount,
                     ),
                     actions: <Widget>[
                       new FlatButton(
@@ -107,7 +104,8 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
                       new FlatButton(
                         onPressed: () {
                           Navigator.of(_context).pop();
-                          _providerSureCoin(dataModel?.id, dataModel?.amount);
+                          _providerSureCoin(dataModel?.id,
+                              buyMoney ?? dataModel?.real_amount);
                         },
                         child: new Text("确定"),
                       ),
@@ -137,7 +135,9 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
             ),
             new Container(
               child: new OutlineButton(
-                onPressed: () {},
+                onPressed: () {
+                  _refuseOrderById(dataModel.id);
+                },
                 child: new Text("拒单"),
               ),
               height: 25,
@@ -177,6 +177,21 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
         );
       }
     }
+  }
+
+  /*
+   * 拒单 
+   */
+  _refuseOrderById(String orderId) {
+    HashMap<String, String> params = new HashMap();
+    params["id"] = orderId;
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_refuseOrder, (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      Utils.showToast(model.msg);
+      if (model.status == 200) {
+        _getOrderList();
+      }
+    }, params: params);
   }
 
   _userSureCoin(String id) {

@@ -144,4 +144,5 @@ class ApiUtils {
    */
   static String get_images = "/Userapi/images";
   static String get_banner = "/Userapi/banner";
+  static String get_refuseOrder = "/Userapi/refuseOrder";
 }
