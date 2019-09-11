@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/MethodTyps.dart';
-import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,10 +69,10 @@ class HttpNet {
           queryParameters: params, options: options, data: data);
     }
 
-    sValue.then((value) {
-      BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
-      if (model.status == 200) {
-        success(value.data);
+      sValue.then((value) {
+        BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
+        if (model.status == 200) {
+          success(value.data);
 //      else if (model.status == 302) {
 //        if (!_frist) {
 //          _frist = true;
@@ -84,20 +83,20 @@ class HttpNet {
 //                (route) => route == null);
 //          });
 //        }
-      } else {
-        Utils.showToast(model.msg);
-      }
-    }).catchError((error) {
-      Utils.logs("错误 = ${error.toString()}");
-      if (null != error) {
-        bool dioError = error is DioError;
-        if (dioError) {
-          var errorStr = error as DioError;
-          Utils.showToast(errorStr.response.data);
-          errorCallback(errorStr.response.data);
+        } else {
+          Utils.showToast(model.msg);
         }
-      }
-    });
+      }).catchError((error) {
+        Utils.logs("错误 = ${error.toString()}");
+        if (null != error) {
+          bool dioError = error is DioError;
+          if (dioError) {
+            var errorStr = error as DioError;
+            Utils.showToast(errorStr.response.data);
+            errorCallback(errorStr.response.data);
+          }
+        }
+      });
   }
 
   Future<bool> _clearToken() async {

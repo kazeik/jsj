@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:jsj/model/HomeModel.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/ActivatePage.dart';
 import 'package:jsj/page/ActivateServicePage.dart';
 import 'package:jsj/page/AlipayPage.dart';
@@ -139,20 +144,12 @@ class _UserPageState extends State<UserPage> {
                             new GestureDetector(
                               child: _buildInfo(status),
                               onTap: () {
-                                Navigator.of(context).push(
-                                  new MaterialPageRoute(builder: (_) {
-                                    return new ActivatePage();
-                                  }),
-                                );
+                                _activateAccount();
                               },
                             ),
                             new GestureDetector(
                               onTap: () {
-                                Navigator.of(context).push(
-                                  new MaterialPageRoute(builder: (_) {
-                                    return new ActivateServicePage();
-                                  }),
-                                );
+                                _activateService();
                               },
                               child: _buildInfo(
                                   ApiUtils.loginData?.is_service == "0"
@@ -183,6 +180,31 @@ class _UserPageState extends State<UserPage> {
         ],
       ),
     );
+  }
+
+  _activateAccount() async {
+    await Navigator.of(context).push(
+      new MaterialPageRoute(builder: (_) {
+        return new ActivatePage();
+      }),
+    );
+    _getHomeData();
+  }
+
+  _activateService() async {
+    await Navigator.of(context).push(
+      new MaterialPageRoute(builder: (_) {
+        return new ActivateServicePage();
+      }),
+    );
+    _getHomeData();
+  }
+
+  _getHomeData() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
+      HomeModel model = HomeModel.fromJson(jsonDecode(str));
+      ApiUtils.loginData = model.data;
+    });
   }
 
   Widget _buildInfo(String title) {
