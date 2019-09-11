@@ -220,7 +220,7 @@ class _DealPageState extends State<DealPage> {
                   margin:
                       EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
                   child: new Text(
-                      "本次最多可购买￥${ApiUtils.loginData?.balance},赠送购买金额0.9%的币"),
+                      "本次最多可购买￥10000,赠送购买金额0.9%的币"),
                 ),
               ],
             ),
@@ -347,7 +347,7 @@ class _DealPageState extends State<DealPage> {
               },
               color: Colors.blue,
               child: new Text(
-                "预计两小时到帐，确认卖出",
+                "等待服务端接单",
                 style: TextStyle(
                   color: Colors.white,
                 ),
