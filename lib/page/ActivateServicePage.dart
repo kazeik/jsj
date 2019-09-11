@@ -187,7 +187,7 @@ class _activateServicePageState extends State<ActivateServicePage> {
       "p_num": pNum,
       "amount_text": moneyStr,
     });
-    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_login, (str) {
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_activateService, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
     }, data: formData);
