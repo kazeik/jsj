@@ -151,4 +151,9 @@ class ApiUtils {
   static String get_refuseOrder = "/Userapi/refuseOrder";
   static String post_activateAccount = "/Userapi/activateAccount";
   static String post_activateService = "/Userapi/activateService";
+
+  /**
+   * 获取等待服务商打币
+   */
+  static String get_processBuyCoinInfo = "/Userapi/ProcessBuyCoinInfo";
 }

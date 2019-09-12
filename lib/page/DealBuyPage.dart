@@ -1,7 +1,9 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/BankDataModel.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/BuyCoinModel.dart';
 import 'package:jsj/model/ServiceItemModel.dart';
@@ -10,7 +12,6 @@ import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
-import 'package:dio/dio.dart';
 import 'package:quiver/strings.dart';
 
 /**
@@ -21,7 +22,8 @@ import 'package:quiver/strings.dart';
 
 class DealBuyPage extends StatefulWidget {
   Function(String) callback;
-  DealBuyPage({Key key,this.callback}):super(key:key);
+
+  DealBuyPage({Key key, this.callback}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => new _DealBuyPageState();
@@ -35,7 +37,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
   ServiceItemModel selectModel;
 
   BuyCoinModel model;
-
+  BankDataModel _bankDataModel;
   bool isDeal = false;
 
   @override
@@ -61,30 +63,40 @@ class _DealBuyPageState extends State<DealBuyPage> {
         if (isNotEmpty(orderId)) {
           isDeal = true;
         }
-        if(model.data?.status == "2"){
+        if (model.data?.status == "2") {
           isDeal = false;
           orderId = "";
+        } else if (model.data?.status == "1") {
+          _getProcessBuyCoinInfo();
         }
         setState(() {});
       }
     });
   }
 
+  _getProcessBuyCoinInfo() {
+    HashMap<String, Object> params = new HashMap();
+    params['id'] = orderId;
+    HttpNet.instance.request(
+        MethodTypes.GET, ApiUtils.get_processBuyCoinInfo, (str) {
+      _bankDataModel = BankDataModel.fromJson(jsonDecode(str));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    if(model?.data?.status=="1"){
+    if (model?.data?.status == "1") {
       return new ListView(
         physics: new NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         children: <Widget>[
           new Container(
-            padding:
-            EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
-            child: new RaisedButton(
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+            child: new OutlineButton(
               onPressed: () {},
               child: new Text(
                 "服务商已接单",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
               ),
               color: Colors.blue,
             ),
@@ -92,17 +104,15 @@ class _DealBuyPageState extends State<DealBuyPage> {
           ),
           new Container(
             color: Colors.white,
-            padding:
-            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "订单编号:",
+              "订单编号:${model?.data?.order_no}",
               style: TextStyle(color: Colors.black),
             ),
           ),
           new Container(
             color: Colors.white,
-            padding:
-            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
               "服务商收款银行卡",
               style: TextStyle(color: Colors.black),
@@ -110,40 +120,35 @@ class _DealBuyPageState extends State<DealBuyPage> {
           ),
           new Container(
             color: Colors.white,
-            padding:
-            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "银行：",
+              "银行：${_bankDataModel?.data?.bank_name}",
             ),
           ),
           new Container(
             color: Colors.white,
-            padding:
-            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "卡号：",
+              "卡号：${_bankDataModel?.data?.bank_account}",
             ),
           ),
           new Container(
             color: Colors.white,
-            padding:
-            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "户名：",
+              "户名：${_bankDataModel?.data?.user_name}",
             ),
           ),
           new Container(
             color: Colors.white,
-            padding:
-            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "打款金额：",
+              "打款金额：￥${_bankDataModel?.data?.amount}",
             ),
           ),
           new Container(
             color: Colors.white,
-            padding:
-            EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
             child: new RaisedButton(
               onPressed: () {},
               child: new Text(
@@ -155,100 +160,101 @@ class _DealBuyPageState extends State<DealBuyPage> {
           ),
         ],
       );
-    }else{
-    return new Container(
-      color: Colors.white,
-      child: new Column(
-        children: <Widget>[
-          new Container(
-            margin: EdgeInsets.only(top: 20, bottom: 10),
-            child: new Text(
-              "订单编号:$orderId",
-              style: TextStyle(fontSize: 16.0),
+    } else {
+      return new Container(
+        color: Colors.white,
+        child: new Column(
+          children: <Widget>[
+            new Container(
+              margin: EdgeInsets.only(top: 20, bottom: 10),
+              child: new Text(
+                "订单编号:$orderId",
+                style: TextStyle(fontSize: 16.0),
+              ),
             ),
-          ),
-          new Divider(
-            endIndent: 20,
-            indent: 20,
-          ),
-          new DropdownButton(
-            items: _buildDropdownItem(),
-            onChanged: (index) {
-              serviceValue = index;
-              serviceListModel.data.forEach((it) {
-                if (it.id == index) {
-                  selectModel = it;
-                }
-              });
-              setState(() {});
-            },
-            hint: new Text("请选择购买服务商"),
-            value: serviceValue,
-          ),
-          new Container(
-            height: 10,
-            color: const Color(0xfffafafa),
-          ),
-          new Container(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Container(
-                  margin: EdgeInsets.only(left: 20, top: 10),
-                  child: new Text("购买金额"),
-                ),
-                new Container(
-                  margin: EdgeInsets.only(left: 20, top: 10),
-                  child: new Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      new Text(
-                        "￥",
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                      new Container(
-                        width: 200,
-                        child: new TextField(
-                          keyboardType: TextInputType.numberWithOptions(
-                              signed: false, decimal: true),
-                          decoration: new InputDecoration(
-                            hintText: "请输入金额",
-                            hintStyle: new TextStyle(fontSize: 18.0),
-                            contentPadding:
-                                const EdgeInsets.symmetric(vertical: 1.0),
-                            border: new OutlineInputBorder(
-                                borderSide: BorderSide.none),
-                          ),
+            new Divider(
+              endIndent: 20,
+              indent: 20,
+            ),
+            new DropdownButton(
+              items: _buildDropdownItem(),
+              onChanged: (index) {
+                serviceValue = index;
+                serviceListModel.data.forEach((it) {
+                  if (it.id == index) {
+                    selectModel = it;
+                  }
+                });
+                setState(() {});
+              },
+              hint: new Text("请选择购买服务商"),
+              value: serviceValue,
+            ),
+            new Container(
+              height: 10,
+              color: const Color(0xfffafafa),
+            ),
+            new Container(
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.only(left: 20, top: 10),
+                    child: new Text("购买金额"),
+                  ),
+                  new Container(
+                    margin: EdgeInsets.only(left: 20, top: 10),
+                    child: new Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        new Text(
+                          "￥",
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                        ),
+                        new Container(
+                          width: 200,
+                          child: new TextField(
+                            keyboardType: TextInputType.numberWithOptions(
+                                signed: false, decimal: true),
+                            decoration: new InputDecoration(
+                              hintText: "请输入金额",
+                              hintStyle: new TextStyle(fontSize: 18.0),
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 1.0),
+                              border: new OutlineInputBorder(
+                                  borderSide: BorderSide.none),
+                            ),
 //                          inputFormatters: <TextInputFormatter>[
 //                            WhitelistingTextInputFormatter.digitsOnly
 //                          ],
-                          onChanged: (str) {
-                            _buyMoney = str;
-                          },
+                            onChanged: (str) {
+                              _buyMoney = str;
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                new Divider(
-                  endIndent: 20,
-                  indent: 20,
-                ),
-                new Container(
-                  alignment: Alignment.center,
-                  margin:
-                      EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
-                  child: new Text("本次最多可购买￥10000,赠送购买金额0.9%的币"),
-                ),
-                _buildButton(),
-              ],
+                  new Divider(
+                    endIndent: 20,
+                    indent: 20,
+                  ),
+                  new Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(
+                        left: 20, top: 10, bottom: 10, right: 20),
+                    child: new Text("本次最多可购买￥10000,赠送购买金额0.9%的币"),
+                  ),
+                  _buildButton(),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    }
   }
-  }
+
   Widget _buildButton() {
     if (!isDeal) {
       return new Container(
