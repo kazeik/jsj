@@ -16,6 +16,7 @@ class DealPage extends StatefulWidget {
 
 class _DealPageState extends State<DealPage> {
   bool _isBuy = true;
+
 //  String _sellMoney;
 //  String _buyMoney;
 //  ServiceListModel serviceListModel;

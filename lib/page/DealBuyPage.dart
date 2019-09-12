@@ -20,6 +20,9 @@ import 'package:quiver/strings.dart';
  */
 
 class DealBuyPage extends StatefulWidget {
+  Function(String) callback;
+  DealBuyPage({Key key,this.callback}):super(key:key);
+
   @override
   State<StatefulWidget> createState() => new _DealBuyPageState();
 }
@@ -58,6 +61,10 @@ class _DealBuyPageState extends State<DealBuyPage> {
         if (isNotEmpty(orderId)) {
           isDeal = true;
         }
+        if(model.data?.status == "2"){
+          isDeal = false;
+          orderId = "";
+        }
         setState(() {});
       }
     });
@@ -65,7 +72,90 @@ class _DealBuyPageState extends State<DealBuyPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    if(model?.data?.status=="1"){
+      return new ListView(
+        physics: new NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        children: <Widget>[
+          new Container(
+            padding:
+            EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+            child: new RaisedButton(
+              onPressed: () {},
+              child: new Text(
+                "服务商已接单",
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.blue,
+            ),
+            color: Colors.white,
+          ),
+          new Container(
+            color: Colors.white,
+            padding:
+            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            child: new Text(
+              "订单编号:",
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          new Container(
+            color: Colors.white,
+            padding:
+            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            child: new Text(
+              "服务商收款银行卡",
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          new Container(
+            color: Colors.white,
+            padding:
+            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            child: new Text(
+              "银行：",
+            ),
+          ),
+          new Container(
+            color: Colors.white,
+            padding:
+            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            child: new Text(
+              "卡号：",
+            ),
+          ),
+          new Container(
+            color: Colors.white,
+            padding:
+            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            child: new Text(
+              "户名：",
+            ),
+          ),
+          new Container(
+            color: Colors.white,
+            padding:
+            EdgeInsets.only(left: 15, right: 15, top: 10 ),
+            child: new Text(
+              "打款金额：",
+            ),
+          ),
+          new Container(
+            color: Colors.white,
+            padding:
+            EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+            child: new RaisedButton(
+              onPressed: () {},
+              child: new Text(
+                "通知成功等待服务商打币",
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.blue,
+            ),
+          ),
+        ],
+      );
+    }else{
     return new Container(
       color: Colors.white,
       child: new Column(
@@ -158,7 +248,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
       ),
     );
   }
-
+  }
   Widget _buildButton() {
     if (!isDeal) {
       return new Container(
@@ -195,7 +285,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
                 if (model?.data?.status == '0')
                   return;
                 else
-                  Utils.showToast("");
+                  Utils.showToast("点击响应了");
               },
               color: model?.data?.status == "0" ? Colors.grey : Colors.blue,
               child: new Text(
