@@ -40,6 +40,8 @@ class _DealBuyPageState extends State<DealBuyPage> {
   BankDataModel _bankDataModel;
   bool isDeal = false;
 
+  bool isSure = false;
+
   @override
   void initState() {
     super.initState();
@@ -77,8 +79,8 @@ class _DealBuyPageState extends State<DealBuyPage> {
   _getProcessBuyCoinInfo() {
     HashMap<String, Object> params = new HashMap();
     params['id'] = orderId;
-    HttpNet.instance.request(
-        MethodTypes.GET, ApiUtils.get_processBuyCoinInfo, (str) {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processBuyCoinInfo,
+        (str) {
       _bankDataModel = BankDataModel.fromJson(jsonDecode(str));
     });
   }
@@ -150,9 +152,11 @@ class _DealBuyPageState extends State<DealBuyPage> {
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
             child: new RaisedButton(
-              onPressed: () {},
+              onPressed: () {
+                _userSurePayMoney();
+              },
               child: new Text(
-                "通知成功等待服务商打币",
+                isSure ? "确认已打款等待服务商打币" : "通知成功等待服务商打币",
                 style: TextStyle(color: Colors.white),
               ),
               color: Colors.blue,
@@ -253,6 +257,15 @@ class _DealBuyPageState extends State<DealBuyPage> {
         ),
       );
     }
+  }
+
+  _userSurePayMoney() {
+    HashMap<String, Object> params = new HashMap();
+    params['id'] = orderId;
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_paycoin, (str) {
+      isSure = true;
+      setState(() {});
+    },params: params);
   }
 
   Widget _buildButton() {
