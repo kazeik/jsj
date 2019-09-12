@@ -78,7 +78,7 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
     if (dataModel.is_admin == "1") {
       //平台发布
       return new Container(
-        height: 40,
+        height: 25,
         child: new OutlineButton(
           onPressed: () {
             showDialog<Null>(

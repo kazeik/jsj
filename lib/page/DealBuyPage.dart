@@ -140,7 +140,10 @@ class _DealBuyPageState extends State<DealBuyPage> {
                     ],
                   ),
                 ),
-                new Divider(),
+                new Divider(
+                  endIndent: 20,
+                  indent: 20,
+                ),
                 new Container(
                   alignment: Alignment.center,
                   margin:
@@ -226,7 +229,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
   }
 
   _refuseOrder() {
-    HashMap<String,Object> params = new HashMap();
+    HashMap<String, Object> params = new HashMap();
     params['id'] = orderId;
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_refuseOrder, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
@@ -235,7 +238,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
         isDeal = false;
         setState(() {});
       }
-    },params: params);
+    }, params: params);
   }
 
   _buyCoin() {
