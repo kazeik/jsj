@@ -144,12 +144,14 @@ class _UserPageState extends State<UserPage> {
                             new GestureDetector(
                               child: _buildInfo(status),
                               onTap: () {
-                                _activateAccount();
+                                if (ApiUtils.loginData?.status == "0")
+                                  _activateAccount();
                               },
                             ),
                             new GestureDetector(
                               onTap: () {
-                                _activateService();
+                                if (ApiUtils.loginData?.is_service == "0")
+                                  _activateService();
                               },
                               child: _buildInfo(
                                   ApiUtils.loginData?.is_service == "0"
