@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/OrderDataModel.dart';
 import 'package:jsj/model/OrderModel.dart';
+import 'package:jsj/model/UploadFileModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealInfoPage.dart';
@@ -151,7 +152,10 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
     });
 
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_upload_img, (str) {
-      Utils.showToast("上传成功");
+      UploadFileModel model = UploadFileModel.fromJson(jsonDecode(str));
+      if (model != null) {
+        Utils.showToast("上传成功");
+      }
     }, data: formData);
   }
 }

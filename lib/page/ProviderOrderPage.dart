@@ -146,34 +146,37 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
         );
       } else if (dataModel.type == "2") {
         //卖出
-        return new OutlineButton(
-          onPressed: () {
-            showDialog<Null>(
-                context: context, //BuildContext对象
-                barrierDismissible: true,
-                builder: (BuildContext _context) {
-                  return new AlertDialog(
-                    title: new Text("认购金额"),
-                    content: new Text("${dataModel?.amount}"),
-                    actions: <Widget>[
-                      new FlatButton(
-                        onPressed: () {
-                          Navigator.of(_context).pop();
-                        },
-                        child: new Text("取消"),
-                      ),
-                      new FlatButton(
-                        onPressed: () {
-                          Navigator.of(_context).pop();
-                          _userSureCoin(dataModel.id);
-                        },
-                        child: new Text("确定"),
-                      ),
-                    ],
-                  );
-                });
-          },
-          child: new Text("马上接"),
+        return new Container(
+          height: 25,
+          child: new OutlineButton(
+            onPressed: () {
+              showDialog<Null>(
+                  context: context, //BuildContext对象
+                  barrierDismissible: true,
+                  builder: (BuildContext _context) {
+                    return new AlertDialog(
+                      title: new Text("认购金额"),
+                      content: new Text("${dataModel?.amount}"),
+                      actions: <Widget>[
+                        new FlatButton(
+                          onPressed: () {
+                            Navigator.of(_context).pop();
+                          },
+                          child: new Text("取消"),
+                        ),
+                        new FlatButton(
+                          onPressed: () {
+                            Navigator.of(_context).pop();
+                            _userSureCoin(dataModel.id);
+                          },
+                          child: new Text("确定"),
+                        ),
+                      ],
+                    );
+                  });
+            },
+            child: new Text("马上接"),
+          ),
         );
       }
     }
