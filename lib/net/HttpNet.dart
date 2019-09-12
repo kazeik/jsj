@@ -69,10 +69,14 @@ class HttpNet {
           queryParameters: params, options: options, data: data);
     }
 
-      sValue.then((value) {
+    sValue.then((value) {
+      if (path != ApiUtils.post_upload_img) {
         BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
         if (model.status == 200) {
           success(value.data);
+        } else {
+          Utils.showToast(model.msg);
+        }
 //      else if (model.status == 302) {
 //        if (!_frist) {
 //          _frist = true;
@@ -83,20 +87,20 @@ class HttpNet {
 //                (route) => route == null);
 //          });
 //        }
-        } else {
-          Utils.showToast(model.msg);
+      } else {
+        success(value.data);
+      }
+    }).catchError((error) {
+      Utils.logs("错误 = ${error.toString()}");
+      if (null != error) {
+        bool dioError = error is DioError;
+        if (dioError) {
+          var errorStr = error as DioError;
+          Utils.showToast(errorStr.response.data);
+          errorCallback(errorStr.response.data);
         }
-      }).catchError((error) {
-        Utils.logs("错误 = ${error.toString()}");
-        if (null != error) {
-          bool dioError = error is DioError;
-          if (dioError) {
-            var errorStr = error as DioError;
-            Utils.showToast(errorStr.response.data);
-            errorCallback(errorStr.response.data);
-          }
-        }
-      });
+      }
+    });
   }
 
   Future<bool> _clearToken() async {
