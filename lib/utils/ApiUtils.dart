@@ -12,7 +12,7 @@ class ApiUtils {
 
   static HomeDataModel loginData;
 
-  static String baseUrl = "http://www.ipay.website";
+  static String baseUrl = "http://www.jsjcoin.com";
 
   /*
    * 获取验证码

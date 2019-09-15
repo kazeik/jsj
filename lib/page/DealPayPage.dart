@@ -25,6 +25,8 @@ class _DealPayPageState extends State<DealPayPage> {
   TextEditingController sellController = TextEditingController();
   String orderId = "";
 
+  bool isSale = false;
+
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -58,7 +60,7 @@ class _DealPayPageState extends State<DealPayPage> {
                             hintText: "请输入卖出金额",
                             hintStyle: new TextStyle(fontSize: 18.0),
                             contentPadding:
-                            const EdgeInsets.symmetric(vertical: 1.0),
+                                const EdgeInsets.symmetric(vertical: 1.0),
                             border: new OutlineInputBorder(
                                 borderSide: BorderSide.none),
                           ),
@@ -79,7 +81,7 @@ class _DealPayPageState extends State<DealPayPage> {
                 ),
                 new Container(
                   margin:
-                  EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
+                      EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
                   child: new Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,7 +114,7 @@ class _DealPayPageState extends State<DealPayPage> {
               },
               color: Colors.blue,
               child: new Text(
-                "等待服务端接单",
+                isSale ? "等待服务商接单" : "卖币", //等待服务端接单
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -136,16 +138,18 @@ class _DealPayPageState extends State<DealPayPage> {
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_salecoin, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
+      isSale = true;
+      setState(() {});
       _getCurrentOrder();
     }, data: formData);
   }
 
   _getCurrentOrder() {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processbuycoin,
-            (str) {
-          BuyCoinModel model = BuyCoinModel.fromJson(jsonDecode(str));
-          orderId = model.data.id;
-          setState(() {});
-        });
+        (str) {
+      BuyCoinModel model = BuyCoinModel.fromJson(jsonDecode(str));
+      orderId = model.data.id;
+      setState(() {});
+    });
   }
 }
