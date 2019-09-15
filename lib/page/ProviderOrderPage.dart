@@ -167,7 +167,7 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
                         new FlatButton(
                           onPressed: () {
                             Navigator.of(_context).pop();
-                            _userSureCoin(dataModel.id);
+                            _providerSureCoin(dataModel.id, dataModel?.amount);
                           },
                           child: new Text("确定"),
                         ),

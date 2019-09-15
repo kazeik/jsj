@@ -11,6 +11,7 @@ import 'package:jsj/model/UploadFileModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealInfoPage.dart';
+import 'package:jsj/page/WaitOutPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 
@@ -31,6 +32,7 @@ class ProviderOrderingPage extends StatefulWidget {
 
 class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
   List<OrderDataModel> allItems = new List();
+  OrderDataModel selectOrder;
 
   @override
   void initState() {
@@ -107,7 +109,7 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
                     return new AlertDialog(
                       title: new Text("银行卡"),
                       content: new Text(
-                        "银行:${dataModel.bank?.bank_name}\n卡号:${dataModel?.bank.bank_account}\n户名:${dataModel?.bank.user_name}",
+                        "银行:${dataModel.bank?.bank_name}\n卡号:${dataModel?.bank?.bank_account}\n户名:${dataModel?.bank?.user_name}",
                       ),
                       actions: <Widget>[
                         new FlatButton(
@@ -127,9 +129,16 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
         new Container(
           child: new OutlineButton(
             onPressed: () {
-              _getSelectImage();
+              if (dataModel?.has_pay == "1") {
+                return;
+              }
+              selectOrder = dataModel;
+              _upFile();
             },
-            child: new Text("上传截图"),
+            child: new Text(
+              dataModel?.has_pay == "1" ? "已打款等待确认" : "确认打款上传截图",
+              style: new TextStyle(fontSize: 12),
+            ),
           ),
           height: 25,
         ),
@@ -137,24 +146,35 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
     );
   }
 
-  _getSelectImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    _upFile(image);
-  }
-
-  _upFile(File file) {
+  _upFile() async {
+    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (file == null) {
+      return;
+    }
     var name =
         file.path.substring(file.path.lastIndexOf("/") + 1, file.path.length);
     var suffix = name.substring(name.lastIndexOf(".") + 1, name.length);
     FormData formData = new FormData.from({
-      "file": new UploadFileInfo(file, name,
-          contentType: ContentType.parse("image/$suffix"))
+      "file": new UploadFileInfo(
+        file,
+        name,
+        contentType: ContentType.parse("image/$suffix"),
+      ),
     });
 
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_upload_img, (str) {
       UploadFileModel model = UploadFileModel.fromJson(jsonDecode(str));
       if (model != null) {
         Utils.showToast("上传成功");
+        Navigator.of(context).push(
+          new MaterialPageRoute(builder: (_) {
+            return new WaitOutPage(
+              filePath: model.file_info?.file_path,
+              amount: selectOrder.amount,
+              orderId: selectOrder.order_no,
+            );
+          }),
+        );
       }
     }, data: formData);
   }
