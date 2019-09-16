@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
+import 'package:jsj/page/ResultPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 
@@ -32,14 +33,17 @@ class _WaitOutPageState extends State<WaitOutPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("我的"),
+        title: new Text("卖出成功"),
         centerTitle: true,
         elevation: 0,
       ),
       body: new ListView(
         children: <Widget>[
-          new Image(
-            image: new AssetImage(""),
+          new Container(
+            margin: EdgeInsets.only(top: 15, bottom: 15),
+            child: new Image(
+              image: new AssetImage(""),
+            ),
           ),
           new Text(
             "卖出申请成功，等服务商处理",
@@ -83,11 +87,17 @@ class _WaitOutPageState extends State<WaitOutPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 new Text("打款图片"),
-                new Image(image: new NetworkImage(widget.filePath)),
+                new Image(
+                  image: new NetworkImage(widget.filePath),
+                  width: 120,
+                  height: 60,
+                  fit: BoxFit.fill,
+                ),
               ],
             ),
           ),
           new Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
             child: new RaisedButton(
               color: Colors.orange,
               onPressed: () {
@@ -98,13 +108,17 @@ class _WaitOutPageState extends State<WaitOutPage> {
               ),
             ),
           ),
-          new Text("收到款项后须在十分钟内点击确认，否则将被视为不诚信用户，永久封禁帐号。"),
+          new Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
+            child: new Text("收到款项后须在十分钟内点击确认，否则将被视为不诚信用户，永久封禁帐号。"),
+          ),
         ],
       ),
     );
   }
 
   _sureOrder() {
+    Utils.logs("id = ${widget.orderId}");
     FormData formData = new FormData.from({
       "id": widget.orderId,
       "real_amount": widget.amount,
@@ -115,8 +129,14 @@ class _WaitOutPageState extends State<WaitOutPage> {
         (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       if (model.status == 200) {
-        Utils.showToast("实际到帐${widget.amount}");
+        Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (_) {
+            return new ResultPage(
+              amount: widget.amount,
+            );
+          }),
+        );
       }
-    });
+    }, data: formData);
   }
 }

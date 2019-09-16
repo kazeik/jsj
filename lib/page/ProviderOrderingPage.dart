@@ -171,7 +171,7 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
             return new WaitOutPage(
               filePath: model.file_info?.file_path,
               amount: selectOrder.amount,
-              orderId: selectOrder.order_no,
+              orderId: selectOrder.id,
             );
           }),
         );
