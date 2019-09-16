@@ -1,6 +1,6 @@
 
 class SaleOrderInfoModel {
-    int amount;
+    num amount;
     String app_user_id;
     String bank_id;
     String create_time;

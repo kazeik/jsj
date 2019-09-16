@@ -211,7 +211,8 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
         Utils.showToast("上传成功");
 //        _goOtherPage(
 //            model.file_info?.file_path, selectOrder.amount, selectOrder.id);
-        _getOrderListByStatus();
+        _sureMoney(selectOrder.amount, selectOrder.id,
+            image: model?.file_info?.file_path);
       }
     }, data: formData);
   }
@@ -229,17 +230,22 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
     _getOrderListByStatus();
   }
 
-  _sureMoney(String amount, String id) {
+  _sureMoney(String amount, String id, {String image}) {
     FormData formData = new FormData.from({
       "id": id,
       "real_amount": amount,
     });
+    if (!isEmpty(image)) {
+      formData["image"] = image;
+    }
+
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_confirmorder,
         (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
-      if(model.status == 200) {
+      if (model.status == 200) {
         Utils.showToast(model.msg);
-        setState(() {});
+//        setState(() {});
+        _getOrderListByStatus();
       }
     }, data: formData);
   }

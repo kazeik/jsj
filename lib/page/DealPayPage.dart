@@ -111,7 +111,7 @@ class _DealPayPageState extends State<DealPayPage> {
                     : new GestureDetector(
                         onTap: () {
                           if (isEmpty(model?.data?.image)) return;
-                          Navigator.of(context).pushReplacement(
+                          Navigator.of(context).push(
                             new MaterialPageRoute(builder: (_) {
                               return new PhotoPage(
                                 url: model?.data?.image,
