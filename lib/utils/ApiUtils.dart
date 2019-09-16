@@ -110,7 +110,7 @@ class ApiUtils {
   static String post_order = "/Userapi/takeOrder";
 
   /*
-   * 服务端打款
+   * 服务商打款
    */
   static String post_confirmorder = "/Userapi/confirmOrder";
 

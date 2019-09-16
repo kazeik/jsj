@@ -82,6 +82,9 @@ class _DealBuyPageState extends State<DealBuyPage> {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processBuyCoinInfo,
         (str) {
       _bankDataModel = BankDataModel.fromJson(jsonDecode(str));
+      setState(() {
+
+      });
     });
   }
 
@@ -303,8 +306,6 @@ class _DealBuyPageState extends State<DealBuyPage> {
               onPressed: () {
                 if (model?.data?.status == '0')
                   return;
-                else
-                  Utils.showToast("点击响应了");
               },
               color: model?.data?.status == "0" ? Colors.grey : Colors.blue,
               child: new Text(
