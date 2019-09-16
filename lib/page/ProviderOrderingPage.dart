@@ -16,6 +16,7 @@ import 'package:jsj/page/DealInfoPage.dart';
 import 'package:jsj/page/WaitOutPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:jsj/views/MainInput.dart';
 import 'package:quiver/strings.dart';
 
 /*
@@ -32,6 +33,7 @@ class ProviderOrderingPage extends StatefulWidget {
 class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
   List<OrderDataModel> allItems = new List();
   OrderDataModel selectOrder;
+  String sureMoney;
 
   @override
   void initState() {
@@ -103,14 +105,19 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
                 builder: (BuildContext _context) {
                   return new AlertDialog(
                     title: new Text("实际到帐"),
-                    content: new Text(
-                      "${dataModel.amount}",
-                    ),
+                    content: new MainInput(
+                        defaultStr: dataModel.amount,
+                        callback: (str) {
+                          sureMoney = str;
+                        }),
                     actions: <Widget>[
                       new FlatButton(
                         onPressed: () {
-                          Navigator.pop(context);
-                          _sureMoney();
+                          Navigator.pop(_context);
+                          if (isEmpty(sureMoney)) {
+                            sureMoney = dataModel?.amount;
+                          }
+                          _sureMoney(sureMoney, dataModel?.id);
                         },
                         child: new Text("确定"),
                       ),
@@ -215,12 +222,13 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
     }, data: formData);
   }
 
-  _sureMoney() {
+  _sureMoney(String amount, String id) {
+    Utils.logs("$amount | $id");
     FormData formData = new FormData.from({
-      "id": selectOrder.id,
-      "real_amount": selectOrder.amount,
+      "id": id,
+      "real_amount": amount,
     });
-    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_salecoin, (str) {
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_confirmorder, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
       setState(() {});

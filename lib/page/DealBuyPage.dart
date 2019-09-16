@@ -82,9 +82,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processBuyCoinInfo,
         (str) {
       _bankDataModel = BankDataModel.fromJson(jsonDecode(str));
-      setState(() {
-
-      });
+      setState(() {});
     });
   }
 
@@ -152,7 +150,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
                 _userSurePayMoney();
               },
               child: new Text(
-                isSure ? "确认已打款等待服务商打币" : "通知成功等待服务商打币",
+                isSure ? "通知成功等待服务商打币" : "确认已打款等待服务商打币",
                 style: TextStyle(color: Colors.white),
               ),
               color: Colors.blue,
@@ -256,7 +254,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "订单编号:$orderId",
+              "订单编号:${model?.data?.order_no}",
               style: TextStyle(color: Colors.black),
             ),
           );
@@ -304,8 +302,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
             margin: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
             child: new FlatButton(
               onPressed: () {
-                if (model?.data?.status == '0')
-                  return;
+                if (model?.data?.status == '0') return;
               },
               color: model?.data?.status == "0" ? Colors.grey : Colors.blue,
               child: new Text(
