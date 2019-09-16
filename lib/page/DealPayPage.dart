@@ -8,6 +8,7 @@ import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/SaleOrderModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
+import 'package:jsj/page/PhotoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:quiver/strings.dart';
@@ -107,10 +108,22 @@ class _DealPayPageState extends State<DealPayPage> {
                 ),
                 isEmpty(model?.data?.image)
                     ? new Container()
-                    : new Image(
-                        width: 120,
-                        height: 60,
-                        image: new NetworkImage("${model?.data?.image}"),
+                    : new GestureDetector(
+                        onTap: () {
+                          if (isEmpty(model?.data?.image)) return;
+                          Navigator.of(context).pushReplacement(
+                            new MaterialPageRoute(builder: (_) {
+                              return new PhotoPage(
+                                url: model?.data?.image,
+                              );
+                            }),
+                          );
+                        },
+                        child: new Image(
+                          width: 120,
+                          height: 60,
+                          image: new NetworkImage("${model?.data?.image}"),
+                        ),
                       )
               ],
             ),
@@ -260,7 +273,7 @@ class _DealPayPageState extends State<DealPayPage> {
         isSale = true;
         setState(() {});
         _getCurrentOrder();
-      }else{
+      } else {
         Utils.showToast(model.msg);
       }
     }, data: formData);

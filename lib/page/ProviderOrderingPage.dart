@@ -209,8 +209,9 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
       UploadFileModel model = UploadFileModel.fromJson(jsonDecode(str));
       if (model != null) {
         Utils.showToast("上传成功");
-        _goOtherPage(
-            model.file_info?.file_path, selectOrder.amount, selectOrder.id);
+//        _goOtherPage(
+//            model.file_info?.file_path, selectOrder.amount, selectOrder.id);
+        _getOrderListByStatus();
       }
     }, data: formData);
   }
