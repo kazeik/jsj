@@ -2,9 +2,10 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jsj/model/BaseModel.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:jsj/model/OrderDataModel.dart';
 import 'package:jsj/model/OrderModel.dart';
 import 'package:jsj/model/UploadFileModel.dart';
@@ -14,10 +15,7 @@ import 'package:jsj/page/DealInfoPage.dart';
 import 'package:jsj/page/WaitOutPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
-
 import 'package:quiver/strings.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:dio/dio.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com

@@ -104,14 +104,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
             ),
             color: Colors.white,
           ),
-          new Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-            child: new Text(
-              "订单编号:${model?.data?.order_no}",
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
+          _buildOrder(),
           new Container(
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -169,13 +162,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
         color: Colors.white,
         child: new Column(
           children: <Widget>[
-            new Container(
-              margin: EdgeInsets.only(top: 20, bottom: 10),
-              child: new Text(
-                "订单编号:$orderId",
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ),
+            _buildOrder(),
             new Divider(
               endIndent: 20,
               indent: 20,
@@ -259,13 +246,26 @@ class _DealBuyPageState extends State<DealBuyPage> {
     }
   }
 
+  Widget _buildOrder() {
+    return isEmpty(orderId)
+        ? new Container()
+        : new Container(
+            color: Colors.white,
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+            child: new Text(
+              "订单编号:$orderId",
+              style: TextStyle(color: Colors.black),
+            ),
+          );
+  }
+
   _userSurePayMoney() {
     HashMap<String, Object> params = new HashMap();
     params['id'] = orderId;
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_paycoin, (str) {
       isSure = true;
       setState(() {});
-    },params: params);
+    }, params: params);
   }
 
   Widget _buildButton() {
@@ -371,7 +371,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
         downItems.add(
           new DropdownMenuItem(
             child: new Text(
-                "ID:${serviceListModel?.data[i].id}(￥${serviceListModel?.data[i].balance})"),
+                "ID:${serviceListModel?.data[i].id}(￥${serviceListModel?.data[i].service_balance})"),
             value: serviceListModel?.data[i].id,
           ),
         );

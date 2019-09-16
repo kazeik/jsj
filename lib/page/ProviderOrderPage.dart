@@ -127,7 +127,7 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
             new Container(
               child: new OutlineButton(
                 onPressed: () {
-                  _userSureCoin(dataModel?.id);
+                  _providerSureCoin(dataModel?.id, dataModel?.amount);
                 },
                 child: new Text("马上接"),
               ),
@@ -215,8 +215,9 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
     });
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_order, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      Utils.showToast(model.msg);
       if (model.status == 200) {
-        Utils.showToast("交易成功");
+        _getOrderList();
       }
     }, data: formData);
   }
