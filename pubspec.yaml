@@ -47,6 +47,9 @@ dev_dependencies:
   #拍照和图片选择
   image_picker: ^0.6.1+4
 
+  #图片缩放
+  photo_view: ^0.4.2
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

@@ -209,29 +209,37 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
       UploadFileModel model = UploadFileModel.fromJson(jsonDecode(str));
       if (model != null) {
         Utils.showToast("上传成功");
-        Navigator.of(context).push(
-          new MaterialPageRoute(builder: (_) {
-            return new WaitOutPage(
-              filePath: model.file_info?.file_path,
-              amount: selectOrder.amount,
-              orderId: selectOrder.id,
-            );
-          }),
-        );
+        _goOtherPage(
+            model.file_info?.file_path, selectOrder.amount, selectOrder.id);
       }
     }, data: formData);
   }
 
+  _goOtherPage(String filePath, String amount, String orderId) async {
+    await Navigator.of(context).push(
+      new MaterialPageRoute(builder: (_) {
+        return new WaitOutPage(
+          filePath: filePath,
+          amount: amount,
+          orderId: orderId,
+        );
+      }),
+    );
+    _getOrderListByStatus();
+  }
+
   _sureMoney(String amount, String id) {
-    Utils.logs("$amount | $id");
     FormData formData = new FormData.from({
       "id": id,
       "real_amount": amount,
     });
-    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_confirmorder, (str) {
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_confirmorder,
+        (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
-      Utils.showToast(model.msg);
-      setState(() {});
+      if(model.status == 200) {
+        Utils.showToast(model.msg);
+        setState(() {});
+      }
     }, data: formData);
   }
 }

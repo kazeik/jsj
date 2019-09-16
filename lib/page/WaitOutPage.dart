@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
+import 'package:jsj/page/PhotoPage.dart';
 import 'package:jsj/page/ResultPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
@@ -87,11 +88,22 @@ class _WaitOutPageState extends State<WaitOutPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 new Text("打款图片"),
-                new Image(
-                  image: new NetworkImage(widget.filePath),
-                  width: 120,
-                  height: 60,
-                  fit: BoxFit.fill,
+                new GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(
+                      new MaterialPageRoute(builder: (_) {
+                        return new PhotoPage(
+                          url: widget.filePath,
+                        );
+                      }),
+                    );
+                  },
+                  child: new Image(
+                    image: new NetworkImage(widget.filePath),
+                    width: 120,
+                    height: 60,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ],
             ),

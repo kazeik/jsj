@@ -256,10 +256,13 @@ class _DealPayPageState extends State<DealPayPage> {
     });
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_salecoin, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
-      Utils.showToast(model.msg);
-      isSale = true;
-      setState(() {});
-      _getCurrentOrder();
+      if (model.status == 200) {
+        isSale = true;
+        setState(() {});
+        _getCurrentOrder();
+      }else{
+        Utils.showToast(model.msg);
+      }
     }, data: formData);
   }
 
