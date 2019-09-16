@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/OrderDataModel.dart';
 import 'package:jsj/model/OrderModel.dart';
 import 'package:jsj/model/UploadFileModel.dart';
@@ -80,68 +81,105 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
           "持卡人:${isEmpty(dataModel.bank?.user_name) ? "" : dataModel.bank.user_name}"),
       trailing: _buildTrailing(dataModel),
       onTap: () {
-        Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-          return new DealInfoPage(
-            id: dataModel.id,
-          );
-        }));
+        Navigator.of(context).push(
+          new MaterialPageRoute(builder: (_) {
+            return new DealInfoPage(
+              id: dataModel.id,
+            );
+          }),
+        );
       },
     );
   }
 
   Widget _buildTrailing(OrderDataModel dataModel) {
-    return new Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        new Container(
-          child: new OutlineButton(
-            onPressed: () {
-              if (dataModel.bank == null) {
-                return;
-              }
-              showDialog<Null>(
-                  context: context, //BuildContext对象
-                  barrierDismissible: true,
-                  builder: (BuildContext _context) {
-                    return new AlertDialog(
-                      title: new Text("银行卡"),
-                      content: new Text(
-                        "银行:${dataModel.bank?.bank_name}\n卡号:${dataModel?.bank?.bank_account}\n户名:${dataModel?.bank?.user_name}",
+    if (dataModel.type == "1") {
+      return new Container(
+        child: new OutlineButton(
+          onPressed: () {
+            showDialog<Null>(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext _context) {
+                  return new AlertDialog(
+                    title: new Text("实际到帐"),
+                    content: new Text(
+                      "${dataModel.amount}",
+                    ),
+                    actions: <Widget>[
+                      new FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _sureMoney();
+                        },
+                        child: new Text("确定"),
                       ),
-                      actions: <Widget>[
-                        new FlatButton(
-                          onPressed: () {
-                            Navigator.of(_context).pop();
-                          },
-                          child: new Text("确定"),
+                    ],
+                  );
+                });
+          },
+          child: new Text(
+            "确认到帐",
+            style: new TextStyle(fontSize: 12),
+          ),
+        ),
+        height: 25,
+      );
+    } else {
+      return new Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          new Container(
+            child: new OutlineButton(
+              onPressed: () {
+                if (dataModel.bank == null) {
+                  return;
+                }
+                showDialog<Null>(
+                    context: context, //BuildContext对象
+                    barrierDismissible: true,
+                    builder: (BuildContext _context) {
+                      return new AlertDialog(
+                        title: new Text("银行卡"),
+                        content: new Text(
+                          "银行:${dataModel.bank?.bank_name}\n卡号:${dataModel?.bank?.bank_account}\n户名:${dataModel?.bank?.user_name}",
                         ),
-                      ],
-                    );
-                  });
-            },
-            child: new Text("收款银行卡"),
-          ),
-          height: 25,
-        ),
-        new Container(
-          child: new OutlineButton(
-            onPressed: () {
-              if (dataModel?.has_pay == "1") {
-                return;
-              }
-              selectOrder = dataModel;
-              _upFile();
-            },
-            child: new Text(
-              dataModel?.has_pay == "1" ? "已打款等待确认" : "确认打款上传截图",
-              style: new TextStyle(fontSize: 12),
+                        actions: <Widget>[
+                          new FlatButton(
+                            onPressed: () {
+                              Navigator.of(_context).pop();
+                            },
+                            child: new Text("确定"),
+                          ),
+                        ],
+                      );
+                    });
+              },
+              child: new Text("收款银行卡"),
             ),
+            height: 25,
           ),
-          height: 25,
-        ),
-      ],
-    );
+          new Container(
+            child: new OutlineButton(
+              onPressed: () {
+                if (dataModel?.has_pay == "1") {
+                  return;
+                } else {
+                  selectOrder = dataModel;
+                  _upFile();
+                }
+              },
+              child: new Text(
+                dataModel?.has_pay == "1" ? "已打款等待确认" : "确认打款上传截图",
+                style: new TextStyle(fontSize: 12),
+              ),
+            ),
+            height: 25,
+          ),
+        ],
+      );
+    }
   }
 
   _upFile() async {
@@ -174,6 +212,18 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
           }),
         );
       }
+    }, data: formData);
+  }
+
+  _sureMoney() {
+    FormData formData = new FormData.from({
+      "id": selectOrder.id,
+      "real_amount": selectOrder.amount,
+    });
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_salecoin, (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      Utils.showToast(model.msg);
+      setState(() {});
     }, data: formData);
   }
 }

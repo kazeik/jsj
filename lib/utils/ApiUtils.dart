@@ -111,6 +111,7 @@ class ApiUtils {
 
   /*
    * 服务商打款
+   * 服务商确认到帐
    */
   static String post_confirmorder = "/Userapi/confirmOrder";
 
@@ -156,4 +157,7 @@ class ApiUtils {
    * 获取等待服务商打币
    */
   static String get_processBuyCoinInfo = "/Userapi/ProcessBuyCoinInfo";
+
+  static String post_sendmsg = "/Message/addMessage";
+  static String get_msg_list = "/Message/messages";
 }
