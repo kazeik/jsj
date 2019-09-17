@@ -186,8 +186,10 @@ class _activateServicePageState extends State<ActivateServicePage> {
       "phone": phone,
       "p_num": pNum,
       "amount_text": moneyStr,
+      "status": 1
     });
-    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_activateService, (str) {
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_activateService,
+        (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       if (model.status == 200) {
         Utils.showToast("激活成功");

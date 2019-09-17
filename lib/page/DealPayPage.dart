@@ -185,6 +185,7 @@ class _DealPayPageState extends State<DealPayPage> {
 //                          ],
                             onChanged: (str) {
                               _sellMoney = str;
+                              sellController.text = _sellMoney;
                             },
                             controller: sellController,
                           ),
