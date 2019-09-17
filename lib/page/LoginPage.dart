@@ -28,8 +28,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   TabController controller;
-  String _lPhone = "13900000000";
-  String _lPass = "123456";
+  String _lPhone = "";
+  String _lPass = "";
   String _lVerfiyCode = "";
 
   List<Tab> tabs = new List<Tab>()
@@ -54,31 +54,16 @@ class _LoginPageState extends State<LoginPage>
 
   _getLoginState() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    _lPhone = preferences.getString("phone");
-    _lPass = preferences.getString("pass");
     bool flag = preferences.getBool("isSave");
+    _lPhone = preferences.getString("phone");
     if (flag == null || !flag) {
       _lPass = "";
       isSave = false;
     } else {
       isSave = flag;
+      _lPass = preferences.getString("pass");
     }
   }
-
-//
-//  _check() {
-//    _getLoginState().then((token) {
-//      if (token == null || isEmpty(token)) {
-//        _getVerfiyCodeImg();
-//      } else {
-//        ApiUtils.cookieValue = token;
-//        Navigator.pushAndRemoveUntil(
-//            context,
-//            new MaterialPageRoute(builder: (context) => new MainPage()),
-//            (route) => route == null);
-//      }
-//    });
-//  }
 
   _startLogin() {
     if (isEmpty(_lPhone)) {

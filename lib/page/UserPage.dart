@@ -36,6 +36,7 @@ class _UserPageState extends State<UserPage> {
     ..add("我的银行卡")
     ..add("余额明细")
     ..add("常见问题");
+
 //    ..add("客服消息");
 
   @override
@@ -137,7 +138,8 @@ class _UserPageState extends State<UserPage> {
                         subtitle: new Row(
                           children: <Widget>[
                             new GestureDetector(
-                              child: _buildInfo(status),
+                              child: _buildInfo(
+                                  status, ApiUtils.loginData?.status),
                               onTap: () {
                                 if (ApiUtils.loginData?.status == "0")
                                   _activateAccount();
@@ -151,7 +153,8 @@ class _UserPageState extends State<UserPage> {
                               child: _buildInfo(
                                   ApiUtils.loginData?.is_service == "0"
                                       ? "激活服务商"
-                                      : "已激活服务商"),
+                                      : "已激活服务商",
+                                  ApiUtils.loginData?.is_service),
                             ),
                           ],
                         ),
@@ -204,13 +207,11 @@ class _UserPageState extends State<UserPage> {
     });
   }
 
-  Widget _buildInfo(String title) {
+  Widget _buildInfo(String title, String status) {
     return new Container(
       decoration: new BoxDecoration(
         borderRadius: new BorderRadius.circular(8),
-        color: ApiUtils.loginData?.status == "0"
-            ? Colors.red
-            : const Color(0xfffdd72b),
+        color: status == "0" ? Colors.red : const Color(0xfffdd72b),
       ),
       margin: EdgeInsets.only(right: 5, top: 10),
       padding: EdgeInsets.only(left: 2, right: 2),

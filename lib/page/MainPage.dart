@@ -56,19 +56,6 @@ class _MainPageState extends State<MainPage> {
     return tabImages[curIndex][1];
   }
 
-  @override
-  void initState() {
-    super.initState();
-    DateTime time = DateTime(2019, 9, 25, 23, 59, 59);
-    DateTime nowTime = DateTime.now();
-    if (nowTime.isAfter(time)) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          new MaterialPageRoute(builder: (context) => new LoginPage()),
-          (route) => route == null);
-    }
-  }
-
   /*
    * 存储的四个页面，和Fragment一样
    */

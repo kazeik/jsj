@@ -10,6 +10,8 @@ import 'package:jsj/model/NewsDataModel.dart';
 import 'package:jsj/model/NewsModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
+import 'package:jsj/page/NewInfoPage.dart';
+import 'package:jsj/page/WebViewPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/LoadingCustomPainter.dart';
@@ -63,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
       HomeModel model = HomeModel.fromJson(jsonDecode(str));
       ApiUtils.loginData = model.data;
-      tempStep= model.data.step;
+      tempStep = model.data.step;
       Utils.logs("stemtp  = ${ApiUtils.loginData?.step}");
       setState(() {});
     });
@@ -281,7 +283,11 @@ class _HomePageState extends State<HomePage> {
       NewsDataModel model = allItems[index];
       return new ListTile(
         title: new Text("${model?.title}"),
-        subtitle: new Text("${model?.content}"),
+        subtitle: new Text(
+          "${model?.content}",
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
         leading: new Container(
           decoration: new BoxDecoration(
             borderRadius: new BorderRadius.circular(10),
@@ -292,12 +298,19 @@ class _HomePageState extends State<HomePage> {
             image: NetworkImage("${model?.image}"),
           ),
         ),
+        onTap: () {
+          Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+            return new NewInfoPage(
+              content: model?.content,
+            );
+          }));
+        },
       );
     }
   }
 
   Widget _swiperBuilder(BuildContext context, int index) {
-    if (!allImages.isEmpty) {
+    if (allImages.isNotEmpty) {
       ImagesDataModel model = allImages[index];
       return (Image.network(
         "${model.image_url}",
@@ -307,7 +320,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _bannerBuilder(BuildContext context, int index) {
-    if (!allBanner.isEmpty) {
+    if (allBanner.isNotEmpty) {
       ImagesDataModel model = allBanner[index];
       return (Image.network(
         "${model.image_url}",

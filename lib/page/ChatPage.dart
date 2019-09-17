@@ -1,12 +1,19 @@
 import 'dart:async';
+import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jsj/model/BaseModel.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/PhotoPage.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:dio/dio.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -47,10 +54,16 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     if (timer == null) {
-      timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {});
+      timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+        _getMessageList();
+      });
     }
 
     _scrollController.addListener(() {});
+  }
+
+  _getMessageList() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_msg_list, (str) {});
   }
 
   @override
@@ -155,19 +168,8 @@ class _ChatPageState extends State<ChatPage> {
       return;
     }
 
-    Utils.logs("filePath = ${imgs.path} ${imgs.lengthSync()}");
-//    var tempDir = await getTemporaryDirectory();
-//
-//    Utils.loading(context);
-//    CompressObject compressObject = CompressObject(
-//      imageFile: imgs, //image
-//      path: tempDir.path, //compress to path
-//    );
-//    String _path = await Luban.compressImage(compressObject);
-//    File file = new File(_path);
-//    var byteData = Uint8List.fromList(file.readAsBytesSync());
-
     Utils.loading(context);
+
   }
 
   List<Widget> _getWidgetList() {
@@ -427,6 +429,20 @@ class _ChatPageState extends State<ChatPage> {
 //    }
 //  }
 
+  void _handleSubmitted(String text) {
+//    if(isEmpty(text)){
+//      return;
+//    }
+
+    FormData formData = new FormData.from({"msgType": "text"});
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_sure_order, (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      Utils.showToast(model.msg);
+      setState(() {});
+      if (model.status == 200) {}
+    }, data: formData);
+  }
+
   Widget _buildTextComposer() {
     return new Container(
       color: const Color(0xfff5f5f5),
@@ -455,14 +471,13 @@ class _ChatPageState extends State<ChatPage> {
                   border: InputBorder.none,
                 ),
                 controller: _textController,
-//                onSubmitted: _handleSubmitted,
-//                decoration: new InputDecoration.collapsed(hintText: '发送消息'),
+                onSubmitted: _handleSubmitted,
               ),
             ),
           ),
           new InkWell(
             onTap: () {
-//              _handleSubmitted(_textController.text);
+              _handleSubmitted(_textController.text);
             },
             child: new Container(
               margin: new EdgeInsets.all(10),
