@@ -175,7 +175,7 @@ class _DealPayPageState extends State<DealPayPage> {
                                 signed: false, decimal: true),
                             decoration: new InputDecoration(
                               hintText: "请输入卖出金额",
-                              hintStyle: new TextStyle(fontSize: 18.0),
+                              hintStyle: new TextStyle(fontSize: 15.0),
                               contentPadding:
                                   const EdgeInsets.symmetric(vertical: 1.0),
                               border: new OutlineInputBorder(
@@ -185,7 +185,6 @@ class _DealPayPageState extends State<DealPayPage> {
 //                          ],
                             onChanged: (str) {
                               _sellMoney = str;
-                              sellController.text = _sellMoney;
                             },
                             controller: sellController,
                           ),
@@ -228,7 +227,10 @@ class _DealPayPageState extends State<DealPayPage> {
               margin: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
               child: new FlatButton(
                 onPressed: () {
-                  if (!isSale) _sellCoin();
+                  if (!isSale) {
+                    sellController.text = _sellMoney;
+                    _sellCoin();
+                  }
                 },
                 color: Colors.blue,
                 child: new Text(
