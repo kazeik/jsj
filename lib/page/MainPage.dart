@@ -1,18 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:jsj/model/HomeModel.dart';
-import 'package:jsj/net/HttpNet.dart';
-import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealPage.dart';
 import 'package:jsj/page/HomePage.dart';
 import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/page/PropertyPage.dart';
 import 'package:jsj/page/UserPage.dart';
-import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:quiver/strings.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -28,6 +20,8 @@ class _MainPageState extends State<MainPage> {
   int _tabIndex = 0;
   var tabImages;
   var appBarTitles = ['首页', '交易', '资产', '我的'];
+
+  num _lastClickTime;
 
 //  List<Widget> pages = List<Widget>();
 
@@ -72,15 +66,7 @@ class _MainPageState extends State<MainPage> {
           context,
           new MaterialPageRoute(builder: (context) => new LoginPage()),
           (route) => route == null);
-    } else
-      _getHomeData();
-  }
-
-  _getHomeData() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
-      HomeModel model = HomeModel.fromJson(jsonDecode(str));
-      ApiUtils.loginData = model.data;
-    });
+    }
   }
 
   /*
@@ -122,35 +108,50 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     initData();
-    return new MaterialApp(
+    return new WillPopScope(
+        child: new MaterialApp(
 //      theme: ThemeData(
 //          primaryColor: Colors.blue, platform: TargetPlatform.iOS),
-      home: new Scaffold(
-        body: _bodys[_tabIndex],
-        bottomNavigationBar: new BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            new BottomNavigationBarItem(
-                icon: getTabIcon(0), title: getTabTitle(0)),
-            new BottomNavigationBarItem(
-                icon: getTabIcon(1), title: getTabTitle(1)),
-            new BottomNavigationBarItem(
-                icon: getTabIcon(2), title: getTabTitle(2)),
-            new BottomNavigationBarItem(
-                icon: getTabIcon(3), title: getTabTitle(3)),
-          ],
-          selectedFontSize: 12,
-          //设置显示的模式
-          type: BottomNavigationBarType.fixed,
-          //设置当前的索引
-          currentIndex: _tabIndex,
-          //tabBottom的点击监听
-          onTap: (index) {
-            setState(() {
-              _tabIndex = index;
-            });
-          },
+          home: new Scaffold(
+            body: _bodys[_tabIndex],
+            bottomNavigationBar: new BottomNavigationBar(
+              items: <BottomNavigationBarItem>[
+                new BottomNavigationBarItem(
+                    icon: getTabIcon(0), title: getTabTitle(0)),
+                new BottomNavigationBarItem(
+                    icon: getTabIcon(1), title: getTabTitle(1)),
+                new BottomNavigationBarItem(
+                    icon: getTabIcon(2), title: getTabTitle(2)),
+                new BottomNavigationBarItem(
+                    icon: getTabIcon(3), title: getTabTitle(3)),
+              ],
+              selectedFontSize: 12,
+              //设置显示的模式
+              type: BottomNavigationBarType.fixed,
+              //设置当前的索引
+              currentIndex: _tabIndex,
+              //tabBottom的点击监听
+              onTap: (index) {
+                setState(() {
+                  _tabIndex = index;
+                });
+              },
+            ),
+          ),
         ),
-      ),
-    );
+        onWillPop: _doubleExit);
+  }
+
+  Future<bool> _doubleExit() {
+    int nowTime = new DateTime.now().microsecondsSinceEpoch;
+    if (_lastClickTime != 0 && nowTime - _lastClickTime > 1500) {
+      return new Future.value(true);
+    } else {
+      _lastClickTime = new DateTime.now().microsecondsSinceEpoch;
+      new Future.delayed(const Duration(milliseconds: 1500), () {
+        _lastClickTime = 0;
+      });
+      return new Future.value(false);
+    }
   }
 }

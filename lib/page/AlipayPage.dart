@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/model/AlipayModel.dart';
 import 'package:jsj/model/BaseModel.dart';
+import 'package:jsj/model/HomeModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
@@ -33,7 +34,25 @@ class _AlipayPageState extends State<AlipayPage> {
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_bindalipay, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
+      if (model.status == 200) {
+        _getHomeData();
+      }
     }, data: formData);
+  }
+
+  _getHomeData() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
+      HomeModel model = HomeModel.fromJson(jsonDecode(str));
+      ApiUtils.loginData = model.data;
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    account = ApiUtils.loginData?.alipay_account;
+    pass = ApiUtils.loginData?.alipay_password;
   }
 
   @override
@@ -57,22 +76,10 @@ class _AlipayPageState extends State<AlipayPage> {
               margin: EdgeInsets.all(15),
               child: new Text("请注册并填入店员支付宝帐号及密码"),
             ),
-            _buildInput(
-                "帐号",
-                "username",
-                false,
-                isEmpty(ApiUtils.loginData?.alipay_account)
-                    ? ""
-                    : ApiUtils.loginData?.alipay_account, (str) {
+            _buildInput("帐号", "username", false, account, (str) {
               account = str;
             }),
-            _buildInput(
-                "密码",
-                "password",
-                true,
-                isEmpty(ApiUtils.loginData?.alipay_password)
-                    ? ""
-                    : ApiUtils.loginData?.alipay_password, (str) {
+            _buildInput("密码", "password", true, pass, (str) {
               pass = str;
             }),
             new Container(

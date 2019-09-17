@@ -144,7 +144,8 @@ class _ShatePageState extends State<SharePage> {
                                   ),
                                   new Text(
                                     "可提现佣金${ApiUtils.loginData?.commission}元",
-                                    style: TextStyle(color: Colors.white,fontSize: 13),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 13),
                                   ),
                                   new Icon(
                                     Icons.chevron_right,
@@ -176,10 +177,11 @@ class _ShatePageState extends State<SharePage> {
                     new FlatButton(
                       color: const Color(0xff0091ea),
                       onPressed: () {
-                        Navigator.of(context)
-                            .push(new MaterialPageRoute(builder: (_) {
-                          return new WithDrawPage();
-                        }));
+                        Navigator.of(context).push(
+                          new MaterialPageRoute(builder: (_) {
+                            return new WithDrawPage();
+                          }),
+                        );
                       },
                       child: new Text(
                         "立即提现",
@@ -201,7 +203,7 @@ class _ShatePageState extends State<SharePage> {
                     new Container(
                       margin: EdgeInsets.only(top: 10, bottom: 10),
                       child: new Text(
-                        "会员ID:${ApiUtils.loginData?.id}",
+                        "邀请码:c${ApiUtils.loginData?.id}",
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),

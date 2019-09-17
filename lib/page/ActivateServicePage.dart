@@ -189,7 +189,11 @@ class _activateServicePageState extends State<ActivateServicePage> {
     });
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_activateService, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
-      Utils.showToast(model.msg);
+      if (model.status == 200) {
+        Utils.showToast("激活成功");
+      } else {
+        Utils.showToast(model.msg);
+      }
     }, data: formData);
   }
 }

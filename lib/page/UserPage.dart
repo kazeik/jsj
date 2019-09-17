@@ -259,16 +259,26 @@ class _UserPageState extends State<UserPage> {
                 onTap: () {
                   switch (i) {
                     case 0:
-                      Navigator.of(context)
-                          .push(new MaterialPageRoute(builder: (_) {
-                        return new SharePage();
-                      }));
+                      if (ApiUtils.loginData?.status == "0")
+                        _activateAccount();
+                      else {
+                        Navigator.of(context).push(
+                          new MaterialPageRoute(builder: (_) {
+                            return new SharePage();
+                          }),
+                        );
+                      }
                       break;
                     case 1:
-                      Navigator.of(context)
-                          .push(new MaterialPageRoute(builder: (_) {
-                        return new ServiceProviderPage();
-                      }));
+                      if (ApiUtils.loginData?.is_service == "0") {
+                        _activateService();
+                      } else {
+                        Navigator.of(context).push(
+                          new MaterialPageRoute(builder: (_) {
+                            return new ServiceProviderPage();
+                          }),
+                        );
+                      }
                       break;
                     case 2:
                       Navigator.of(context)

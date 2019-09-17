@@ -292,6 +292,8 @@ class _DealPayPageState extends State<DealPayPage> {
         orderId = "";
       } else if (model.data?.status == "1") {
         _getProcessBuyCoinInfo();
+      } else if (model.data?.status == "0") {
+        isSale = true;
       }
       setState(() {});
     });

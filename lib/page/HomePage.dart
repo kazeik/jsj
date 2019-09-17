@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:jsj/model/HomeModel.dart';
 import 'package:jsj/model/ImagesDataModel.dart';
 import 'package:jsj/model/ImagesModel.dart';
 import 'package:jsj/model/NewsDataModel.dart';
@@ -36,11 +37,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    tempStep = ApiUtils.loginData?.step;
-    Utils.logs("当前步数 = $tempStep");
     _getImages();
     _getNews();
     _getBanner();
+    _getHomeData();
   }
 
   _getNews() {
@@ -55,6 +55,16 @@ class _HomePageState extends State<HomePage> {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_images, (str) {
       ImagesModel model = ImagesModel.fromJson(jsonDecode(str));
       allImages.addAll(model.data);
+      setState(() {});
+    });
+  }
+
+  _getHomeData() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
+      HomeModel model = HomeModel.fromJson(jsonDecode(str));
+      ApiUtils.loginData = model.data;
+      tempStep= model.data.step;
+      Utils.logs("stemtp  = ${ApiUtils.loginData?.step}");
       setState(() {});
     });
   }

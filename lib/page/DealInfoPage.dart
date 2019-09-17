@@ -7,6 +7,7 @@ import 'package:jsj/model/DealInfoModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -114,6 +115,7 @@ class _AboutPageState extends State<DealInfoPage> {
   @override
   void initState() {
     super.initState();
+    Utils.logs("id = ${widget.id}");
     _getDetailInfo();
   }
 }

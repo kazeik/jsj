@@ -111,7 +111,7 @@ class _BankCardPageState extends State<BankCardPage> {
           margin: EdgeInsets.all(10),
           height: 120,
           decoration: new BoxDecoration(
-              borderRadius: new BorderRadius.circular(10), color: Colors.red),
+              borderRadius: new BorderRadius.circular(10), color: Colors.blue),
           child: ListTile(
             title: new Text(
               isEmpty(_bankName) ? "未知银行" : _bankName,
@@ -129,7 +129,7 @@ class _BankCardPageState extends State<BankCardPage> {
             ),
             leading: new Image(
               image: AssetImage(
-                Utils.getImgPath("cmb", format: "jpg"),
+                Utils.getImgPath("jsjlogo"),
               ),
             ),
           ),

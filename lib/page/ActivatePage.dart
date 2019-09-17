@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/AlipayPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/MainInput.dart';
 
 /**
@@ -71,7 +75,14 @@ class _activatePageState extends State<ActivatePage> {
   }
 
   _activateAccount() {
-    HttpNet.instance
-        .request(MethodTypes.POST, ApiUtils.post_activateAccount, (str) {});
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_activateAccount,
+        (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      if (model.status == 200) {
+        Utils.showToast("激活成功");
+      } else {
+        Utils.showToast(model.msg);
+      }
+    });
   }
 }

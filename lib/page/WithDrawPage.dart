@@ -145,7 +145,12 @@ class _WithDrawPageState extends State<WithDrawPage> {
     FormData formData = new FormData.from({"amount": _money});
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_drawwith, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
-      Utils.showToast(model.msg);
+      if (model.status == 200) {
+        Utils.showToast("提现成功");
+        Navigator.pop(context);
+      } else {
+        Utils.showToast(model.msg);
+      }
     }, data: formData);
   }
 }

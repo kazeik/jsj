@@ -94,6 +94,7 @@ class HomeDataModel {
       this.lock_balance,
       this.phone,
       this.reply,
+      this.step,
       this.status,
       this.service_balance,
       this.service_lock_balance,
@@ -119,6 +120,7 @@ class HomeDataModel {
       phone: json['phone'],
       reply: json['reply'],
       status: json['status'],
+      step: json['step'],
       service_balance: json['service_balance'],
       service_lock_balance: json['service_lock_balance'],
       total_commission: json['total_commission'],
@@ -143,6 +145,7 @@ class HomeDataModel {
     data['lock_balance'] = this.lock_balance;
     data['phone'] = this.phone;
     data['reply'] = this.reply;
+    data['step'] = this.step;
     data['status'] = this.status;
     data['service_balance'] = this.service_balance;
     data['service_lock_balance'] = this.service_lock_balance;

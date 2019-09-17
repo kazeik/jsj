@@ -82,6 +82,7 @@ flutter:
     - assets/images/qrcode.png
     - assets/images/commission.png
     - assets/images/team.png
+    - assets/images/jsjlogo.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -82,15 +82,6 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
           "订单编号:${dataModel.order_no}\n佣金:${double.parse(dataModel?.amount) / 1000} 订单金额:${dataModel?.amount}\n时间:$_time\n"
           "持卡人:${isEmpty(dataModel.bank?.user_name) ? "" : dataModel.bank.user_name}"),
       trailing: _buildTrailing(dataModel),
-      onTap: () {
-        Navigator.of(context).push(
-          new MaterialPageRoute(builder: (_) {
-            return new DealInfoPage(
-              id: dataModel.id,
-            );
-          }),
-        );
-      },
     );
   }
 
