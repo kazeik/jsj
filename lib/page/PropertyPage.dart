@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:jsj/model/HomeModel.dart';
 import 'package:jsj/model/PropertyDataModel.dart';
 import 'package:jsj/model/PropertyModel.dart';
 import 'package:jsj/net/HttpNet.dart';
@@ -31,6 +32,17 @@ class _PropertyPageState extends State<PropertyPage> {
   void initState() {
     super.initState();
     _getLastMoney();
+    _getHomeData();
+  }
+
+  _getHomeData() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
+      HomeModel model = HomeModel.fromJson(jsonDecode(str));
+      ApiUtils.loginData = model.data;
+      setState(() {
+
+      });
+    });
   }
 
   _getLastMoney() {
