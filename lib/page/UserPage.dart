@@ -9,6 +9,7 @@ import 'package:jsj/page/ActivateServicePage.dart';
 import 'package:jsj/page/AlipayPage.dart';
 import 'package:jsj/page/BalanceInfoPage.dart';
 import 'package:jsj/page/BankCardPage.dart';
+import 'package:jsj/page/ChatPage.dart';
 import 'package:jsj/page/MessagePage.dart';
 import 'package:jsj/page/ServiceProviderPage.dart';
 import 'package:jsj/page/SharePage.dart';
@@ -35,13 +36,7 @@ class _UserPageState extends State<UserPage> {
     ..add("我的银行卡")
     ..add("余额明细")
     ..add("常见问题");
-
-//  List<String> unregister = new List<String>()
-//    ..add("激活帐号")
-//    ..add("激活服务商")
-//    ..add("申请服务商")
-//    ..add("申请代理")
-//    ..add("常见问题");
+//    ..add("客服消息");
 
   @override
   Widget build(BuildContext context) {
@@ -302,6 +297,12 @@ class _UserPageState extends State<UserPage> {
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
                         return new MessagePage();
+                      }));
+                      break;
+                    case 6:
+                      Navigator.of(context)
+                          .push(new MaterialPageRoute(builder: (_) {
+                        return new ChatPage();
                       }));
                       break;
                   }
