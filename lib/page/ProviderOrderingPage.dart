@@ -79,7 +79,7 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
     return new ListTile(
       title: new Text("${dataModel?.trans_type}"),
       subtitle: new Text(
-          "订单编号:${dataModel.order_no}\n佣金:${double.parse(dataModel?.amount) / 1000} 订单金额:${dataModel?.amount}\n时间:$_time\n"
+          "订单编号:${dataModel.order_no}\n佣金:￥${double.parse(dataModel?.amount) / 1000} 订单金额:￥${dataModel?.amount}\n时间:$_time\n"
           "持卡人:${isEmpty(dataModel.bank?.user_name) ? "" : dataModel.bank.user_name}"),
       trailing: _buildTrailing(dataModel),
     );

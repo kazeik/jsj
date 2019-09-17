@@ -1,15 +1,15 @@
-import 'dart:io';
-import 'dart:typed_data';
+import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/HomeModel.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/WithDrawPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:quiver/strings.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 14:08
  * 类说明:
@@ -21,8 +21,6 @@ class SharePage extends StatefulWidget {
 }
 
 class _ShatePageState extends State<SharePage> {
-  Uint8List _imgbytes;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,11 +175,7 @@ class _ShatePageState extends State<SharePage> {
                     new FlatButton(
                       color: const Color(0xff0091ea),
                       onPressed: () {
-                        Navigator.of(context).push(
-                          new MaterialPageRoute(builder: (_) {
-                            return new WithDrawPage();
-                          }),
-                        );
+                        _withdraw();
                       },
                       child: new Text(
                         "立即提现",
@@ -222,18 +216,27 @@ class _ShatePageState extends State<SharePage> {
     );
   }
 
+  _withdraw() async {
+    await Navigator.of(context).push(
+      new MaterialPageRoute(builder: (_) {
+        return new WithDrawPage();
+      }),
+    );
+    _getHomeData();
+  }
+
+  _getHomeData() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
+      HomeModel model = HomeModel.fromJson(jsonDecode(str));
+      ApiUtils.loginData = model.data;
+      setState(() {});
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-//    _getQrcode();
+    _getHomeData();
   }
 
-  _getQrcode() async {
-    var httpClient = new HttpClient();
-    var request = await httpClient
-        .getUrl(Uri.parse("${ApiUtils.baseUrl}${ApiUtils.get_qrcode}"));
-    var response = await request.close();
-    _imgbytes = await consolidateHttpClientResponseBytes(response);
-    setState(() {});
-  }
 }

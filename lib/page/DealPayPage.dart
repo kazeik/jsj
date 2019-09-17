@@ -284,17 +284,22 @@ class _DealPayPageState extends State<DealPayPage> {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processSaleOrder,
         (str) {
       model = SaleOrderModel.fromJson(jsonDecode(str));
-      orderId = model.data.id;
-      if (isNotEmpty(orderId)) {
-        isDeal = true;
-      }
-      if (model.data?.status == "2") {
+      if (model?.data == null) {
         isDeal = false;
         orderId = "";
-      } else if (model.data?.status == "1") {
-        _getProcessBuyCoinInfo();
-      } else if (model.data?.status == "0") {
-        isSale = true;
+      } else {
+        orderId = model?.data?.id;
+        if (isNotEmpty(orderId)) {
+          isDeal = true;
+        }
+        if (model.data?.status == "2") {
+          isDeal = false;
+          orderId = "";
+        } else if (model.data?.status == "1") {
+          _getProcessBuyCoinInfo();
+        } else if (model.data?.status == "0") {
+          isSale = true;
+        }
       }
       setState(() {});
     });
