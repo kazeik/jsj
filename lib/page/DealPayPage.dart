@@ -164,15 +164,11 @@ class _DealPayPageState extends State<DealPayPage> {
                     ),
                     new Container(
                       margin: EdgeInsets.only(left: 20, top: 10),
-                      child: new Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          new Text(
-                            "￥",
-                            style: TextStyle(fontSize: 18, color: Colors.black),
-                          ),
-                          new Container(
-                            width: 200,
+//                      child: new Row(
+//                        mainAxisSize: MainAxisSize.min,
+//                        children: <Widget>[
+//                          new Container(
+//                            width: 200,
                             child: new TextField(
                               focusNode: _contentFocusNode,
                               keyboardType: TextInputType.numberWithOptions(
@@ -192,9 +188,9 @@ class _DealPayPageState extends State<DealPayPage> {
                               },
                               controller: sellController,
                             ),
-                          ),
-                        ],
-                      ),
+//                          ),
+//                        ],
+//                      ),
                     ),
                     new Divider(
                       indent: 20,
@@ -208,7 +204,7 @@ class _DealPayPageState extends State<DealPayPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           new Text(
-                              "可卖出余额￥${isEmpty(ApiUtils.loginData?.balance) ? "0" : ApiUtils.loginData?.balance}币，手续费1%+10币"),
+                              "可卖出余额${isEmpty(ApiUtils.loginData?.balance) ? "0" : ApiUtils.loginData?.balance}币，手续费1%+10币"),
                           new InkWell(
                             onTap: () {
                               _sellMoney = isEmpty(ApiUtils.loginData?.balance)

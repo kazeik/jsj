@@ -199,15 +199,15 @@ class _DealBuyPageState extends State<DealBuyPage> {
                     ),
                     new Container(
                       margin: EdgeInsets.only(left: 20, top: 10),
-                      child: new Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          new Text(
-                            "￥",
-                            style: TextStyle(fontSize: 16, color: Colors.black),
-                          ),
-                          new Container(
-                            width: 200,
+//                      child: new Row(
+//                        mainAxisSize: MainAxisSize.min,
+//                        children: <Widget>[
+//                          new Text(
+//                            "￥",
+//                            style: TextStyle(fontSize: 16, color: Colors.black),
+//                          ),
+//                          new Container(
+//                            width: 200,
                             child: new TextField(
                               focusNode: _contentFocusNode,
 //                            textInputAction: TextInputAction.next,
@@ -228,9 +228,9 @@ class _DealBuyPageState extends State<DealBuyPage> {
                                 _buyMoney = str;
                               },
                             ),
-                          ),
-                        ],
-                      ),
+//                          ),
+//                        ],
+//                      ),
                     ),
                     new Divider(
                       endIndent: 20,
@@ -240,7 +240,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(
                           left: 20, top: 10, bottom: 10, right: 20),
-                      child: new Text("本次最多可购买￥10000,赠送购买金额0.9%的币"),
+                      child: new Text("本次最多可购买10000,赠送购买金额0.9%的币"),
                     ),
                     _buildButton(),
                   ],
