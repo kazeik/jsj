@@ -34,10 +34,10 @@ class _UserPageState extends State<UserPage> {
     ..add("服务商平台")
     ..add("支付宝管理")
     ..add("我的银行卡")
-    ..add("余额明细")
+//    ..add("消息中心")
+    ..add("修改密码")
+    ..add("客服消息")
     ..add("常见问题");
-
-//    ..add("客服消息");
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class _UserPageState extends State<UserPage> {
               ),
             ],
           ),
-          new Column(
+          new ListView(
             children: <Widget>[
               new Container(
                 margin: EdgeInsets.only(top: 20),
@@ -288,19 +288,19 @@ class _UserPageState extends State<UserPage> {
                         return new BankCardPage();
                       }));
                       break;
+//                    case 4:
+//                      Navigator.of(context)
+//                          .push(new MaterialPageRoute(builder: (_) {
+//                        return new BalanceInfoPage();
+//                      }));
+//                      break;
                     case 4:
-                      Navigator.of(context)
-                          .push(new MaterialPageRoute(builder: (_) {
-                        return new BalanceInfoPage();
-                      }));
-                      break;
-                    case 5:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
                         return new MessagePage();
                       }));
                       break;
-                    case 6:
+                    case 5:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
                         return new ChatPage();

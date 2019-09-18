@@ -112,26 +112,42 @@ class _BankCardPageState extends State<BankCardPage> {
           height: 120,
           decoration: new BoxDecoration(
               borderRadius: new BorderRadius.circular(10), color: Colors.blue),
-          child: ListTile(
-            title: new Text(
-              isEmpty(_bankName) ? "未知银行" : _bankName,
-              style: TextStyle(color: Colors.white),
-            ),
-            subtitle: new Text(
-              "储蓄卡",
-              style: TextStyle(color: Colors.white),
-            ),
-            trailing: new Text(
-              isEmpty(_cardNo)
-                  ? "**** 0000"
-                  : "**** ${_cardNo.substring(_cardNo.length - 4, _cardNo.length)}",
-              style: TextStyle(color: Colors.white, fontSize: 18),
-            ),
-            leading: new Image(
-              image: AssetImage(
-                Utils.getImgPath("jsjlogo"),
+          child: new Column(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              new ListTile(
+                title: new Text(
+                  isEmpty(_bankName) ? "未知银行" : _bankName,
+                  style: TextStyle(color: Colors.white),
+                ),
+                subtitle: new Text(
+                  "储蓄卡",
+                  style: TextStyle(color: Colors.white),
+                ),
+                trailing: new Text(
+                  isEmpty(_cardNo)
+                      ? "**** 0000"
+                      : "**** ${_cardNo.substring(_cardNo.length - 4, _cardNo.length)}",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                leading: new Image(
+                  image: AssetImage(
+                    Utils.getImgPath("jsjlogo"),
+                  ),
+                ),
               ),
-            ),
+              new Container(
+                alignment: Alignment.bottomRight,
+                margin: EdgeInsets.only(right: 20, top: 10),
+                child: new InkWell(
+                  child: new Text(
+                    "删除",
+                    style: new TextStyle(color: Colors.white),
+                  ),
+                  onTap: () {},
+                ),
+              )
+            ],
           ),
         ),
       );
