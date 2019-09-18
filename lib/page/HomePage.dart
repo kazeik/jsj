@@ -147,15 +147,16 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 children: <Widget>[
                   ClipPath(
-                    clipper: LoadingCustomPainter(),
-                    child: Container(
+                    clipper: new LoadingCustomPainter(),
+                    child: new Container(
                       width: 50,
                       color:
                           tempStep == 1 ? Colors.blue : const Color(0xfff6f6f6),
-                      child: Center(
-                        child: Text(
+                      child: new Center(
+                        child: new Text(
                           "注册",
-                          style: TextStyle(
+                          textScaleFactor: 1.0,
+                          style: new TextStyle(
                               fontSize: 13.0,
                               color:
                                   tempStep == 1 ? Colors.white : Colors.black),
@@ -164,15 +165,16 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   ClipPath(
-                    clipper: RhombusCustomPainter(),
-                    child: Container(
+                    clipper: new RhombusCustomPainter(),
+                    child: new Container(
                       width: 80,
                       color:
                           tempStep == 2 ? Colors.blue : const Color(0xfff6f6f6),
                       child: Center(
                         child: Text(
                           "激活帐号",
-                          style: TextStyle(
+                          textScaleFactor: 1.0,
+                          style: new TextStyle(
                               fontSize: 13.0,
                               color:
                                   tempStep == 2 ? Colors.white : Colors.black),
@@ -181,14 +183,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   ClipPath(
-                    clipper: RhombusCustomPainter(),
-                    child: Container(
+                    clipper: new RhombusCustomPainter(),
+                    child: new Container(
                       width: 80,
                       color:
                           tempStep == 3 ? Colors.blue : const Color(0xfff6f6f6),
-                      child: Center(
-                        child: Text(
+                      child: new Center(
+                        child: new Text(
                           "绑定支付宝",
+                          textScaleFactor: 1.0,
                           style: TextStyle(
                               fontSize: 13.0,
                               color:
@@ -198,15 +201,16 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   ClipPath(
-                    clipper: RhombusCustomPainter(),
-                    child: Container(
+                    clipper: new RhombusCustomPainter(),
+                    child: new Container(
                       width: 80,
                       color:
                           tempStep == 4 ? Colors.blue : const Color(0xfff6f6f6),
-                      child: Center(
-                        child: Text(
+                      child: new Center(
+                        child: new Text(
                           "绑定银行卡",
-                          style: TextStyle(
+                          textScaleFactor: 1.0,
+                          style: new TextStyle(
                               fontSize: 13.0,
                               color:
                                   tempStep == 4 ? Colors.white : Colors.black),
@@ -215,15 +219,16 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   ClipPath(
-                    clipper: LoadingCustomPainter(reverse: true),
-                    child: Container(
+                    clipper: new LoadingCustomPainter(reverse: true),
+                    child: new Container(
                       width: 80,
                       color:
                           tempStep == 5 ? Colors.blue : const Color(0xfff6f6f6),
-                      child: Center(
-                        child: Text(
+                      child: new Center(
+                        child: new Text(
                           "自动交易",
-                          style: TextStyle(
+                          textScaleFactor: 1.0,
+                          style: new TextStyle(
                               fontSize: 13.0,
                               color:
                                   tempStep == 5 ? Colors.white : Colors.black),

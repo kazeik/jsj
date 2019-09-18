@@ -42,6 +42,8 @@ class _DealBuyPageState extends State<DealBuyPage> {
 
   bool isSure = false;
 
+  FocusNode _contentFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -159,90 +161,97 @@ class _DealBuyPageState extends State<DealBuyPage> {
         ],
       );
     } else {
-      return new Container(
-        color: Colors.white,
-        child: new Column(
-          children: <Widget>[
-            _buildOrder(),
-            new Divider(
-              endIndent: 20,
-              indent: 20,
-            ),
-            new DropdownButton(
-              items: _buildDropdownItem(),
-              onChanged: (index) {
-                serviceValue = index;
-                serviceListModel.data.forEach((it) {
-                  if (it.id == index) {
-                    selectModel = it;
-                  }
-                });
-                setState(() {});
-              },
-              hint: new Text("请选择购买服务商"),
-              value: serviceValue,
-            ),
-            new Container(
-              height: 10,
-              color: const Color(0xfffafafa),
-            ),
-            new Container(
-              child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  new Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
-                    child: new Text("购买金额"),
-                  ),
-                  new Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
-                    child: new Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        new Text(
-                          "￥",
-                          style: TextStyle(fontSize: 18, color: Colors.black),
-                        ),
-                        new Container(
-                          width: 200,
-                          child: new TextField(
-                            keyboardType: TextInputType.numberWithOptions(
-                                signed: false, decimal: true),
-                            decoration: new InputDecoration(
-                              hintText: "请输入金额",
-                              hintStyle: new TextStyle(fontSize: 18.0),
-                              contentPadding:
-                                  const EdgeInsets.symmetric(vertical: 1.0),
-                              border: new OutlineInputBorder(
-                                  borderSide: BorderSide.none),
-                            ),
+      return new GestureDetector(
+        child: new Container(
+          color: Colors.white,
+          child: new Column(
+            children: <Widget>[
+              _buildOrder(),
+              new Divider(
+                endIndent: 20,
+                indent: 20,
+              ),
+              new DropdownButton(
+                items: _buildDropdownItem(),
+                onChanged: (index) {
+                  serviceValue = index;
+                  serviceListModel.data.forEach((it) {
+                    if (it.id == index) {
+                      selectModel = it;
+                    }
+                  });
+                  setState(() {});
+                },
+                hint: new Text("请选择购买服务商"),
+                value: serviceValue,
+              ),
+              new Container(
+                height: 10,
+                color: const Color(0xfffafafa),
+              ),
+              new Container(
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Container(
+                      margin: EdgeInsets.only(left: 20, top: 10),
+                      child: new Text("购买金额"),
+                    ),
+                    new Container(
+                      margin: EdgeInsets.only(left: 20, top: 10),
+                      child: new Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          new Text(
+                            "￥",
+                            style: TextStyle(fontSize: 16, color: Colors.black),
+                          ),
+                          new Container(
+                            width: 200,
+                            child: new TextField(
+                              focusNode: _contentFocusNode,
+//                            textInputAction: TextInputAction.next,
+                              keyboardType: const TextInputType.numberWithOptions(
+                                  decimal: true),
+                              decoration: new InputDecoration(
+                                hintText: "请输入金额",
+                                hintStyle: new TextStyle(fontSize: 16.0),
+                                contentPadding:
+                                const EdgeInsets.symmetric(vertical: 1.0),
+                                border: new OutlineInputBorder(
+                                    borderSide: BorderSide.none),
+                              ),
 //                          inputFormatters: <TextInputFormatter>[
 //                            WhitelistingTextInputFormatter.digitsOnly
 //                          ],
-                            onChanged: (str) {
-                              _buyMoney = str;
-                            },
+                              onChanged: (str) {
+                                _buyMoney = str;
+                              },
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  new Divider(
-                    endIndent: 20,
-                    indent: 20,
-                  ),
-                  new Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(
-                        left: 20, top: 10, bottom: 10, right: 20),
-                    child: new Text("本次最多可购买￥10000,赠送购买金额0.9%的币"),
-                  ),
-                  _buildButton(),
-                ],
+                    new Divider(
+                      endIndent: 20,
+                      indent: 20,
+                    ),
+                    new Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(
+                          left: 20, top: 10, bottom: 10, right: 20),
+                      child: new Text("本次最多可购买￥10000,赠送购买金额0.9%的币"),
+                    ),
+                    _buildButton(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        onTap:(){
+          _contentFocusNode.unfocus();
+        },
       );
     }
   }

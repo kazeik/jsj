@@ -34,6 +34,8 @@ class _DealPayPageState extends State<DealPayPage> {
   SaleOrderModel model;
   bool isSure = false;
 
+  FocusNode _contentFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -146,104 +148,111 @@ class _DealPayPageState extends State<DealPayPage> {
         ],
       );
     } else {
-      return new Container(
-        color: Colors.white,
-        child: new Column(
-          children: <Widget>[
-            new Container(
-              margin: EdgeInsets.only(top: 10),
-              child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  new Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
-                    child: new Text("卖出金额"),
-                  ),
-                  new Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
-                    child: new Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        new Text(
-                          "￥",
-                          style: TextStyle(fontSize: 18, color: Colors.black),
-                        ),
-                        new Container(
-                          width: 200,
-                          child: new TextField(
-                            keyboardType: TextInputType.numberWithOptions(
-                                signed: false, decimal: true),
-                            decoration: new InputDecoration(
-                              hintText: "请输入卖出金额",
-                              hintStyle: new TextStyle(fontSize: 15.0),
-                              contentPadding:
-                                  const EdgeInsets.symmetric(vertical: 1.0),
-                              border: new OutlineInputBorder(
-                                  borderSide: BorderSide.none),
-                            ),
+      return new GestureDetector(
+        child: new Container(
+          color: Colors.white,
+          child: new Column(
+            children: <Widget>[
+              new Container(
+                margin: EdgeInsets.only(top: 10),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Container(
+                      margin: EdgeInsets.only(left: 20, top: 10),
+                      child: new Text("卖出金额"),
+                    ),
+                    new Container(
+                      margin: EdgeInsets.only(left: 20, top: 10),
+                      child: new Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          new Text(
+                            "￥",
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          ),
+                          new Container(
+                            width: 200,
+                            child: new TextField(
+                              focusNode: _contentFocusNode,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  signed: false, decimal: true),
+                              decoration: new InputDecoration(
+                                hintText: "请输入卖出金额",
+                                hintStyle: new TextStyle(fontSize: 15.0),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 1.0),
+                                border: new OutlineInputBorder(
+                                    borderSide: BorderSide.none),
+                              ),
 //                          inputFormatters: <TextInputFormatter>[
 //                          ],
-                            onChanged: (str) {
-                              _sellMoney = str;
+                              onChanged: (str) {
+                                _sellMoney = str;
+                              },
+                              controller: sellController,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    new Divider(
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    new Container(
+                      margin: EdgeInsets.only(
+                          left: 20, top: 10, bottom: 10, right: 20),
+                      child: new Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          new Text(
+                              "可卖出余额￥${isEmpty(ApiUtils.loginData?.balance) ? "0" : ApiUtils.loginData?.balance}币，手续费1%+10币"),
+                          new InkWell(
+                            onTap: () {
+                              _sellMoney = isEmpty(ApiUtils.loginData?.balance)
+                                  ? "0"
+                                  : ApiUtils.loginData?.balance;
+                              sellController.text = _sellMoney;
                             },
-                            controller: sellController,
-                          ),
-                        ),
-                      ],
+                            child: new Text(
+                              "全部卖出",
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  new Divider(
-                    indent: 20,
-                    endIndent: 20,
-                  ),
-                  new Container(
-                    margin: EdgeInsets.only(
-                        left: 20, top: 10, bottom: 10, right: 20),
-                    child: new Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        new Text(
-                            "可卖出余额￥${isEmpty(ApiUtils.loginData?.balance) ? "0" : ApiUtils.loginData?.balance}币，手续费1%+10币"),
-                        new InkWell(
-                          onTap: () {
-                            _sellMoney = isEmpty(ApiUtils.loginData?.balance)
-                                ? "0"
-                                : ApiUtils.loginData?.balance;
-                            sellController.text = _sellMoney;
-                          },
-                          child: new Text(
-                            "全部卖出",
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            new Container(
-              margin: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
-              child: new FlatButton(
-                onPressed: () {
-                  if (!isSale) {
-                    sellController.text = _sellMoney;
-                    _sellCoin();
-                  }
-                },
-                color: Colors.blue,
-                child: new Text(
-                  isSale ? "等待服务商接单" : "卖币", //等待服务端接单
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                  ],
                 ),
               ),
-              width: double.infinity,
-            )
-          ],
+              new Container(
+                margin:
+                    EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+                child: new FlatButton(
+                  onPressed: () {
+                    if (!isSale) {
+                      sellController.text = _sellMoney;
+                      _sellCoin();
+                    }
+                  },
+                  color: Colors.blue,
+                  child: new Text(
+                    isSale ? "等待服务商接单" : "卖币", //等待服务端接单
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                width: double.infinity,
+              )
+            ],
+          ),
         ),
+        onTap: () {
+          _contentFocusNode.unfocus();
+        },
       );
     }
   }
