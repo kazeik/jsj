@@ -160,4 +160,5 @@ class ApiUtils {
 
   static String post_sendmsg = "/Message/addMessage";
   static String get_msg_list = "/Message/messages";
+  static String post_changepass = "/Userapi/changePassword";
 }

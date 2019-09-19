@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jsj/page/DealPage.dart';
 import 'package:jsj/page/HomePage.dart';
-import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/page/PropertyPage.dart';
 import 'package:jsj/page/UserPage.dart';
 import 'package:jsj/utils/Utils.dart';
@@ -96,34 +95,30 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     initData();
     return new WillPopScope(
-        child: new MaterialApp(
-//      theme: ThemeData(
-//          primaryColor: Colors.blue, platform: TargetPlatform.iOS),
-          home: new Scaffold(
-            body: _bodys[_tabIndex],
-            bottomNavigationBar: new BottomNavigationBar(
-              items: <BottomNavigationBarItem>[
-                new BottomNavigationBarItem(
-                    icon: getTabIcon(0), title: getTabTitle(0)),
-                new BottomNavigationBarItem(
-                    icon: getTabIcon(1), title: getTabTitle(1)),
-                new BottomNavigationBarItem(
-                    icon: getTabIcon(2), title: getTabTitle(2)),
-                new BottomNavigationBarItem(
-                    icon: getTabIcon(3), title: getTabTitle(3)),
-              ],
-              selectedFontSize: 12,
-              //设置显示的模式
-              type: BottomNavigationBarType.fixed,
-              //设置当前的索引
-              currentIndex: _tabIndex,
-              //tabBottom的点击监听
-              onTap: (index) {
-                setState(() {
-                  _tabIndex = index;
-                });
-              },
-            ),
+        child: new Scaffold(
+          body: _bodys[_tabIndex],
+          bottomNavigationBar: new BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              new BottomNavigationBarItem(
+                  icon: getTabIcon(0), title: getTabTitle(0)),
+              new BottomNavigationBarItem(
+                  icon: getTabIcon(1), title: getTabTitle(1)),
+              new BottomNavigationBarItem(
+                  icon: getTabIcon(2), title: getTabTitle(2)),
+              new BottomNavigationBarItem(
+                  icon: getTabIcon(3), title: getTabTitle(3)),
+            ],
+            selectedFontSize: 12,
+            //设置显示的模式
+            type: BottomNavigationBarType.fixed,
+            //设置当前的索引
+            currentIndex: _tabIndex,
+            //tabBottom的点击监听
+            onTap: (index) {
+              setState(() {
+                _tabIndex = index;
+              });
+            },
           ),
         ),
         onWillPop: _doubleExit);

@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/page/LoginPage.dart';
+import 'package:jsj/page/MessagePage.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/views/MainInput.dart';
 
 /**
@@ -43,7 +46,12 @@ class _SettingPageState extends State<SettingPage> {
             margin: EdgeInsets.only(left: 15, right: 15),
             child: new RaisedButton(
               color: const Color(0xff0091ea),
-              onPressed: () {},
+              onPressed: () {
+                ApiUtils.loginData = null;
+
+                Navigator.of(context).pushNamedAndRemoveUntil('/loginPage', ModalRoute.withName("/loginPage"));
+//                Navigator.of(context).popUntil(ModalRoute.withName('/loginPage'));
+              },
               child: new Text(
                 "退出登录",
                 style: new TextStyle(
