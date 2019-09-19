@@ -19,9 +19,11 @@ class NewInfoPage extends StatelessWidget {
         title: new Text("公告"),
         centerTitle: true,
       ),
-      body: new Text(
-        content,
-        style: new TextStyle(wordSpacing: 10.0, height: 1.5),
+      body: new SingleChildScrollView(
+        child: new Text(
+          content,
+          style: new TextStyle(wordSpacing: 10.0, height: 1.5),
+        ),
       ),
     );
   }
