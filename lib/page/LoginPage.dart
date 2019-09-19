@@ -99,19 +99,6 @@ class _LoginPageState extends State<LoginPage>
 
   _getVerfiyCodeImg() async {
     try {
-//      Dio dio = new Dio();
-//      dio.options.responseType = ResponseType.stream;
-//      String url = "${ApiUtils.baseUrl}${ApiUtils.get_verfiycode}";
-//      Response response = await dio.get(url);
-//      HttpClientResponse resp = response.data;
-//
-//      resp.cookies.forEach((cookieItem) {
-//        ApiUtils.cookieValue = cookieItem.value;
-//        _saveToken("token", cookieItem.value);
-//      });
-//
-//      var imgbyte = await consolidateHttpClientResponseBytes(resp);
-
       var httpClient = new HttpClient();
       var request = await httpClient
           .getUrl(Uri.parse("${ApiUtils.baseUrl}${ApiUtils.get_verfiycode}"));
@@ -123,6 +110,7 @@ class _LoginPageState extends State<LoginPage>
         Utils.saveInfo("token", cookieItem.value);
         Utils.saveInfo("tokenKey", cookieItem.name);
         Utils.logs("获取到的token = $cookieItem");
+
       });
 
       var imgbyte = await consolidateHttpClientResponseBytes(response);

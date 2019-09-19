@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/HomeModel.dart';
 import 'package:jsj/model/UploadFileModel.dart';
 import 'package:jsj/net/HttpNet.dart';
@@ -160,10 +161,11 @@ class _UserPageState extends State<UserPage> {
                                           File imageFile =
                                               await ImagePicker.pickImage(
                                                   source: ImageSource.camera);
-                                          _uploadUserAvatar(imageFile);
                                           Navigator.pop(context);
+                                          _uploadUserAvatarFile(imageFile);
                                         },
                                       ),
+                                      new Divider(),
                                       new ListTile(
                                         leading: new Icon(Icons.photo_library),
                                         title: new Text("相册"),
@@ -171,8 +173,8 @@ class _UserPageState extends State<UserPage> {
                                           File imageFile =
                                               await ImagePicker.pickImage(
                                                   source: ImageSource.gallery);
-                                          _uploadUserAvatar(imageFile);
                                           Navigator.pop(context);
+                                          _uploadUserAvatarFile(imageFile);
                                         },
                                       ),
                                     ],
@@ -242,20 +244,37 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  _uploadUserAvatar(File avatar) async {
-    FormData formData = new FormData.fromMap({
-      "file": await MultipartFile.fromFile(avatar.path),
-    });
+  _uploadUserAvatarFile(File avatar) async {
+    HttpNet.instance.request(
+      MethodTypes.POST,
+      ApiUtils.post_upload_img,
+      (str) {
+        UploadFileModel model = UploadFileModel.fromJson(jsonDecode(str));
+        if (model != null) {
+          _uploadUserAvatar(model.file_info.file_path);
+        }
+      },
+      data: new FormData.fromMap({
+        "file": await MultipartFile.fromFile(avatar.path),
+      }),
+    );
+  }
 
-    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_upload_img, (str) {
-      UploadFileModel model = UploadFileModel.fromJson(jsonDecode(str));
-      if (model != null) {
-        if (model.status == "200") {
+  _uploadUserAvatar(String avatarPath) async {
+    HttpNet.instance.request(
+      MethodTypes.POST,
+      ApiUtils.post_avatar,
+      (str) {
+        BaseModel model = BaseModel.fromJson(jsonDecode(str));
+        if (model != null) {
           Utils.showToast("上传成功");
           _getHomeData();
         }
-      }
-    }, data: formData);
+      },
+      data: new FormData.fromMap({
+        "avatar": avatarPath,
+      }),
+    );
   }
 
   _activateAccount() async {

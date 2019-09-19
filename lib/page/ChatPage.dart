@@ -268,9 +268,15 @@ class _ChatPageState extends State<ChatPage> {
             new Container(
               margin: EdgeInsets.all(10),
               child: new ClipOval(
-                child: new FadeInImage.assetNetwork(
-                  placeholder: Utils.getImgPath("header_img"),
-                  image: "",
+//                child: new FadeInImage.assetNetwork(
+//                  placeholder: Utils.getImgPath("usericon1"),
+//                  image: "",
+//                  width: 45,
+//                  height: 45,
+//                  fit: BoxFit.fitHeight,
+//                ),
+                child: new Image(
+                  image: new AssetImage(Utils.getImgPath("usericon1")),
                   width: 45,
                   height: 45,
                   fit: BoxFit.fitHeight,
@@ -341,8 +347,8 @@ class _ChatPageState extends State<ChatPage> {
               ),
               new ClipOval(
                 child: new FadeInImage.assetNetwork(
-                  placeholder: Utils.getImgPath("header_img"),
-                  image: "",
+                  placeholder: Utils.getImgPath("usericon1"),
+                  image: ApiUtils.loginData?.avatar,
                   width: 45,
                   height: 45,
                   fit: BoxFit.fitHeight,
@@ -390,8 +396,8 @@ class _ChatPageState extends State<ChatPage> {
               ),
               new ClipOval(
                 child: new FadeInImage.assetNetwork(
-                  placeholder: Utils.getImgPath("header_img"),
-                  image: "",
+                  placeholder: Utils.getImgPath("usericon1"),
+                  image: ApiUtils.loginData?.avatar,
                   width: 45,
                   height: 45,
                   fit: BoxFit.fitHeight,
@@ -413,9 +419,15 @@ class _ChatPageState extends State<ChatPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               new ClipOval(
-                child: new FadeInImage.assetNetwork(
-                  placeholder: Utils.getImgPath("header_img"),
-                  image: "",
+//                child: new FadeInImage.assetNetwork(
+//                  placeholder: Utils.getImgPath("usericon1"),
+//                  image: "",
+//                  width: 45,
+//                  height: 45,
+//                  fit: BoxFit.fitHeight,
+//                ),
+                child: new Image(
+                  image: new AssetImage(Utils.getImgPath("usericon1")),
                   width: 45,
                   height: 45,
                   fit: BoxFit.fitHeight,
