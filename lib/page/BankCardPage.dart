@@ -5,13 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/model/BankListModel.dart';
 import 'package:jsj/model/BaseModel.dart';
-import 'package:jsj/model/HomeModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/AddCardPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
-import 'package:quiver/strings.dart';
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 14:08
@@ -87,7 +85,7 @@ class _BankCardPageState extends State<BankCardPage> {
   _getBankList() {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_banklist, (str) {
       model = BankListModel.fromJson(jsonDecode(str));
-      if (null != model && null != model?.data && model?.data?.isNotEmpty) {
+      if (null != model && null != model?.data && model.data.isNotEmpty) {
         _cardNo = model?.data[0].bank_account;
         _bankName = model?.data[0].bank_name;
       }
@@ -96,7 +94,7 @@ class _BankCardPageState extends State<BankCardPage> {
   }
 
   Widget _buildCard() {
-    if (ApiUtils.loginData?.has_bank != null && ApiUtils.loginData.has_bank) {
+    if (model != null && model.data != null && model.data.isNotEmpty) {
       return new GestureDetector(
         onTap: () {
           Navigator.of(context).push(
@@ -120,7 +118,9 @@ class _BankCardPageState extends State<BankCardPage> {
             children: <Widget>[
               new ListTile(
                 title: new Text(
-                  isEmpty(_bankName) ? "未知银行" : _bankName,
+                  model?.data == null || model.data.isEmpty
+                      ? "未知银行"
+                      : model?.data[0].bank_name,
                   style: TextStyle(color: Colors.white),
                 ),
                 subtitle: new Text(
@@ -128,9 +128,9 @@ class _BankCardPageState extends State<BankCardPage> {
                   style: TextStyle(color: Colors.white),
                 ),
                 trailing: new Text(
-                  isEmpty(_cardNo)
+                  model?.data == null || model.data.isEmpty
                       ? "**** 0000"
-                      : "**** ${_cardNo.substring(_cardNo.length - 4, _cardNo.length)}",
+                      : "**** ${model?.data[0].bank_account.substring(model?.data[0].bank_account.length - 4, model?.data[0].bank_account.length)}",
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
                 leading: new Image(
@@ -167,17 +167,19 @@ class _BankCardPageState extends State<BankCardPage> {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_delbank, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       if (model.status == 200) {
-        Utils.showToast("删除成功");
-        _getHomeData();
+        Utils.showToast(model.msg);
+        model = null;
+        setState(() {});
+//        _getHomeData();
       }
     }, params: map);
   }
 
-  _getHomeData() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
-      HomeModel model = HomeModel.fromJson(jsonDecode(str));
-      ApiUtils.loginData = model.data;
-      setState(() {});
-    });
-  }
+//  _getHomeData() {
+//    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
+//      HomeModel model = HomeModel.fromJson(jsonDecode(str));
+//      ApiUtils.loginData = model.data;
+//      setState(() {});
+//    });
+//  }
 }
