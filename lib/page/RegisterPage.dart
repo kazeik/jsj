@@ -54,7 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
       Utils.showToast("邀请码不能为空");
       return;
     }
-    FormData formData = new FormData.from({
+    FormData formData = new FormData.fromMap({
       "phone": _rPhone,
       "password": _rPass,
       "invite_code": _rInvateCode,

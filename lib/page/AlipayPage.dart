@@ -27,7 +27,7 @@ class _AlipayPageState extends State<AlipayPage> {
   String pass;
 
   _bindAlipay() {
-    FormData formData = new FormData.from({
+    FormData formData = new FormData.fromMap({
       "alipay_password": pass,
       "alipay_account": account,
     });

@@ -254,7 +254,7 @@ class _DealPayPageState extends State<DealPayPage> {
   }
 
   _serverPayMoney() {
-    FormData formData = new FormData.from(
+    FormData formData = new FormData.fromMap(
         {"real_amount": _bankDataModel?.data?.amount, "id": orderId});
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_sure_order, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
@@ -272,7 +272,7 @@ class _DealPayPageState extends State<DealPayPage> {
       Utils.showToast("金额不能为空");
       return;
     }
-    FormData formData = new FormData.from({
+    FormData formData = new FormData.fromMap({
       "amount": _sellMoney,
     });
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_salecoin, (str) {

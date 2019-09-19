@@ -70,7 +70,7 @@ class _AddCardPageState extends State<AddCardPage> {
       return;
     }
 
-    FormData formData = new FormData.from({
+    FormData formData = new FormData.fromMap({
       "bank_name": bankname,
       "bank_account": cardNo,
       "user_name": cardName,

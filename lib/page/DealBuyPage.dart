@@ -363,7 +363,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
       return;
     }
     FormData formData =
-        new FormData.from({"amount": _buyMoney, "service_id": serviceValue});
+        new FormData.fromMap({"amount": _buyMoney, "service_id": serviceValue});
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_buycoin, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);

@@ -131,7 +131,7 @@ class _WaitOutPageState extends State<WaitOutPage> {
 
   _sureOrder() {
     Utils.logs("id = ${widget.orderId}");
-    FormData formData = new FormData.from({
+    FormData formData = new FormData.fromMap({
       "id": widget.orderId,
       "real_amount": widget.amount,
       "image": widget.filePath

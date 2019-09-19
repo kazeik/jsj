@@ -181,7 +181,7 @@ class _activateServicePageState extends State<ActivateServicePage> {
   }
 
   _submitInfo() {
-    FormData formData = new FormData.from({
+    FormData formData = new FormData.fromMap({
       "name": name,
       "phone": phone,
       "p_num": pNum,

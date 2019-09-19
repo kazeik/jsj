@@ -23,12 +23,12 @@ class HttpNet {
     _initDio();
   }
 
-  bool _frist = false;
-  BuildContext _context;
-
-  set(BuildContext context) {
-    this._context = context;
-  }
+//  bool _frist = false;
+//  BuildContext _context;
+//
+//  set(BuildContext context) {
+//    this._context = context;
+//  }
 
   static HttpNet _getInstance() {
     if (_instance == null) {

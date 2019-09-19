@@ -187,12 +187,8 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
     var name =
         file.path.substring(file.path.lastIndexOf("/") + 1, file.path.length);
     var suffix = name.substring(name.lastIndexOf(".") + 1, name.length);
-    FormData formData = new FormData.from({
-      "file": new UploadFileInfo(
-        file,
-        name,
-        contentType: ContentType.parse("image/$suffix"),
-      ),
+    FormData formData = new FormData.fromMap({
+      "file": await MultipartFile.fromFile(file.path, filename: name),
     });
 
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_upload_img, (str) {
@@ -221,13 +217,14 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
   }
 
   _sureMoney(String amount, String id, {String image}) {
-    FormData formData = new FormData.from({
+    Map<String, dynamic> map = {
       "id": id,
       "real_amount": amount,
-    });
+    };
     if (!isEmpty(image)) {
-      formData["image"] = image;
+      map["image"] = image;
     }
+    FormData formData = new FormData.fromMap(map);
 
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_confirmorder,
         (str) {

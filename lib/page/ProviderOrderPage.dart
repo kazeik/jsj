@@ -209,7 +209,7 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
   }
 
   _providerSureCoin(String id, String money) {
-    FormData formData = new FormData.from({
+    FormData formData = new FormData.fromMap({
       "id": id,
       "amount": money,
     });

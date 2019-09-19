@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HttpNet.instance.set(context);
+//    HttpNet.instance.set(context);
     return MaterialApp(
       title: 'jsj钱包',
       theme: ThemeData(

@@ -9,6 +9,7 @@ import 'package:jsj/page/ActivateServicePage.dart';
 import 'package:jsj/page/AlipayPage.dart';
 import 'package:jsj/page/BalanceInfoPage.dart';
 import 'package:jsj/page/BankCardPage.dart';
+import 'package:jsj/page/ChangePassPage.dart';
 import 'package:jsj/page/ChatPage.dart';
 import 'package:jsj/page/MessagePage.dart';
 import 'package:jsj/page/ServiceProviderPage.dart';
@@ -297,13 +298,20 @@ class _UserPageState extends State<UserPage> {
                     case 4:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
-                        return new MessagePage();
+                        return new ChangePassPage();
                       }));
+                      break;
                       break;
                     case 5:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
                         return new ChatPage();
+                      }));
+                      break;
+                    case 6:
+                      Navigator.of(context)
+                          .push(new MaterialPageRoute(builder: (_) {
+                        return new MessagePage();
                       }));
                       break;
                   }

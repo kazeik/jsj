@@ -142,7 +142,7 @@ class _WithDrawPageState extends State<WithDrawPage> {
       Utils.showToast("提现金额不能为空");
       return;
     }
-    FormData formData = new FormData.from({"amount": _money});
+    FormData formData = new FormData.fromMap({"amount": _money});
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_drawwith, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       if (model.status == 200) {

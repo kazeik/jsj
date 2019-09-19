@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage>
       Utils.showToast("验证码不能为空");
       return;
     }
-    FormData formData = new FormData.from({
+    FormData formData = new FormData.fromMap({
       "phone": _lPhone,
       "password": _lPass,
       "invite_code": _lVerfiyCode,

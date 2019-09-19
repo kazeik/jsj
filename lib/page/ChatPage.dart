@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,7 +13,6 @@ import 'package:jsj/page/PhotoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:dio/dio.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -434,7 +433,7 @@ class _ChatPageState extends State<ChatPage> {
 //      return;
 //    }
 
-    FormData formData = new FormData.from({"msgType": "text"});
+    FormData formData = new FormData.fromMap({"msgType": "text"});
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_sure_order, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
