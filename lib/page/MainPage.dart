@@ -20,7 +20,7 @@ class _MainPageState extends State<MainPage> {
   var tabImages;
   var appBarTitles = ['首页', '交易', '资产', '我的'];
 
-  num _lastClickTime;
+  int _lastClickTime = 0;
 
 //  List<Widget> pages = List<Widget>();
 
@@ -130,6 +130,7 @@ class _MainPageState extends State<MainPage> {
       return new Future.value(true);
     } else {
       _lastClickTime = new DateTime.now().microsecondsSinceEpoch;
+      Utils.showToast("双击退出程序");
       new Future.delayed(const Duration(milliseconds: 1500), () {
         _lastClickTime = 0;
       });
