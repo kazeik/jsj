@@ -264,7 +264,7 @@ class _LoginPageState extends State<LoginPage>
                               style: TextStyle(fontSize: 13),
                             ),
                           )
-                        : Image.memory(_imgbytes),
+                        : Image.memory(_imgbytes,height: 50,),
                   ),
                   flex: 1,
                 ),

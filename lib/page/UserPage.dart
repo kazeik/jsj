@@ -13,6 +13,7 @@ import 'package:jsj/page/ChangePassPage.dart';
 import 'package:jsj/page/ChatPage.dart';
 import 'package:jsj/page/MessagePage.dart';
 import 'package:jsj/page/ServiceProviderPage.dart';
+import 'package:jsj/page/SettingPage.dart';
 import 'package:jsj/page/SharePage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
@@ -35,8 +36,8 @@ class _UserPageState extends State<UserPage> {
     ..add("服务商平台")
     ..add("支付宝管理")
     ..add("我的银行卡")
-//    ..add("消息中心")
     ..add("修改密码")
+    ..add("设置")
     ..add("客服消息")
     ..add("常见问题");
 
@@ -301,14 +302,19 @@ class _UserPageState extends State<UserPage> {
                         return new ChangePassPage();
                       }));
                       break;
-                      break;
                     case 5:
+                      Navigator.of(context)
+                          .push(new MaterialPageRoute(builder: (_) {
+                        return new SettingPage();
+                      }));
+                      break;
+                    case 6:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
                         return new ChatPage();
                       }));
                       break;
-                    case 6:
+                    case 7:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
                         return new MessagePage();

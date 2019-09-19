@@ -7,12 +7,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jsj/model/BaseModel.dart';
+import 'package:jsj/model/MessageItemModel.dart';
+import 'package:jsj/model/MessageModel.dart';
+import 'package:jsj/model/UploadFileModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/PhotoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:quiver/strings.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -28,7 +32,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final List<String> _messages = <String>[];
+  final List<MessageItemModel> _messages = <MessageItemModel>[];
   final TextEditingController _textController = new TextEditingController();
   bool isShow = false;
 
@@ -53,7 +57,7 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     if (timer == null) {
-      timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      timer = Timer.periodic(const Duration(seconds: 3), (Timer t) {
         _getMessageList();
       });
     }
@@ -62,7 +66,12 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _getMessageList() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_msg_list, (str) {});
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_msg_list, (str) {
+      MessageModel model = MessageModel.fromJson(jsonDecode(str));
+      _messages.clear();
+      _messages.addAll(model.data);
+      setState(() {});
+    });
   }
 
   @override
@@ -103,16 +112,13 @@ class _ChatPageState extends State<ChatPage> {
                 },
               ),
               controller: _refreshController,
-              onRefresh: _onRefresh,
+//              onRefresh: _onRefresh,
 //              onLoading: _onLoading,
               child: ListView.builder(
                 controller: _scrollController,
                 addRepaintBoundaries: false,
                 addAutomaticKeepAlives: false,
-                itemBuilder: (BuildContext context, int index) {
-                  return new Container();
-                },
-//                itemBuilder: _buildChatItem,
+                itemBuilder: _buildChatItem,
                 itemCount: _messages.length,
               ),
             ),
@@ -167,8 +173,26 @@ class _ChatPageState extends State<ChatPage> {
       return;
     }
 
-    Utils.loading(context);
+    FormData formData = new FormData.fromMap({
+      "file": await MultipartFile.fromFile(imgs.path),
+    });
 
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_upload_img, (str) {
+      UploadFileModel model = UploadFileModel.fromJson(jsonDecode(str));
+      if (model != null) {
+        Utils.showToast("上传成功");
+        _submitFile(model.file_info.file_path);
+      }
+    }, data: formData);
+  }
+
+  _submitFile(String path) {
+    FormData formData =
+        new FormData.fromMap({"type": "image", "content": path});
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_sendmsg, (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      if (model.status == 200) {}
+    }, data: formData);
   }
 
   List<Widget> _getWidgetList() {
@@ -208,7 +232,7 @@ class _ChatPageState extends State<ChatPage> {
     return all;
   }
 
-  /*
+/*
    * 显示和隐藏菜单
    */
   _onViewEvent() {
@@ -224,221 +248,223 @@ class _ChatPageState extends State<ChatPage> {
     }));
   }
 
-  /*
+/*
    * 构建聊天列表内容
    */
-//  Widget _buildChatItem(BuildContext context, int index) {
-//    ChatListModel model = _messages[index];
-//    if (model.msgType == "0") {
-//      //文字类
-//      if (model.sender != ApiUtils.loginUser.chatId) {
-//        //左边
-//        String url = "${ApiUtils.baseUrl}${ApiUtils.port}${ApiUtils.getheader}";
-//        url = url.replaceAll(":personId", "${widget.model.friendId}");
-//        url = url.replaceAll(":avatarHash", model.senderAvatarHash);
-//        return new Row(
-//          crossAxisAlignment: CrossAxisAlignment.start,
-//          mainAxisAlignment: MainAxisAlignment.start,
-//          children: <Widget>[
-//            new Container(
-//              margin: EdgeInsets.all(10),
-//              child: new ClipOval(
-//                child: new FadeInImage.assetNetwork(
-//                  placeholder: Utils.getImgPath("header_img"),
-//                  image: url,
-//                  width: 45,
-//                  height: 45,
-//                  fit: BoxFit.fitHeight,
-//                ),
-//              ),
-//            ),
-//            new Container(
-//              width: 200,
-//              child: Column(
-//                crossAxisAlignment: CrossAxisAlignment.start,
-//                children: <Widget>[
-//                  new Container(
-//                    margin: EdgeInsets.only(top: 10),
-//                    child: new Text(model.createSince),
-//                  ),
-//                  new Container(
-//                    decoration: new BoxDecoration(
-//                      borderRadius: new BorderRadius.all(
-//                        new Radius.circular(5),
-//                      ),
-//                      color: Colors.white,
-//                    ),
-//                    padding: EdgeInsets.all(10),
-//                    child: new Text(
-//                      model.content,
-//                      softWrap: true,
-//                    ),
-//                  ),
-//                ],
-//              ),
-//            ),
-//          ],
-//        );
-//      } else if (model.sender == "${ApiUtils.loginUser.chatId}") {
-//        //右边
-//        String url =
-//            "${ApiUtils.baseUrl}${ApiUtils.port}${ApiUtils.employeeAvatar}";
-//        url = url.replaceAll(":employeeId", "${ApiUtils.loginUser.employeeId}");
-//        url = url.replaceAll(":avatarHash", "${ApiUtils.loginUser.avatarHash}");
-//        return new Container(
-//          margin: EdgeInsets.only(right: 10, top: 10),
-//          child: new Row(
-//            crossAxisAlignment: CrossAxisAlignment.start,
-//            mainAxisAlignment: MainAxisAlignment.end,
-//            children: <Widget>[
-//              new Container(
-//                width: 200,
-//                margin: EdgeInsets.only(right: 10, bottom: 10),
-//                child: new Column(
-//                  crossAxisAlignment: CrossAxisAlignment.end,
-//                  children: <Widget>[
-//                    new Text(model.createSince, softWrap: true),
-//                    new Container(
-//                      decoration: new BoxDecoration(
-//                        borderRadius: new BorderRadius.all(
-//                          new Radius.circular(5),
-//                        ),
-//                        color: const Color(0xff0091ea),
-//                      ),
-//                      padding: EdgeInsets.all(10),
-//                      child: new Text(
-//                        model.content,
-//                        style: new TextStyle(color: Colors.white),
-//                      ),
-//                    ),
-//                  ],
-//                ),
-//              ),
-//              new ClipOval(
-//                child: new FadeInImage.assetNetwork(
-//                  placeholder: Utils.getImgPath("header_img"),
-//                  image: url,
-//                  width: 45,
-//                  height: 45,
-//                  fit: BoxFit.fitHeight,
-//                ),
-//              ),
-//            ],
-//          ),
-//        );
-//      }
-//    } else {
-//      //图片类
-//      if (model.sender == ApiUtils.loginUser.chatId) {
-//        //右边
-//        String url =
-//            "${ApiUtils.baseUrl}${ApiUtils.port}${ApiUtils.employeeAvatar}";
-//        url = url.replaceAll(":employeeId", "${ApiUtils.loginUser.employeeId}");
-//        url = url.replaceAll(":avatarHash", "${ApiUtils.loginUser.avatarHash}");
-//        String chatImgPath =
-//            "${ApiUtils.baseUrl}${ApiUtils.port}${ApiUtils.imgpath}${model.content}";
-//        String imgPath = "$chatImgPath-thumb";
-//        return new Container(
-//          margin: EdgeInsets.only(right: 10, top: 10),
-//          child: new Row(
-//            crossAxisAlignment: CrossAxisAlignment.start,
-//            mainAxisAlignment: MainAxisAlignment.end,
-//            children: <Widget>[
-//              new Column(
-//                crossAxisAlignment: CrossAxisAlignment.end,
-//                children: <Widget>[
-//                  new Container(
-//                    margin: EdgeInsets.only(top: 5, right: 10),
-//                    child: new Text(model.createSince),
-//                  ),
-//                  new GestureDetector(
-//                    onTap: () {
-//                      _onImgEvent(chatImgPath);
-//                    },
-//                    child: new Image(
-//                      image: NetworkImage(imgPath),
-//                      width: 180,
-//                      height: 180,
-//                    ),
-//                  ),
-//                ],
-//              ),
-//              new ClipOval(
-//                child: new FadeInImage.assetNetwork(
-//                  placeholder: Utils.getImgPath("header_img"),
-//                  image: url,
-//                  width: 45,
-//                  height: 45,
-//                  fit: BoxFit.fitHeight,
-//                ),
-//              ),
-//            ],
-//          ),
-//        );
-//      } else {
-//        //左边
-//        String url = "${ApiUtils.baseUrl}${ApiUtils.port}${ApiUtils.getheader}";
-//        url = url.replaceAll(":personId", "${widget.model.friendId}");
-//        url = url.replaceAll(":avatarHash", model.receiverAvatarHash);
-//        String chatImgPath =
-//            "${ApiUtils.baseUrl}${ApiUtils.port}${ApiUtils.imgpath}${model.content}";
-//        String imgPath = "$chatImgPath-thumb";
-//        return new Container(
-//          margin: EdgeInsets.all(10),
-//          child: new Row(
-//            crossAxisAlignment: CrossAxisAlignment.start,
-//            mainAxisAlignment: MainAxisAlignment.start,
-//            children: <Widget>[
-//              new ClipOval(
-//                child: new FadeInImage.assetNetwork(
-//                  placeholder: Utils.getImgPath("header_img"),
-//                  image: url,
-//                  width: 45,
-//                  height: 45,
-//                  fit: BoxFit.fitHeight,
-//                ),
-//              ),
-//              new Column(
-//                crossAxisAlignment: CrossAxisAlignment.start,
-//                children: <Widget>[
-//                  new Container(
-//                    margin: EdgeInsets.only(left: 10),
-//                    child: new Text(model.createSince),
-//                  ),
-//                  new Container(
-//                    margin: EdgeInsets.only(left: 10),
-//                    child: new GestureDetector(
-//                      onTap: () {
-//                        _onImgEvent(imgPath);
-//                      },
-//                      child: new Image(
-//                        image: NetworkImage(imgPath),
-//                        width: 180,
-//                        height: 180,
-//                        fit: BoxFit.fill,
-//                      ),
-//                    ),
-//                  ),
-//                ],
-//              ),
-//            ],
-//          ),
-//        );
-//      }
-//    }
-//  }
+  Widget _buildChatItem(BuildContext context, int index) {
+    MessageItemModel model = _messages[index];
+    if (model.type == "text") {
+      //文字类
+      if (model.form_id != ApiUtils.loginData.id) {
+        //左边
+        DateTime dateTime = new DateTime.fromMillisecondsSinceEpoch(
+            int.parse(model.create_time) * 1000);
+        String time =
+            "${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
+        return new Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            new Container(
+              margin: EdgeInsets.all(10),
+              child: new ClipOval(
+                child: new FadeInImage.assetNetwork(
+                  placeholder: Utils.getImgPath("header_img"),
+                  image: "",
+                  width: 45,
+                  height: 45,
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+            ),
+            new Container(
+              width: 200,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: new Text(time),
+                  ),
+                  new Container(
+                    decoration: new BoxDecoration(
+                      borderRadius: new BorderRadius.all(
+                        new Radius.circular(5),
+                      ),
+                      color: Colors.white,
+                    ),
+                    padding: EdgeInsets.all(10),
+                    child: new Text(
+                      model.content,
+                      softWrap: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      } else {
+        //右边
+        DateTime dateTime = new DateTime.fromMillisecondsSinceEpoch(
+            int.parse(model.create_time) * 1000);
+        String time =
+            "${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
+        return new Container(
+          margin: EdgeInsets.only(right: 10, top: 10),
+          child: new Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              new Container(
+                width: 200,
+                margin: EdgeInsets.only(right: 10, bottom: 10),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    new Text(time, softWrap: true),
+                    new Container(
+                      decoration: new BoxDecoration(
+                        borderRadius: new BorderRadius.all(
+                          new Radius.circular(5),
+                        ),
+                        color: const Color(0xff0091ea),
+                      ),
+                      padding: EdgeInsets.all(10),
+                      child: new Text(
+                        model.content,
+                        style: new TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              new ClipOval(
+                child: new FadeInImage.assetNetwork(
+                  placeholder: Utils.getImgPath("header_img"),
+                  image: "",
+                  width: 45,
+                  height: 45,
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    } else {
+      //图片类
+      if (model.form_id == ApiUtils.loginData.id) {
+        //右边
+        DateTime dateTime = new DateTime.fromMillisecondsSinceEpoch(
+            int.parse(model.create_time) * 1000);
+        String time =
+            "${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
+        return new Container(
+          margin: EdgeInsets.only(right: 10, top: 10),
+          child: new Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              new Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.only(top: 5, right: 10),
+                    child: new Text(time),
+                  ),
+                  new GestureDetector(
+                    onTap: () {
+                      if (isEmpty(model.content)) return;
+                      _onImgEvent(model.content);
+                    },
+                    child: isEmpty(model.content)
+                        ? new Container()
+                        : new Image(
+                            image: NetworkImage(model.content),
+                            width: 180,
+                            height: 180,
+                          ),
+                  ),
+                ],
+              ),
+              new ClipOval(
+                child: new FadeInImage.assetNetwork(
+                  placeholder: Utils.getImgPath("header_img"),
+                  image: "",
+                  width: 45,
+                  height: 45,
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        //左边
+        DateTime dateTime = new DateTime.fromMillisecondsSinceEpoch(
+            int.parse(model.create_time) * 1000);
+        String time =
+            "${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
+        return new Container(
+          margin: EdgeInsets.all(10),
+          child: new Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              new ClipOval(
+                child: new FadeInImage.assetNetwork(
+                  placeholder: Utils.getImgPath("header_img"),
+                  image: "",
+                  width: 45,
+                  height: 45,
+                  fit: BoxFit.fitHeight,
+                ),
+              ),
+              new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: new Text(time),
+                  ),
+                  new Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: new GestureDetector(
+                      onTap: () {
+                        if (isEmpty(model.content)) return;
+                        _onImgEvent(model.content);
+                      },
+                      child: isEmpty(model.content)
+                          ? new Container()
+                          : new Image(
+                              image: NetworkImage(model.content),
+                              width: 180,
+                              height: 180,
+                              fit: BoxFit.fill,
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
 
   void _handleSubmitted(String text) {
-//    if(isEmpty(text)){
-//      return;
-//    }
+    if (isEmpty(text)) {
+      return;
+    }
 
-    FormData formData = new FormData.fromMap({"msgType": "text"});
-    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_sure_order, (str) {
+    FormData formData = new FormData.fromMap({"type": "text", "content": text});
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_sendmsg, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
-      Utils.showToast(model.msg);
-      setState(() {});
-      if (model.status == 200) {}
+      if (model.status == 200) {
+        _textController.clear();
+      }
     }, data: formData);
   }
 
