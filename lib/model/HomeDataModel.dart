@@ -29,6 +29,8 @@ class HomeDataModel {
   String create_time;
   bool has_bank;
 
+  String avatar;
+
   /*
    * 用户ID
    */
@@ -36,43 +38,43 @@ class HomeDataModel {
   String invite_code;
   String invite_id;
 
-  /**
+  /*
    * 是否为供应商 0 1
    */
   String is_service;
 
-  /**
+  /*
    * 冻结余额
    */
   String lock_balance;
 
-  /**
+  /*
    * 手机
    */
   String phone;
   dynamic reply;
 
-  /**
+  /*
    * 状态 0刚注册 1申请中 2正常 3禁用
    */
   String status;
 
-  /**
+  /*
    * 服务商余额
    */
   String service_balance;
 
-  /**
+  /*
    * 1、注册2、激活，3、绑定支付宝，4、绑定银行卡，5、自动交易
    */
   int step;
 
-  /**
+  /*
    * 服务商冻结余额
    */
   String service_lock_balance;
 
-  /**
+  /*
    * 累计收益
    */
   String total_commission;
@@ -88,6 +90,7 @@ class HomeDataModel {
       this.create_time,
       this.has_bank,
       this.id,
+        this.avatar,
       this.invite_code,
       this.invite_id,
       this.is_service,
@@ -118,6 +121,7 @@ class HomeDataModel {
       is_service: json['is_service'],
       lock_balance: json['lock_balance'],
       phone: json['phone'],
+      avatar: json['avatar'],
       reply: json['reply'],
       status: json['status'],
       step: json['step'],
@@ -144,6 +148,7 @@ class HomeDataModel {
     data['is_service'] = this.is_service;
     data['lock_balance'] = this.lock_balance;
     data['phone'] = this.phone;
+    data['avatar'] = this.avatar;
     data['reply'] = this.reply;
     data['step'] = this.step;
     data['status'] = this.status;

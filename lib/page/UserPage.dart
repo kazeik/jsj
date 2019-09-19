@@ -1,13 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:jsj/model/HomeModel.dart';
+import 'package:jsj/model/UploadFileModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/ActivatePage.dart';
 import 'package:jsj/page/ActivateServicePage.dart';
 import 'package:jsj/page/AlipayPage.dart';
-import 'package:jsj/page/BalanceInfoPage.dart';
 import 'package:jsj/page/BankCardPage.dart';
 import 'package:jsj/page/ChangePassPage.dart';
 import 'package:jsj/page/ChatPage.dart';
@@ -15,9 +16,12 @@ import 'package:jsj/page/MessagePage.dart';
 import 'package:jsj/page/ServiceProviderPage.dart';
 import 'package:jsj/page/SettingPage.dart';
 import 'package:jsj/page/SharePage.dart';
+import 'package:jsj/page/SystemMsgPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:quiver/strings.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:dio/dio.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -55,7 +59,24 @@ class _UserPageState extends State<UserPage> {
     }
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("我的"),
+        title: new Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            new Text(""),
+            new Text("我的"),
+            new GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  new MaterialPageRoute(builder: (_) {
+                    return new SystemMsgPage();
+                  }),
+                );
+              },
+              child: new Icon(Icons.sms),
+            )
+          ],
+        ),
         centerTitle: true,
         elevation: 0,
       ),
@@ -124,9 +145,46 @@ class _UserPageState extends State<UserPage> {
                     new Container(
                       margin: EdgeInsets.only(left: 10),
                       child: new ListTile(
-                        leading: new Image(
-                          image: AssetImage(
-                            Utils.getImgPath("usericon1"),
+                        leading: new GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return new Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new ListTile(
+                                        leading: new Icon(Icons.photo_camera),
+                                        title: new Text("拍照"),
+                                        onTap: () async {
+                                          File imageFile =
+                                              await ImagePicker.pickImage(
+                                                  source: ImageSource.camera);
+                                          _uploadUserAvatar(imageFile);
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      new ListTile(
+                                        leading: new Icon(Icons.photo_library),
+                                        title: new Text("相册"),
+                                        onTap: () async {
+                                          File imageFile =
+                                              await ImagePicker.pickImage(
+                                                  source: ImageSource.gallery);
+                                          _uploadUserAvatar(imageFile);
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
+                          child: new Image(
+                            image: isEmpty(ApiUtils.loginData?.avatar)
+                                ? AssetImage(
+                                    Utils.getImgPath("usericon1"),
+                                  )
+                                : new NetworkImage(ApiUtils.loginData?.avatar),
                           ),
                         ),
                         title: new Text(
@@ -184,6 +242,22 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
+  _uploadUserAvatar(File avatar) async {
+    FormData formData = new FormData.fromMap({
+      "file": await MultipartFile.fromFile(avatar.path),
+    });
+
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_upload_img, (str) {
+      UploadFileModel model = UploadFileModel.fromJson(jsonDecode(str));
+      if (model != null) {
+        if (model.status == "200") {
+          Utils.showToast("上传成功");
+          _getHomeData();
+        }
+      }
+    }, data: formData);
+  }
+
   _activateAccount() async {
     await Navigator.of(context).push(
       new MaterialPageRoute(builder: (_) {
@@ -206,6 +280,7 @@ class _UserPageState extends State<UserPage> {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
       HomeModel model = HomeModel.fromJson(jsonDecode(str));
       ApiUtils.loginData = model.data;
+      setState(() {});
     });
   }
 
@@ -335,78 +410,6 @@ class _UserPageState extends State<UserPage> {
     }
     return widgets;
   }
-
-//  List<Widget> _buildUnRegisterCell() {
-//    List<Widget> widgets = new List<Widget>();
-//    for (int i = 0; i < unregister.length; i++) {
-//      widgets.add(
-//        new Container(
-//          child: new Column(
-//            children: <Widget>[
-//              new InkWell(
-//                child: new Row(
-//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                  children: <Widget>[
-//                    new Container(
-//                      child: new Text(unregister[i]),
-//                      margin: EdgeInsets.all(5),
-//                    ),
-//                    new Icon(Icons.chevron_right),
-//                  ],
-//                ),
-//                onTap: () {
-//                  switch (i) {
-//                    case 0:
-////                      Navigator.of(context)
-////                          .push(new MaterialPageRoute(builder: (_) {
-////                        return new SharePage();
-////                      }));
-//                      break;
-//                    case 1:
-////                      Navigator.of(context)
-////                          .push(new MaterialPageRoute(builder: (_) {
-////                        return new ServiceProviderPage();
-////                      }));
-//                      break;
-//                    case 2:
-////                      Navigator.of(context)
-////                          .push(new MaterialPageRoute(builder: (_) {
-////                        return new AlipayPage();
-////                      }));
-//                      break;
-//                    case 3:
-////                      Navigator.of(context)
-////                          .push(new MaterialPageRoute(builder: (_) {
-////                        return new BankCardPage();
-////                      }));
-//                      break;
-//                    case 4:
-////                      Navigator.of(context)
-////                          .push(new MaterialPageRoute(builder: (_) {
-////                        return new BalanceInfoPage();
-////                      }));
-//                      break;
-//                    case 5:
-//                      Navigator.of(context)
-//                          .push(new MaterialPageRoute(builder: (_) {
-//                        return new MessagePage();
-//                      }));
-//                      break;
-//                  }
-//                },
-//              ),
-//              i != title.length - 1
-//                  ? new Divider()
-//                  : new Container(
-//                      height: 5,
-//                    ),
-//            ],
-//          ),
-//        ),
-//      );
-//    }
-//    return widgets;
-//  }
 
   Widget _buildAlertInfo(String msg, Color backcolor) {
     return new Container(
