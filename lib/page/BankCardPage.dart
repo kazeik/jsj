@@ -1,8 +1,11 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jsj/model/BankListModel.dart';
+import 'package:jsj/model/BaseModel.dart';
+import 'package:jsj/model/HomeModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/AddCardPage.dart';
@@ -93,7 +96,7 @@ class _BankCardPageState extends State<BankCardPage> {
   }
 
   Widget _buildCard() {
-    if (ApiUtils.loginData?.has_bank != null && ApiUtils.loginData?.has_bank) {
+    if (ApiUtils.loginData?.has_bank != null && ApiUtils.loginData.has_bank) {
       return new GestureDetector(
         onTap: () {
           Navigator.of(context).push(
@@ -144,7 +147,9 @@ class _BankCardPageState extends State<BankCardPage> {
                     "删除",
                     style: new TextStyle(color: Colors.white),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    _deleteCard();
+                  },
                 ),
               )
             ],
@@ -154,5 +159,25 @@ class _BankCardPageState extends State<BankCardPage> {
     } else {
       return new Container();
     }
+  }
+
+  _deleteCard() {
+    HashMap<String, dynamic> map = new HashMap();
+    map["id"] = model?.data[0]?.id;
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_delbank, (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      if (model.status == 200) {
+        Utils.showToast("删除成功");
+        _getHomeData();
+      }
+    }, params: map);
+  }
+
+  _getHomeData() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
+      HomeModel model = HomeModel.fromJson(jsonDecode(str));
+      ApiUtils.loginData = model.data;
+      setState(() {});
+    });
   }
 }
