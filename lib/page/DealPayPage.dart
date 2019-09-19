@@ -169,25 +169,25 @@ class _DealPayPageState extends State<DealPayPage> {
 //                        children: <Widget>[
 //                          new Container(
 //                            width: 200,
-                            child: new TextField(
-                              focusNode: _contentFocusNode,
-                              keyboardType: TextInputType.numberWithOptions(
-                                  signed: false, decimal: true),
-                              decoration: new InputDecoration(
-                                hintText: "请输入卖出金额",
-                                hintStyle: new TextStyle(fontSize: 15.0),
-                                contentPadding:
-                                    const EdgeInsets.symmetric(vertical: 1.0),
-                                border: new OutlineInputBorder(
-                                    borderSide: BorderSide.none),
-                              ),
+                      child: new TextField(
+                        focusNode: _contentFocusNode,
+                        keyboardType: TextInputType.numberWithOptions(
+                            signed: false, decimal: true),
+                        decoration: new InputDecoration(
+                          hintText: "请输入卖出金额",
+                          hintStyle: new TextStyle(fontSize: 15.0),
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 1.0),
+                          border: new OutlineInputBorder(
+                              borderSide: BorderSide.none),
+                        ),
 //                          inputFormatters: <TextInputFormatter>[
 //                          ],
-                              onChanged: (str) {
-                                _sellMoney = str;
-                              },
-                              controller: sellController,
-                            ),
+                        onChanged: (str) {
+                          _sellMoney = str;
+                        },
+                        controller: sellController,
+                      ),
 //                          ),
 //                        ],
 //                      ),
@@ -204,7 +204,9 @@ class _DealPayPageState extends State<DealPayPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           new Text(
-                              "可卖出余额${isEmpty(ApiUtils.loginData?.balance) ? "0" : ApiUtils.loginData?.balance}币，手续费1%+10币"),
+                              "可卖出余额${isEmpty(ApiUtils.loginData?.balance) ? "0" : ApiUtils.loginData?.balance}币，手续费1%+10币",
+                              maxLines: 2,
+                              textScaleFactor: 1.0),
                           new InkWell(
                             onTap: () {
                               _sellMoney = isEmpty(ApiUtils.loginData?.balance)
@@ -215,6 +217,7 @@ class _DealPayPageState extends State<DealPayPage> {
                             child: new Text(
                               "全部卖出",
                               style: TextStyle(color: Colors.blue),
+                              textScaleFactor: 1.0,
                             ),
                           )
                         ],
