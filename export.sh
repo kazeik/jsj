@@ -15,11 +15,11 @@ flutter packages get
 mkdir app
 
 ##==================================apk==================================
-# echo "开始打包apk"
-# flutter build apk --release #--no-codesign 
-# echo "打包apk已完成"
+echo "开始打包apk"
+flutter build apk --release #--no-codesign 
+echo "打包apk已完成"
 
-# cp -r build/app/outputs/apk/release/app-release.apk app
+cp -r build/app/outputs/apk/release/app-release.apk app
 ##==================================apk==================================
 
 ##==================================ipa==================================
