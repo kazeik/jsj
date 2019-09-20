@@ -77,7 +77,10 @@ class _ChangeAccountPageState extends State<ChangeAccountPage> {
     });
     if (allItems.length < 6) {
       allWidget.add(new GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil('/loginPage', ModalRoute.withName("/loginPage"));
+        },
         child: new Column(
           children: <Widget>[
             new Image(
