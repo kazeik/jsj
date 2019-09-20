@@ -42,6 +42,7 @@ class AccountDbProvider extends BaseDbProvider {
         await db.rawQuery("select * from $name where $columnId = $id");
     return maps;
   }
+
   ///查找所有的数据
   Future<List<Map<String, dynamic>>> findAllProvider(Database db) async {
     return await db.rawQuery("select * from $name");
@@ -74,6 +75,13 @@ class AccountDbProvider extends BaseDbProvider {
     await database.rawUpdate(
         "update $name set $columnMobile = ?,$columnAvatar = ? where $columnId= ?",
         [model.mobile, model.avatar, model.id]);
+  }
+
+  Future<void> updateState(AccountPojo model) async {
+    Database database = await getDataBase();
+    await database.rawUpdate(
+        "update $name set $columnCurrent = ? where $columnId= ?",
+        [model.current, model.id]);
   }
 
 //  ///获取事件数据
