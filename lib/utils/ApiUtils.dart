@@ -164,4 +164,6 @@ class ApiUtils {
   static String get_loginout = "/Userapi/loginOut";
   static String post_avatar = "/Userapi/avatar";
   static String get_delbank = "/Userapi/delBank";
+  static String get_msgList = "/Userapi/messageList";
+  static String get_readmsg = "/Userapi/readMessage";
 }

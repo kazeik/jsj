@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:jsj/db/AccountDbProvider.dart';
+import 'package:jsj/db/pojo/AccountPojo.dart';
 import 'package:jsj/model/HomeModel.dart';
 import 'package:jsj/model/ImagesDataModel.dart';
 import 'package:jsj/model/ImagesModel.dart';
@@ -11,7 +13,6 @@ import 'package:jsj/model/NewsModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/NewInfoPage.dart';
-import 'package:jsj/page/WebViewPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/LoadingCustomPainter.dart';
@@ -61,13 +62,25 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  _getHomeData() {
+  _getHomeData() async {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
       HomeModel model = HomeModel.fromJson(jsonDecode(str));
       ApiUtils.loginData = model.data;
       tempStep = model.data.step;
       Utils.logs("stemtp  = ${ApiUtils.loginData?.step}");
       setState(() {});
+
+      String phone = Utils.getInfo("phone");
+      String pass = Utils.getInfo("pass");
+      AccountDbProvider provider = new AccountDbProvider();
+      AccountPojo pojo = new AccountPojo();
+      pojo.current = 1;
+      pojo.cookieValue = ApiUtils.cookieValue;
+      pojo.cookieKey = ApiUtils.cookieKey;
+      pojo.pass = pass;
+      pojo.mobile = phone;
+      pojo.id = model.data.id;
+      provider.insert(pojo);
     });
   }
 

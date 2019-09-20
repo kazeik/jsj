@@ -110,7 +110,6 @@ class _LoginPageState extends State<LoginPage>
         Utils.saveInfo("token", cookieItem.value);
         Utils.saveInfo("tokenKey", cookieItem.name);
         Utils.logs("获取到的token = $cookieItem");
-
       });
 
       var imgbyte = await consolidateHttpClientResponseBytes(response);
@@ -252,7 +251,10 @@ class _LoginPageState extends State<LoginPage>
                               style: TextStyle(fontSize: 13),
                             ),
                           )
-                        : Image.memory(_imgbytes,height: 50,),
+                        : Image.memory(
+                            _imgbytes,
+                            height: 50,
+                          ),
                   ),
                   flex: 1,
                 ),

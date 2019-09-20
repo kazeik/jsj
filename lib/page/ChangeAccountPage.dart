@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:jsj/db/AccountDbProvider.dart';
+import 'package:jsj/db/pojo/AccountPojo.dart';
+import 'package:jsj/utils/Utils.dart';
+import 'package:sqflite/sqflite.dart';
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-19 16:12
@@ -33,6 +36,21 @@ class _ChangeAccountPageState extends State<ChangeAccountPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getAllData();
+  }
+
+  _getAllData() async {
+    AccountDbProvider provider = new AccountDbProvider();
+    AccountPojo pojo = new AccountPojo();
+    Database db = await provider.getDataBase();
+    provider.findAllProvider(db).then((data) {
+      Utils.logs(data.toString());
+    });
   }
 
   List<Widget> _buildGridTileList() {

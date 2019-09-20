@@ -34,6 +34,11 @@ class Utils {
     preferences.setString(key, value);
   }
 
+  static getInfo(String key) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.getString(key);
+  }
+
   static saveBoolInfo(String key, bool value) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setBool(key, value);

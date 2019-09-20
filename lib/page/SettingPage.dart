@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/BaseModel.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/ChangeAccountPage.dart';
 import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/page/MessagePage.dart';
@@ -54,11 +59,30 @@ class _SettingPageState extends State<SettingPage> {
             child: new RaisedButton(
               color: const Color(0xff0091ea),
               onPressed: () {
-                ApiUtils.loginData = null;
-
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/loginPage', ModalRoute.withName("/loginPage"));
-//                Navigator.of(context).popUntil(ModalRoute.withName('/loginPage'));
+                showDialog<Null>(
+                    context: context, //BuildContext对象
+                    barrierDismissible: true,
+                    builder: (BuildContext _context) {
+                      return new AlertDialog(
+                        title: new Text("退出登录"),
+                        content: new Text("确定要退出登录吗"),
+                        actions: <Widget>[
+                          new FlatButton(
+                            onPressed: () {
+                              Navigator.of(_context).pop();
+                            },
+                            child: new Text("取消"),
+                          ),
+                          new FlatButton(
+                            onPressed: () {
+                              Navigator.of(_context).pop();
+                              _loginOut();
+                            },
+                            child: new Text("确定"),
+                          ),
+                        ],
+                      );
+                    });
               },
               child: new Text(
                 "退出登录",
@@ -71,5 +95,17 @@ class _SettingPageState extends State<SettingPage> {
         ],
       ),
     );
+  }
+
+  _loginOut() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_loginout, (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      if (model.status == 200) {
+        ApiUtils.loginData = null;
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/loginPage', ModalRoute.withName("/loginPage"));
+      }
+    });
   }
 }
