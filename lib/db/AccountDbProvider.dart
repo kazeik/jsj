@@ -37,7 +37,8 @@ class AccountDbProvider extends BaseDbProvider {
   }
 
   ///查询数据库
-  Future _getPersonProvider(Database db, String id) async {
+  Future getPersonProvider(String id) async {
+    Database db = await getDataBase();
     List<Map<String, dynamic>> maps =
         await db.rawQuery("select * from $name where $columnId = $id");
     return maps;
@@ -51,7 +52,7 @@ class AccountDbProvider extends BaseDbProvider {
   ///插入到数据库
   Future insert(AccountPojo model) async {
     Database db = await getDataBase();
-    var userProvider = await _getPersonProvider(db, model.id);
+    var userProvider = await getPersonProvider(model.id);
     if (userProvider != null) {
       ///删除数据
       await db.delete(name, where: "$columnId = ?", whereArgs: [model.id]);
@@ -75,6 +76,11 @@ class AccountDbProvider extends BaseDbProvider {
     await database.rawUpdate(
         "update $name set $columnMobile = ?,$columnAvatar = ? where $columnId= ?",
         [model.mobile, model.avatar, model.id]);
+  }
+
+  Future<void> updateStateBySql(String sql) async {
+    Database database = await getDataBase();
+    await database.rawUpdate(sql);
   }
 
   Future<void> updateState(AccountPojo model) async {
