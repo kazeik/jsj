@@ -158,11 +158,8 @@ class _UserPageState extends State<UserPage> {
                                         leading: new Icon(Icons.photo_camera),
                                         title: new Text("拍照"),
                                         onTap: () async {
-                                          File imageFile =
-                                              await ImagePicker.pickImage(
-                                                  source: ImageSource.camera);
                                           Navigator.pop(context);
-                                          _uploadUserAvatarFile(imageFile);
+                                          _uploadUserAvatarFile();
                                         },
                                       ),
                                       new Divider(),
@@ -170,16 +167,38 @@ class _UserPageState extends State<UserPage> {
                                         leading: new Icon(Icons.photo_library),
                                         title: new Text("相册"),
                                         onTap: () async {
-                                          File imageFile =
-                                              await ImagePicker.pickImage(
-                                                  source: ImageSource.gallery);
                                           Navigator.pop(context);
-                                          _uploadUserAvatarFile(imageFile);
+                                          _uploadUserAvatarFile();
                                         },
                                       ),
                                     ],
                                   );
                                 });
+
+//                            showDialog<Null>(
+//                              context: context,
+//                              builder: (BuildContext context) {
+//                                return new SimpleDialog(
+//                                  title: new Text('请选择'),
+//                                  children: <Widget>[
+//                                    new SimpleDialogOption(
+//                                      child: new Text('拍照'),
+//                                      onPressed: () {
+//                                        Navigator.of(context).pop();
+//                                        _uploadUserAvatarFile();
+//                                      },
+//                                    ),
+//                                    new SimpleDialogOption(
+//                                      child: new Text('相册'),
+//                                      onPressed: () {
+//                                        Navigator.of(context).pop();
+//                                        _uploadUserAvatarFile();
+//                                      },
+//                                    ),
+//                                  ],
+//                                );
+//                              },
+//                            );
                           },
                           child: new Image(
                             image: isEmpty(ApiUtils.loginData?.avatar)
@@ -244,7 +263,10 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  _uploadUserAvatarFile(File avatar) async {
+  _uploadUserAvatarFile() async {
+    File avatar = await ImagePicker.pickImage(
+        maxWidth: 200, maxHeight: 200, source: ImageSource.gallery);
+    Navigator.pop(context);
     HttpNet.instance.request(
       MethodTypes.POST,
       ApiUtils.post_upload_img,

@@ -10,6 +10,9 @@ class ApiUtils {
   static String cookieValue = "";
   static String cookieKey = "";
 
+  static String phone = "";
+  static String pass = "";
+
   static HomeDataModel loginData;
 
   static String baseUrl = "http://www.jsjcoin.com";

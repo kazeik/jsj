@@ -12,6 +12,7 @@ import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/PhotoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:jsj/views/UsNumberTextInputFormatter.dart';
 import 'package:quiver/strings.dart';
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -173,10 +174,9 @@ class _DealPayPageState extends State<DealPayPage> {
                     new Container(
                       margin: EdgeInsets.only(left: 20, top: 10),
                       child: new TextField(
-                        textInputAction: TextInputAction.unspecified,
                         focusNode: _contentFocusNode,
-                        keyboardType: TextInputType.numberWithOptions(
-                            signed: false, decimal: true),
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
                         decoration: new InputDecoration(
                           hintText: "请输入卖出金额",
                           hintStyle: new TextStyle(fontSize: 15.0),
@@ -185,24 +185,9 @@ class _DealPayPageState extends State<DealPayPage> {
                           border: new OutlineInputBorder(
                               borderSide: BorderSide.none),
                         ),
-//                        inputFormatters: <TextInputFormatter>[
-//                          WhitelistingTextInputFormatter(
-//                              RegExp('^(([1-9]{1}\d*)|(0{1}))(\.\d{2})'))
-//                        ],
+                        inputFormatters: [UsNumberTextInputFormatter()],
                         onChanged: (str) {
-                          int index = str.indexOf(".");
-                          if (index > 0) {
-                            String temp = str.substring(index, str.length);
-                            if (temp.length > 3) {
-                              Utils.showToast("只能输入小数点后两位");
-                              _sellMoney = str.substring(0, index + 3);
-                            } else {
-                              _sellMoney = str.substring(0, index) + temp;
-                            }
-                          } else {
-                            _sellMoney = str;
-                          }
-                          sellController.text = _sellMoney;
+                          _sellMoney = str;
                         },
                         controller: sellController,
                       ),

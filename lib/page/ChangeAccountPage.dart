@@ -78,8 +78,8 @@ class _ChangeAccountPageState extends State<ChangeAccountPage> {
     if (allItems.length < 6) {
       allWidget.add(new GestureDetector(
         onTap: () {
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil('/loginPage', ModalRoute.withName("/loginPage"));
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              '/loginPage', ModalRoute.withName("/loginPage"));
         },
         child: new Column(
           children: <Widget>[
@@ -118,7 +118,7 @@ class _ChangeAccountPageState extends State<ChangeAccountPage> {
     AccountDbProvider provider = new AccountDbProvider();
     Database db = await provider.getDataBase();
     provider.findAllProvider(db).then((data) {
-      Utils.logs(data.toString());
+      Utils.logs("数据库记录 = ${data.toString()}");
       data.forEach((it) {
         AccountPojo pojo = new AccountPojo();
         pojo.id = "${it["id"]}";

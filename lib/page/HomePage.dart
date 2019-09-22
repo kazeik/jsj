@@ -14,7 +14,6 @@ import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/NewInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
-import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/LoadingCustomPainter.dart';
 import 'package:jsj/views/RhombusCustomPainter.dart';
 
@@ -40,10 +39,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _getHomeData();
     _getImages();
     _getNews();
     _getBanner();
-    _getHomeData();
   }
 
   _getNews() {
@@ -67,19 +66,17 @@ class _HomePageState extends State<HomePage> {
       HomeModel model = HomeModel.fromJson(jsonDecode(str));
       ApiUtils.loginData = model.data;
       tempStep = model.data.step;
-      Utils.logs("stemtp  = ${ApiUtils.loginData?.step}");
       setState(() {});
 
-      String phone = Utils.getInfo("phone");
-      String pass = Utils.getInfo("pass");
       AccountDbProvider provider = new AccountDbProvider();
       AccountPojo pojo = new AccountPojo();
       pojo.current = 1;
       pojo.cookieValue = ApiUtils.cookieValue;
       pojo.cookieKey = ApiUtils.cookieKey;
-      pojo.pass = pass;
-      pojo.mobile = phone;
+      pojo.pass = ApiUtils.pass;
+      pojo.mobile = ApiUtils.phone;
       pojo.id = model.data.id;
+      pojo.avatar = model.data?.avatar;
       provider.insert(pojo);
     });
   }

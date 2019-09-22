@@ -84,6 +84,8 @@ class _LoginPageState extends State<LoginPage>
       "invite_code": _lVerfiyCode,
     });
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_login, (model) {
+      ApiUtils.phone = _lPhone;
+      ApiUtils.pass = _lPass;
       Utils.saveInfo("phone", _lPhone);
       Utils.saveBoolInfo("isSave", isSave);
       if (isSave) {
