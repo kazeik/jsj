@@ -9,14 +9,14 @@ import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 17:15
  * 类说明:
  */
 
 class DealInfoPage extends StatefulWidget {
-  String id;
+  final String id;
 
   DealInfoPage({Key key, this.id}) : super(key: key);
 

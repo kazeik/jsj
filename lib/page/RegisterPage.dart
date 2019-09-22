@@ -18,7 +18,7 @@ import 'package:quiver/strings.dart';
  */
 
 class RegisterPage extends StatefulWidget {
-  TabController tabController;
+  final TabController tabController;
 
   RegisterPage({Key key, this.tabController}) : super(key: key);
 

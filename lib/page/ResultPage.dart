@@ -16,7 +16,7 @@ import 'package:jsj/utils/Utils.dart';
  */
 
 class ResultPage extends StatefulWidget {
-  String amount;
+  final String amount;
 
   ResultPage({Key key, this.amount})
       : super(key: key);

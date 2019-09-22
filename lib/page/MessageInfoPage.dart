@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
  */
 
 class MessageInfoPage extends StatefulWidget {
-  String title;
-  int index;
+  final String title;
+  final int index;
 
   MessageInfoPage({Key key, @required this.title, @required this.index})
       : super(key: key);

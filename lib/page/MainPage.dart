@@ -4,6 +4,7 @@ import 'package:jsj/page/HomePage.dart';
 import 'package:jsj/page/PropertyPage.dart';
 import 'package:jsj/page/UserPage.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -22,7 +23,47 @@ class _MainPageState extends State<MainPage> {
 
   int _lastClickTime = 0;
 
+  JPush jpush = new JPush();
+
 //  List<Widget> pages = List<Widget>();
+  @override
+  void initState() {
+    super.initState();
+    _openNotification();
+    _startupPush();
+  }
+
+  void _startupPush() async {
+    await jpush.setup(
+        appKey: "efd29b0fcb33a86369de4bb4",
+        channel: "developer-default",
+        production: false,
+        debug: true);
+
+    var registerId = jpush.getRegistrationID();
+    Utils.logs("注册id = $registerId");
+  }
+
+  /*
+  * 打开推送提醒
+  * */
+
+  void _openNotification() async {
+    jpush.addEventHandler(
+      // 接收通知回调方法。
+      onReceiveNotification: (Map<String, dynamic> message) async {
+        print("flutter onReceiveNotification: $message");
+      },
+      // 点击通知回调方法。
+      onOpenNotification: (Map<String, dynamic> message) async {
+        print("flutter onOpenNotification: $message");
+      },
+      // 接收自定义消息回调方法。
+      onReceiveMessage: (Map<String, dynamic> message) async {
+        print("flutter onReceiveMessage: $message");
+      },
+    );
+  }
 
   /*
    * 根据image路径获取图片

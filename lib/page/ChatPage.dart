@@ -25,8 +25,6 @@ import 'package:quiver/strings.dart';
  */
 
 class ChatPage extends StatefulWidget {
-  ChatPage({Key key}) : super(key: key);
-
   @override
   State<StatefulWidget> createState() => new _ChatPageState();
 }

@@ -12,11 +12,11 @@ import 'package:quiver/strings.dart';
  */
 
 class AddCardPage extends StatefulWidget {
-  String bankName;
-  String cardNo;
-  String cardName;
-  String cardNameId;
-  String phone;
+  final String bankName;
+  final String cardNo;
+  final String cardName;
+  final String cardNameId;
+  final String phone;
 
   AddCardPage(
       {Key key,

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
  */
 
 class NewInfoPage extends StatelessWidget {
-  String content;
+  final String content;
 
   NewInfoPage({Key key, this.content}) : super(key: key);
 

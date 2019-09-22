@@ -11,7 +11,7 @@ import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/NewInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-19 16:12
  * 类说明:

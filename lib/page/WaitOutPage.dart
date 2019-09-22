@@ -11,16 +11,16 @@ import 'package:jsj/page/ResultPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-15 21:41
  * 类说明:
  */
 
 class WaitOutPage extends StatefulWidget {
-  String amount;
-  String filePath;
-  String orderId;
+  final String amount;
+  final String filePath;
+  final String orderId;
 
   WaitOutPage({Key key, this.amount, this.filePath, this.orderId})
       : super(key: key);

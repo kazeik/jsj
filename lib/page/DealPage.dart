@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:jsj/page/DealBuyPage.dart';
 import 'package:jsj/page/DealPayPage.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 10:47
  * 类说明:

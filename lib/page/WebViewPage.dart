@@ -1,19 +1,18 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:quiver/strings.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-08-27 22:07
  * 类说明:
  */
 class WebViewPage extends StatefulWidget {
-  String url;
+  final String url;
   final String title;
-  String content;
+  final String content;
 
   WebViewPage({this.url, this.title, this.content});
 

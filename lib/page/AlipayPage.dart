@@ -3,14 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jsj/model/AlipayModel.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/HomeModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
-import 'package:quiver/strings.dart';
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 14:08

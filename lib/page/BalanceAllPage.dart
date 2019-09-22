@@ -10,7 +10,7 @@ import 'package:jsj/page/DealInfoPage.dart';
  */
 
 class BalanceAllPage extends StatefulWidget {
-  List<BalanceDataModel> allData = new List();
+  final List<BalanceDataModel> allData;
 
   BalanceAllPage({Key key, this.allData}) : super(key: key);
 

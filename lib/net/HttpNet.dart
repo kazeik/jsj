@@ -96,8 +96,12 @@ class HttpNet {
         bool dioError = error is DioError;
         if (dioError) {
           var errorStr = error as DioError;
-          Utils.showToast(errorStr.response.data);
-          errorCallback(errorStr.response.data);
+          if (error == DioErrorType.CONNECT_TIMEOUT) {
+            Utils.showToast("网络连接超时，请重试");
+          } else {
+            Utils.showToast(errorStr.response.data);
+            errorCallback(errorStr.response.data);
+          }
         }
       }
     });

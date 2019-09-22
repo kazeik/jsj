@@ -8,7 +8,7 @@ import 'package:photo_view/photo_view.dart';
  */
 class PhotoPage extends StatefulWidget {
   const PhotoPage({Key key, this.url}) : super(key: key);
-  final url;
+  final String url;
 
   @override
   State<StatefulWidget> createState() => new _PhotoPageState();

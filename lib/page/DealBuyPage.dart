@@ -120,28 +120,28 @@ class _DealBuyPageState extends State<DealBuyPage> {
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "银行：${_bankDataModel?.data?.bank_name}",
+              "银行：${isEmpty(_bankDataModel?.data?.bank_name) ? "" : _bankDataModel?.data?.bank_name}",
             ),
           ),
           new Container(
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "卡号：${_bankDataModel?.data?.bank_account}",
+              "卡号：${isEmpty(_bankDataModel?.data?.bank_account) ? "" : _bankDataModel?.data?.bank_account}",
             ),
           ),
           new Container(
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "户名：${_bankDataModel?.data?.user_name}",
+              "户名：${isEmpty(_bankDataModel?.data?.user_name) ? "" : _bankDataModel?.data?.user_name}",
             ),
           ),
           new Container(
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "打款金额：￥${_bankDataModel?.data?.amount}",
+              "打款金额：￥${isEmpty(_bankDataModel?.data?.amount) ? "" : _bankDataModel?.data?.amount}",
             ),
           ),
           new Container(
@@ -208,26 +208,26 @@ class _DealBuyPageState extends State<DealBuyPage> {
 //                          ),
 //                          new Container(
 //                            width: 200,
-                            child: new TextField(
-                              focusNode: _contentFocusNode,
+                      child: new TextField(
+                        focusNode: _contentFocusNode,
 //                            textInputAction: TextInputAction.next,
-                              keyboardType: const TextInputType.numberWithOptions(
-                                  decimal: true),
-                              decoration: new InputDecoration(
-                                hintText: "请输入金额",
-                                hintStyle: new TextStyle(fontSize: 16.0),
-                                contentPadding:
-                                const EdgeInsets.symmetric(vertical: 1.0),
-                                border: new OutlineInputBorder(
-                                    borderSide: BorderSide.none),
-                              ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        decoration: new InputDecoration(
+                          hintText: "请输入金额",
+                          hintStyle: new TextStyle(fontSize: 16.0),
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 1.0),
+                          border: new OutlineInputBorder(
+                              borderSide: BorderSide.none),
+                        ),
 //                          inputFormatters: <TextInputFormatter>[
 //                            WhitelistingTextInputFormatter.digitsOnly
 //                          ],
-                              onChanged: (str) {
-                                _buyMoney = str;
-                              },
-                            ),
+                        onChanged: (str) {
+                          _buyMoney = str;
+                        },
+                      ),
 //                          ),
 //                        ],
 //                      ),
@@ -249,7 +249,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
             ],
           ),
         ),
-        onTap:(){
+        onTap: () {
           _contentFocusNode.unfocus();
         },
       );

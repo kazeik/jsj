@@ -10,7 +10,7 @@ import 'package:jsj/page/DealInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:quiver/strings.dart';
 
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 10:48
  * 类说明:

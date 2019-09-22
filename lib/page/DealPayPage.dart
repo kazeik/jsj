@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jsj/model/BankDataModel.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/SaleOrderModel.dart';
@@ -25,7 +26,8 @@ class DealPayPage extends StatefulWidget {
 
 class _DealPayPageState extends State<DealPayPage> {
   String _sellMoney;
-  TextEditingController sellController = TextEditingController();
+  TextEditingController sellController;
+
   String orderId = "";
 
   bool isSale = false;
@@ -39,7 +41,14 @@ class _DealPayPageState extends State<DealPayPage> {
   @override
   void initState() {
     super.initState();
+    sellController = TextEditingController();
     _getCurrentOrder();
+  }
+
+  @override
+  void dispose() {
+    sellController.dispose();
+    super.dispose();
   }
 
   @override
@@ -61,7 +70,6 @@ class _DealPayPageState extends State<DealPayPage> {
             ),
             color: Colors.white,
           ),
-//          _buildOrder(),
           new Container(
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -74,28 +82,28 @@ class _DealPayPageState extends State<DealPayPage> {
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "银行：${_bankDataModel?.data?.bank_name}",
+              "银行：${isEmpty(_bankDataModel?.data?.bank_name) ? "" : _bankDataModel?.data?.bank_name}",
             ),
           ),
           new Container(
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "卡号：${_bankDataModel?.data?.bank_account}",
+              "卡号：${isEmpty(_bankDataModel?.data?.bank_account) ? "" : _bankDataModel?.data?.bank_account}",
             ),
           ),
           new Container(
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "户名：${_bankDataModel?.data?.user_name}",
+              "户名：${isEmpty(_bankDataModel?.data?.user_name) ? "" : _bankDataModel?.data?.user_name}",
             ),
           ),
           new Container(
             color: Colors.white,
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: new Text(
-              "打款金额：￥${_bankDataModel?.data?.amount}",
+              "打款金额：￥${isEmpty(_bankDataModel?.data?.amount) ? "" : _bankDataModel?.data?.amount}",
             ),
           ),
           new Container(
@@ -164,12 +172,8 @@ class _DealPayPageState extends State<DealPayPage> {
                     ),
                     new Container(
                       margin: EdgeInsets.only(left: 20, top: 10),
-//                      child: new Row(
-//                        mainAxisSize: MainAxisSize.min,
-//                        children: <Widget>[
-//                          new Container(
-//                            width: 200,
                       child: new TextField(
+                        textInputAction: TextInputAction.unspecified,
                         focusNode: _contentFocusNode,
                         keyboardType: TextInputType.numberWithOptions(
                             signed: false, decimal: true),
@@ -181,16 +185,27 @@ class _DealPayPageState extends State<DealPayPage> {
                           border: new OutlineInputBorder(
                               borderSide: BorderSide.none),
                         ),
-//                          inputFormatters: <TextInputFormatter>[
-//                          ],
+//                        inputFormatters: <TextInputFormatter>[
+//                          WhitelistingTextInputFormatter(
+//                              RegExp('^(([1-9]{1}\d*)|(0{1}))(\.\d{2})'))
+//                        ],
                         onChanged: (str) {
-                          _sellMoney = str;
+                          int index = str.indexOf(".");
+                          if (index > 0) {
+                            String temp = str.substring(index, str.length);
+                            if (temp.length > 3) {
+                              Utils.showToast("只能输入小数点后两位");
+                              _sellMoney = str.substring(0, index + 3);
+                            } else {
+                              _sellMoney = str.substring(0, index) + temp;
+                            }
+                          } else {
+                            _sellMoney = str;
+                          }
+                          sellController.text = _sellMoney;
                         },
                         controller: sellController,
                       ),
-//                          ),
-//                        ],
-//                      ),
                     ),
                     new Divider(
                       indent: 20,
@@ -273,6 +288,10 @@ class _DealPayPageState extends State<DealPayPage> {
   _sellCoin() {
     if (isEmpty(_sellMoney)) {
       Utils.showToast("金额不能为空");
+      return;
+    }
+    if (double.parse(_sellMoney) > double.parse(ApiUtils.loginData?.balance)) {
+      Utils.showToast("余额不够，请检查帐户余额");
       return;
     }
     FormData formData = new FormData.fromMap({
