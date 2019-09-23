@@ -15,7 +15,7 @@ class ApiUtils {
 
   static HomeDataModel loginData;
 
-  static String baseUrl = "http://www.jsjcoin.com";
+  static String baseUrl = "https://www.jsjcoin.com";
 
   /*
    * 获取验证码
