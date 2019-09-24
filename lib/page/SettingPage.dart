@@ -6,6 +6,7 @@ import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/ChangeAccountPage.dart';
+import 'package:jsj/page/MessagePage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 
 /**

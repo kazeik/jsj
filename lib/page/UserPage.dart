@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/HomeModel.dart';
 import 'package:jsj/model/UploadFileModel.dart';
@@ -11,7 +13,6 @@ import 'package:jsj/page/ActivatePage.dart';
 import 'package:jsj/page/ActivateServicePage.dart';
 import 'package:jsj/page/AlipayPage.dart';
 import 'package:jsj/page/BankCardPage.dart';
-import 'package:jsj/page/ChangePassPage.dart';
 import 'package:jsj/page/ChatPage.dart';
 import 'package:jsj/page/MessagePage.dart';
 import 'package:jsj/page/ServiceProviderPage.dart';
@@ -21,8 +22,6 @@ import 'package:jsj/page/SystemMsgPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:quiver/strings.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:dio/dio.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -37,11 +36,11 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   List<String> title = new List<String>()
-    ..add("代理分享")
+    ..add("分享")
     ..add("服务商平台")
     ..add("支付宝管理")
     ..add("我的银行卡")
-    ..add("修改密码")
+//    ..add("修改密码")
     ..add("设置")
     ..add("客服消息")
     ..add("常见问题");
@@ -159,7 +158,9 @@ class _UserPageState extends State<UserPage> {
                                         title: new Text("拍照"),
                                         onTap: () async {
                                           Navigator.pop(context);
-                                          _uploadUserAvatarFile();
+                                          File avatar = await ImagePicker.pickImage(
+                                              maxWidth: 200, maxHeight: 200, source: ImageSource.camera);
+                                          _uploadUserAvatarFile(avatar);
                                         },
                                       ),
                                       new Divider(),
@@ -168,7 +169,9 @@ class _UserPageState extends State<UserPage> {
                                         title: new Text("相册"),
                                         onTap: () async {
                                           Navigator.pop(context);
-                                          _uploadUserAvatarFile();
+                                          File avatar = await ImagePicker.pickImage(
+                                              maxWidth: 200, maxHeight: 200, source: ImageSource.gallery);
+                                          _uploadUserAvatarFile(avatar);
                                         },
                                       ),
                                     ],
@@ -200,12 +203,21 @@ class _UserPageState extends State<UserPage> {
 //                              },
 //                            );
                           },
-                          child: new Image(
-                            image: isEmpty(ApiUtils.loginData?.avatar)
-                                ? AssetImage(
-                                    Utils.getImgPath("usericon1"),
-                                  )
-                                : new NetworkImage(ApiUtils.loginData?.avatar),
+//                          child: new Image(
+//                            image: isEmpty(ApiUtils.loginData?.avatar)
+//                                ? AssetImage(
+//                                    Utils.getImgPath("usericon1"),
+//                                  )
+//                                : new NetworkImage(ApiUtils.loginData?.avatar),
+//                          ),
+                          child: new ClipOval(
+                            child: new FadeInImage.assetNetwork(
+                              placeholder: Utils.getImgPath("usericon1"),
+                              image: ApiUtils.loginData?.avatar,
+                              width: 55,
+                              height: 55,
+                              fit: BoxFit.fitHeight,
+                            ),
                           ),
                         ),
                         title: new Text(
@@ -263,10 +275,11 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  _uploadUserAvatarFile() async {
-    File avatar = await ImagePicker.pickImage(
-        maxWidth: 200, maxHeight: 200, source: ImageSource.gallery);
-    Navigator.pop(context);
+  _uploadUserAvatarFile( File avatar) async {
+    if (avatar == null) {
+      Utils.showToast("图像获取失败");
+      return;
+    }
     HttpNet.instance.request(
       MethodTypes.POST,
       ApiUtils.post_upload_img,
@@ -412,25 +425,25 @@ class _UserPageState extends State<UserPage> {
 //                        return new BalanceInfoPage();
 //                      }));
 //                      break;
+//                    case 4:
+//                      Navigator.of(context)
+//                          .push(new MaterialPageRoute(builder: (_) {
+//                        return new ChangePassPage();
+//                      }));
+//                      break;
                     case 4:
-                      Navigator.of(context)
-                          .push(new MaterialPageRoute(builder: (_) {
-                        return new ChangePassPage();
-                      }));
-                      break;
-                    case 5:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
                         return new SettingPage();
                       }));
                       break;
-                    case 6:
+                    case 5:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
                         return new ChatPage();
                       }));
                       break;
-                    case 7:
+                    case 6:
                       Navigator.of(context)
                           .push(new MaterialPageRoute(builder: (_) {
                         return new MessagePage();
