@@ -7,7 +7,6 @@ import 'package:jsj/model/OrderDataModel.dart';
 import 'package:jsj/model/OrderModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
-import 'package:jsj/page/DealInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:quiver/strings.dart';
 
@@ -66,7 +65,7 @@ class _ProviderOrderFinishPageState extends State<ProviderOrderFinishPage> {
     return new ListTile(
       title: new Text("${dataModel?.trans_type}"),
       subtitle: new Text(
-          "订单编号:${dataModel.order_no}\n佣金:${double.parse(dataModel?.amount) / 1000} 订单金额:￥${dataModel?.amount}\n实际金额:￥${dataModel?.amount}"
+          "订单编号:${dataModel.order_no}\n佣金:${double.parse(dataModel?.amount) / 1000} 订单金额:￥${dataModel?.amount}\n实际金额:￥${dataModel?.real_amount}"
           "\n时间:$_time\n用户ID:${dataModel?.app_user_id}\n"
           "持卡人:${isEmpty(dataModel.bank?.user_name) ? "" : dataModel.bank.user_name}"),
       trailing: _buildTrailing(dataModel),
