@@ -169,4 +169,5 @@ class ApiUtils {
   static String get_delbank = "/Userapi/delBank";
   static String get_msgList = "/Userapi/messageList";
   static String get_readmsg = "/Userapi/readMessage";
+  static String post_sendsms = "/Userapi/sendMsg";
 }

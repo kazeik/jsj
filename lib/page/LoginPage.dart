@@ -1,9 +1,12 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/SmsModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/MainPage.dart';
@@ -38,6 +41,8 @@ class _LoginPageState extends State<LoginPage>
   String verfiycode = "";
 
   Uint8List _imgbytes;
+
+  bool sms = false;
 
   bool isSave = false;
 
@@ -128,6 +133,20 @@ class _LoginPageState extends State<LoginPage>
     }
   }
 
+  _getsms() {
+    FormData formData = new FormData.fromMap({
+      "phone": _lPhone,
+    });
+    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_sendsms, (data) {
+      SmsModel model = SmsModel.fromJson(jsonDecode(data));
+      if (model.status == "success") {
+        Utils.showToast("获取验证码成功");
+      } else {
+        Utils.showToast("获取验证码失败");
+      }
+    }, data: formData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -201,6 +220,42 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 
+  Timer _countdownTimer;
+  String _codeCountdownStr = '获取验证码';
+  int _countdownNum = 59;
+
+  void reGetCountdown() {
+    setState(() {
+      if (_countdownTimer != null) {
+        return;
+      }
+      // Timer的第一秒倒计时是有一点延迟的，为了立刻显示效果可以添加下一行。
+      _codeCountdownStr = '${_countdownNum--}秒重新获取';
+      _countdownTimer = new Timer.periodic(new Duration(seconds: 1), (timer) {
+        setState(() {
+          if (_countdownNum > 0) {
+            _codeCountdownStr = '${_countdownNum--}秒重新获取';
+          } else {
+            _codeCountdownStr = '获取验证码';
+            _countdownNum = 59;
+            _countdownTimer.cancel();
+            _countdownTimer = null;
+            setState(() {
+              sms = false;
+            });
+          }
+        });
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _countdownTimer?.cancel();
+    _countdownTimer = null;
+    super.dispose();
+  }
+
   List<Widget> _buildBarPage() {
     List<Widget> widgets = new List();
     widgets.add(
@@ -238,28 +293,41 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   flex: 2,
                 ),
-                new Expanded(
-                  child: new GestureDetector(
-                    onTap: () {
-                      _getVerfiyCodeImg();
-                    },
-                    child: _imgbytes == null
-                        ? new InkWell(
-                            onTap: () {
-                              _getVerfiyCodeImg();
-                            },
-                            child: new Text(
-                              "获取验证码",
-                              style: TextStyle(fontSize: 13),
-                            ),
-                          )
-                        : Image.memory(
-                            _imgbytes,
-                            height: 50,
-                          ),
+                InkWell(
+                  onTap: () {
+//                          _getVerfiyCodeImg();
+                    if (!sms) {
+                      sms = true;
+                      _getsms();
+                      reGetCountdown();
+                    }
+                  },
+                  child: new Text(
+                    _codeCountdownStr,
+                    style: TextStyle(fontSize: 13),
                   ),
-                  flex: 1,
-                ),
+                )
+//                new Expanded(
+//                  child: new GestureDetector(
+//                      onTap: () {
+//                        _getVerfiyCodeImg();
+//                      },
+//                    child: _imgbytes == null
+//                        ? new InkWell(
+//                            onTap: () {
+//                              _getVerfiyCodeImg();
+//                            },
+//                            child: new Text(
+//                              "获取验证码",
+//                              style: TextStyle(fontSize: 13),
+//                            ),
+//                          )
+//                        : Image.memory(
+//                            _imgbytes,
+//                            height: 50,
+//                          ),
+//                  flex: 1,
+//                ),
               ],
             ),
           ),
