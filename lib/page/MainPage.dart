@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage> {
         channel: "developer-default",
         production: false,
         debug: true);
-
+    jpush.applyPushAuthority(new NotificationSettingsIOS( sound: true, alert: true, badge: true));
     var registerId = jpush.getRegistrationID();
     Utils.logs("注册id = $registerId");
   }
