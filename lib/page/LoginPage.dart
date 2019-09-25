@@ -16,6 +16,7 @@ import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/MainInput.dart';
 import 'package:quiver/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -44,9 +45,12 @@ class _LoginPageState extends State<LoginPage>
 
   bool isSave = false;
 
+  JPush jpush = new JPush();
+
   @override
   void initState() {
     super.initState();
+    jpush.setBadge(0);
     controller =
         TabController(initialIndex: 0, length: tabs.length, vsync: this);
 

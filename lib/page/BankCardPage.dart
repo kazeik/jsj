@@ -22,9 +22,6 @@ class BankCardPage extends StatefulWidget {
 }
 
 class _BankCardPageState extends State<BankCardPage> {
-  String _bankName;
-  String _cardNo;
-  String _cardType;
   BankListModel model;
 
   @override
@@ -71,14 +68,7 @@ class _BankCardPageState extends State<BankCardPage> {
   _addCardBind({bool change = false}) async {
     await Navigator.of(context).push(
       new MaterialPageRoute(builder: (_) {
-        return new AddCardPage(
-          isChange: change,
-          bankName: model?.data[0]?.bank_name,
-          cardName: model?.data[0]?.user_name,
-          cardNo: model?.data[0]?.bank_account,
-          cardNameId: model?.data[0]?.id_number,
-          phone: model?.data[0]?.bind_phone,
-        );
+        return new AddCardPage();
       }),
     );
     _getBankList();
@@ -93,10 +83,6 @@ class _BankCardPageState extends State<BankCardPage> {
   _getBankList() {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_banklist, (str) {
       model = BankListModel.fromJson(jsonDecode(str));
-      if (null != model && null != model?.data && model.data.isNotEmpty) {
-        _cardNo = model?.data[0].bank_account;
-        _bankName = model?.data[0].bank_name;
-      }
       setState(() {});
     });
   }
@@ -108,11 +94,13 @@ class _BankCardPageState extends State<BankCardPage> {
           Navigator.of(context).push(
             new MaterialPageRoute(builder: (_) {
               return new AddCardPage(
-                  bankName: model?.data[0]?.bank_name,
-                  cardName: model?.data[0]?.user_name,
-                  cardNo: model?.data[0]?.bank_account,
-                  phone: model?.data[0]?.bind_phone,
-                  cardNameId: model?.data[0]?.id_number);
+                bankModel: model,
+              );
+//              bankName: model?.data[0]?.bank_name,
+//              cardName: model?.data[0]?.user_name,
+//              cardNo: model?.data[0]?.bank_account,
+//              phone: model?.data[0]?.bind_phone,
+//              cardNameId: model?.data[0]?.id_number
             }),
           );
         },

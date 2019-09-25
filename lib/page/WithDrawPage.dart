@@ -29,6 +29,7 @@ class _WithDrawPageState extends State<WithDrawPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
+        centerTitle: true,
         title: new Text(
           "佣金提现",
           style: TextStyle(color: Colors.black),

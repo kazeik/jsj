@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:jsj/model/BankListModel.dart';
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
@@ -15,23 +16,9 @@ import 'package:quiver/strings.dart';
  */
 
 class AddCardPage extends StatefulWidget {
-  final String bankName;
-  final String cardNo;
-  final String cardName;
-  final String cardNameId;
-  final String phone;
+  final BankListModel bankModel;
 
-  final bool isChange;
-
-  AddCardPage(
-      {Key key,
-      this.bankName,
-      this.cardName,
-      this.cardNo,
-      this.cardNameId,
-      this.phone,
-      this.isChange})
-      : super(key: key);
+  AddCardPage({Key key, this.bankModel}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => new _AddCardPageState();
@@ -47,11 +34,13 @@ class _AddCardPageState extends State<AddCardPage> {
   @override
   void initState() {
     super.initState();
-    bankname = widget.bankName;
-    cardNo = widget.cardNo;
-    cardName = widget.cardName;
-    cardNameId = widget.cardNameId;
-    phone = widget.phone;
+    if (null != widget.bankModel) {
+      bankname = widget.bankModel?.data[0].bank_name;
+      cardNo = widget.bankModel?.data[0].bank_account;
+      cardName = widget.bankModel?.data[0].user_name;
+      cardNameId = widget.bankModel?.data[0].id_number;
+      phone = widget.bankModel?.data[0].bind_phone;
+    }
   }
 
   _submitAddCard() {
@@ -84,9 +73,11 @@ class _AddCardPageState extends State<AddCardPage> {
       "bind_phone": phone,
     });
 
-    HttpNet.instance.request(MethodTypes.POST,
-        widget.isChange ? ApiUtils.post_editbank : ApiUtils.post_addbank,
-        (str) {
+    HttpNet.instance.request(
+        MethodTypes.POST,
+        widget.bankModel != null
+            ? ApiUtils.post_editbank
+            : ApiUtils.post_addbank, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       if (model.status == 200) {
         Utils.showToast(model.msg);
@@ -144,7 +135,7 @@ class _AddCardPageState extends State<AddCardPage> {
               children: <Widget>[
                 _buildCell("持卡人", "请输入持卡人", cardName, (str) {
                   cardName = str;
-                },enable: !widget.isChange),
+                }, enable: widget.bankModel == null),
                 new Divider(
                   height: 1,
                   endIndent: 10,
@@ -187,7 +178,8 @@ class _AddCardPageState extends State<AddCardPage> {
   }
 
   Widget _buildCell(
-      String title, String hint, String defaultStr, Function(String) callback,{bool enable}) {
+      String title, String hint, String defaultStr, Function(String) callback,
+      {bool enable}) {
     return new Container(
       color: Colors.white,
       padding: EdgeInsets.only(
