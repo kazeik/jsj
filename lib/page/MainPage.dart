@@ -47,9 +47,8 @@ class _MainPageState extends State<MainPage> {
     await jpush.setup(
         appKey: "efd29b0fcb33a86369de4bb4",
         channel: "developer-default",
-        production: false,
+        production: true,
         debug: true);
-    jpush.applyPushAuthority(new NotificationSettingsIOS( sound: true, alert: true, badge: true));
     var registerId = jpush.getRegistrationID();
     Utils.logs("注册id = $registerId");
   }
