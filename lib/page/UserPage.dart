@@ -38,7 +38,7 @@ class _UserPageState extends State<UserPage> {
   List<String> title = new List<String>()
     ..add("分享")
     ..add("服务商平台")
-    ..add("支付宝管理")
+    ..add("收款帐户管理")
     ..add("我的银行卡")
 //    ..add("修改密码")
     ..add("设置")

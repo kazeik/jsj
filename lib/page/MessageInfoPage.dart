@@ -47,6 +47,7 @@ class _MessageInfoPageState extends State<MessageInfoPage> {
       appBar: new AppBar(
         title: new Text(widget.title),
         elevation: 0,
+        centerTitle: true,
       ),
       body: new Container(
         color: Colors.white,

@@ -26,6 +26,7 @@ class _MessagePageState extends State<MessagePage> {
       appBar: new AppBar(
         title: new Text("常见问题"),
         elevation: 0,
+        centerTitle: true,
       ),
       body: new Container(
         color: Colors.white,

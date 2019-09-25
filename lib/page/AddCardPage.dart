@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
@@ -18,13 +21,16 @@ class AddCardPage extends StatefulWidget {
   final String cardNameId;
   final String phone;
 
+  final bool isChange;
+
   AddCardPage(
       {Key key,
       this.bankName,
       this.cardName,
       this.cardNo,
       this.cardNameId,
-      this.phone})
+      this.phone,
+      this.isChange})
       : super(key: key);
 
   @override
@@ -78,8 +84,16 @@ class _AddCardPageState extends State<AddCardPage> {
       "bind_phone": phone,
     });
 
-    HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_addbank, (str) {},
-        data: formData);
+    HttpNet.instance.request(MethodTypes.POST,
+        widget.isChange ? ApiUtils.post_editbank : ApiUtils.post_addbank,
+        (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      if (model.status == 200) {
+        Utils.showToast(model.msg);
+      } else {
+        Utils.showToast("操作失败，请重试");
+      }
+    }, data: formData);
   }
 
   @override
@@ -94,6 +108,7 @@ class _AddCardPageState extends State<AddCardPage> {
         iconTheme: new IconThemeData.fallback(),
         elevation: 0,
         brightness: Brightness.light,
+        centerTitle: true,
       ),
       body: new ListView(
         children: <Widget>[
@@ -129,7 +144,7 @@ class _AddCardPageState extends State<AddCardPage> {
               children: <Widget>[
                 _buildCell("持卡人", "请输入持卡人", cardName, (str) {
                   cardName = str;
-                }),
+                },enable: !widget.isChange),
                 new Divider(
                   height: 1,
                   endIndent: 10,
@@ -172,7 +187,7 @@ class _AddCardPageState extends State<AddCardPage> {
   }
 
   Widget _buildCell(
-      String title, String hint, String defaultStr, Function(String) callback) {
+      String title, String hint, String defaultStr, Function(String) callback,{bool enable}) {
     return new Container(
       color: Colors.white,
       padding: EdgeInsets.only(
@@ -191,6 +206,7 @@ class _AddCardPageState extends State<AddCardPage> {
           new Container(
             width: 240,
             child: new TextField(
+              enabled: enable,
               decoration: new InputDecoration(
                 hintText: hint,
                 border: new OutlineInputBorder(borderSide: BorderSide.none),

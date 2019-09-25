@@ -39,6 +39,7 @@ class _BankCardPageState extends State<BankCardPage> {
         iconTheme: new IconThemeData.fallback(),
         elevation: 0,
         brightness: Brightness.light,
+        centerTitle: true,
       ),
       body: new Container(
         color: Colors.white,
@@ -67,10 +68,17 @@ class _BankCardPageState extends State<BankCardPage> {
     );
   }
 
-  _addCardBind() async {
+  _addCardBind({bool change = false}) async {
     await Navigator.of(context).push(
       new MaterialPageRoute(builder: (_) {
-        return new AddCardPage();
+        return new AddCardPage(
+          isChange: change,
+          bankName: model?.data[0]?.bank_name,
+          cardName: model?.data[0]?.user_name,
+          cardNo: model?.data[0]?.bank_account,
+          cardNameId: model?.data[0]?.id_number,
+          phone: model?.data[0]?.bind_phone,
+        );
       }),
     );
     _getBankList();
@@ -144,11 +152,12 @@ class _BankCardPageState extends State<BankCardPage> {
                 margin: EdgeInsets.only(right: 20, top: 10),
                 child: new InkWell(
                   child: new Text(
-                    "删除",
+                    "修改",
                     style: new TextStyle(color: Colors.white),
                   ),
                   onTap: () {
-                    _deleteCard();
+//                    _deleteCard();
+                    _addCardBind(change: true);
                   },
                 ),
               )

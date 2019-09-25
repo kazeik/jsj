@@ -20,14 +20,20 @@ class AlipayPage extends StatefulWidget {
   State<StatefulWidget> createState() => new _AlipayPageState();
 }
 
-class _AlipayPageState extends State<AlipayPage> {
+class _AlipayPageState extends State<AlipayPage>
+    with SingleTickerProviderStateMixin {
   String account;
   String pass;
+  TabController controller;
+  List<Tab> tabs = new List<Tab>()
+    ..add(new Tab(text: "支付宝"))
+    ..add(new Tab(text: "中银来聚财"));
 
   _bindAlipay() {
     FormData formData = new FormData.fromMap({
       "alipay_password": pass,
       "alipay_account": account,
+      "type":controller.index
     });
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_bindalipay, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
@@ -49,6 +55,10 @@ class _AlipayPageState extends State<AlipayPage> {
   @override
   void initState() {
     super.initState();
+
+    controller =
+        TabController(initialIndex: 0, length: tabs.length, vsync: this);
+
     account = ApiUtils.loginData?.alipay_account;
     pass = ApiUtils.loginData?.alipay_password;
   }
@@ -59,7 +69,7 @@ class _AlipayPageState extends State<AlipayPage> {
       appBar: new AppBar(
         centerTitle: true,
         title: new Text(
-          "支付宝管理",
+          "收款帐户管理",
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
@@ -67,9 +77,103 @@ class _AlipayPageState extends State<AlipayPage> {
         brightness: Brightness.light,
         elevation: 0,
       ),
+//      body: new Container(
+//        color: Colors.white,
+//        child: new ListView(
+//          children: <Widget>[
+//            new Container(
+//              margin: EdgeInsets.all(15),
+//              child: new Text("请注册并填入店员支付宝帐号及密码"),
+//            ),
+//            _buildInput("帐号", "username", false, account, (str) {
+//              account = str;
+//            }),
+//            _buildInput("密码", "password", true, pass, (str) {
+//              pass = str;
+//            }),
+//            new Container(
+//              margin: EdgeInsets.only(left: 10, right: 10),
+//              child: new Row(
+//                children: <Widget>[
+//                  new Expanded(
+//                    child: new Container(
+//                      margin: EdgeInsets.all(5),
+//                      child: new FlatButton(
+//                        onPressed: () {
+//                          _bindAlipay();
+//                        },
+//                        child: new Text("修改"),
+//                        color: Colors.blue,
+//                        textColor: Colors.white,
+//                      ),
+//                    ),
+//                    flex: 1,
+//                  ),
+//                  new Expanded(
+//                    child: new Container(
+//                      margin: EdgeInsets.all(5),
+//                      child: new FlatButton(
+//                        onPressed: () {
+//                          _bindAlipay();
+//                        },
+//                        child: new Text("保存"),
+//                        color: Colors.blue,
+//                        textColor: Colors.white,
+//                      ),
+//                    ),
+//                    flex: 1,
+//                  ),
+//                ],
+//                mainAxisSize: MainAxisSize.max,
+//                mainAxisAlignment: MainAxisAlignment.spaceAround,
+//              ),
+//            ),
+////            new Container(
+////              margin: EdgeInsets.only(top: 15),
+////              color: Colors.white,
+////              width: double.infinity,
+////              alignment: Alignment.center,
+////              child: new Text(
+////                "店员支付宝帐号设置教程",
+////                style: new TextStyle(color: Colors.blue),
+////              ),
+////            )
+//          ],
+//        ),
+//      ),
+
       body: new Container(
         color: Colors.white,
+        child: new Column(
+          children: <Widget>[
+            new TabBar(
+              labelColor: Colors.blue,
+              unselectedLabelColor: Colors.grey,
+              controller: controller,
+              isScrollable: true,
+              tabs: tabs,
+              indicatorSize: TabBarIndicatorSize.label,
+            ),
+            new Expanded(
+              child: new TabBarView(
+                physics: new NeverScrollableScrollPhysics(),
+                controller: controller,
+                children: _buildBarPage(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildBarPage() {
+    List<Widget> widgets = new List();
+    widgets.add(
+      new Container(
+        color: Colors.white,
         child: new ListView(
+          physics: new NeverScrollableScrollPhysics(),
           children: <Widget>[
             new Container(
               margin: EdgeInsets.all(15),
@@ -132,6 +236,86 @@ class _AlipayPageState extends State<AlipayPage> {
         ),
       ),
     );
+    widgets.add(
+      new Container(
+        color: Colors.white,
+        child: new ListView(
+          physics: new NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            new Container(
+              margin: EdgeInsets.all(15),
+              child: new Text("请注册并填入中银来聚财账号及密码"),
+            ),
+            _buildInput("帐号", "username", false, account, (str) {
+              account = str;
+            }),
+            _buildInput("密码", "password", true, pass, (str) {
+              pass = str;
+            }),
+
+            new Container(
+              margin: EdgeInsets.only(top: 5,right: 15,left: 15),
+              child: new FlatButton(
+                onPressed: () {
+                  _bindAlipay();
+                },
+                child: new Text("保存"),
+                color: Colors.blue,
+                textColor: Colors.white,
+              ),
+            )
+//            new Container(
+//              margin: EdgeInsets.only(left: 10, right: 10),
+//              child: new Row(
+//                children: <Widget>[
+//                  new Expanded(
+//                    child: new Container(
+//                      margin: EdgeInsets.all(5),
+//                      child: new FlatButton(
+//                        onPressed: () {
+//                          _bindAlipay();
+//                        },
+//                        child: new Text("修改"),
+//                        color: Colors.blue,
+//                        textColor: Colors.white,
+//                      ),
+//                    ),
+//                    flex: 1,
+//                  ),
+//                  new Expanded(
+//                    child: new Container(
+//                      margin: EdgeInsets.all(5),
+//                      child: new FlatButton(
+//                        onPressed: () {
+//                          _bindAlipay();
+//                        },
+//                        child: new Text("保存"),
+//                        color: Colors.blue,
+//                        textColor: Colors.white,
+//                      ),
+//                    ),
+//                    flex: 1,
+//                  ),
+//                ],
+//                mainAxisSize: MainAxisSize.max,
+//                mainAxisAlignment: MainAxisAlignment.spaceAround,
+//              ),
+//            ),
+//            new Container(
+//              margin: EdgeInsets.only(top: 15),
+//              color: Colors.white,
+//              width: double.infinity,
+//              alignment: Alignment.center,
+//              child: new Text(
+//                "店员支付宝帐号设置教程",
+//                style: new TextStyle(color: Colors.blue),
+//              ),
+//            )
+          ],
+        ),
+      ),
+    );
+    return widgets;
   }
 
   Widget _buildInput(String hint, String iconPath, bool isPass,

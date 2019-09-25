@@ -38,6 +38,7 @@ class _activateServicePageState extends State<ActivateServicePage> {
         iconTheme: new IconThemeData.fallback(),
         brightness: Brightness.light,
         elevation: 0,
+        centerTitle: true,
       ),
       body: new Container(
         child: new ListView(

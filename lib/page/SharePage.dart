@@ -27,6 +27,7 @@ class _ShatePageState extends State<SharePage> {
       appBar: new AppBar(
         title: new Text("代理分享"),
         elevation: 0,
+        centerTitle: true,
       ),
       body: new Stack(
         children: <Widget>[
