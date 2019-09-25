@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -36,11 +36,9 @@ class _LoginPageState extends State<LoginPage>
   String _lVerfiyCode = "";
 
   List<Tab> tabs = new List<Tab>()
-    ..add(new Tab(text: "登录"))
-    ..add(new Tab(text: "注册"));
+    ..add(new Tab(text: "密码登录"))
+    ..add(new Tab(text: "验证码登录"));
   String verfiycode = "";
-
-  Uint8List _imgbytes;
 
   bool sms = false;
 
@@ -75,19 +73,27 @@ class _LoginPageState extends State<LoginPage>
       Utils.showToast("手机号不能为空");
       return;
     }
-    if (isEmpty(_lPass)) {
-      Utils.showToast("密码不能为空");
-      return;
+    if (controller.index == 0) {
+      if (isEmpty(_lPass)) {
+        Utils.showToast("密码不能为空");
+        return;
+      }
+    } else {
+      if (isEmpty(_lVerfiyCode)) {
+        Utils.showToast("验证码不能为空");
+        return;
+      }
     }
-    if (isEmpty(_lVerfiyCode)) {
-      Utils.showToast("验证码不能为空");
-      return;
+
+    var map = HashMap<String, String>();
+    map["phone"] = _lPhone;
+    if (controller.index == 0) {
+      map["password"] = _lPass;
+    } else {
+      map["invite_code"] = _lVerfiyCode;
     }
-    FormData formData = new FormData.fromMap({
-      "phone": _lPhone,
-      "password": _lPass,
-      "invite_code": _lVerfiyCode,
-    });
+
+    FormData formData = new FormData.fromMap(map);
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_login, (model) {
       ApiUtils.phone = _lPhone;
       ApiUtils.pass = _lPass;
@@ -125,7 +131,7 @@ class _LoginPageState extends State<LoginPage>
         Utils.showToast("图片获取失败");
       }
       setState(() {
-        this._imgbytes = imgbyte;
+//        this._imgbytes = imgbyte;
       });
     } on Error catch (e) {
       Utils.showToast("图片获取失败1 $e");
@@ -163,7 +169,7 @@ class _LoginPageState extends State<LoginPage>
               children: <Widget>[
                 new Container(
                   color: Colors.blue,
-                  height: 200,
+                  height: 150,
                 ),
                 new Container(
                   color: Colors.white,
@@ -171,21 +177,23 @@ class _LoginPageState extends State<LoginPage>
               ],
             ),
           ),
-          new Container(
-            margin: EdgeInsets.only(top: 40),
+          new Center(
+//            margin: EdgeInsets.only(top: 40),
             child: new Card(
-              margin: EdgeInsets.only(top: 50, right: 20, left: 20, bottom: 20),
+              margin: EdgeInsets.only(top: 70, right: 20, left: 20, bottom: 70),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(14.0),
+                  Radius.circular(10.0),
                 ),
               ),
               child: new Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   new Container(
                     margin: EdgeInsets.all(20),
+                    alignment: Alignment.center,
                     child: new TabBar(
                       labelColor: Colors.blue,
                       unselectedLabelColor: Colors.grey,
@@ -196,25 +204,62 @@ class _LoginPageState extends State<LoginPage>
                     ),
                   ),
                   new Expanded(
-                    child: new TabBarView(
-                      physics: new NeverScrollableScrollPhysics(),
-                      controller: controller,
-                      children: _buildBarPage(),
+                    child: new Container(
+                      child: new TabBarView(
+                        physics: new NeverScrollableScrollPhysics(),
+                        controller: controller,
+                        children: _buildBarPage(),
+                      ),
+                    ),
+                  ),
+                  new Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.only(left: 15, right: 15),
+                    child: new RaisedButton(
+                      color: const Color(0xff0091ea),
+                      onPressed: () {
+                        _startLogin();
+                      },
+                      child: new Text(
+                        "登录",
+                        style: new TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  new Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.only(left: 15, right: 15),
+                    child: new RaisedButton(
+                      color: const Color(0xff0091ea),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(new MaterialPageRoute(builder: (_) {
+                          return new RegisterPage();
+                        }));
+                      },
+                      child: new Text(
+                        "注册",
+                        style: new TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          new Container(
-            alignment: Alignment.topRight,
-            child: new Image(
-              height: 200,
-              image: AssetImage(
-                Utils.getImgPath("login_icon"),
-              ),
-            ),
-          ),
+//          new Container(
+//            alignment: Alignment.topRight,
+//            child: new Image(
+//              height: 200,
+//              image: AssetImage(
+//                Utils.getImgPath("login_icon"),
+//              ),
+//            ),
+//          ),
         ],
       ),
     );
@@ -278,6 +323,142 @@ class _LoginPageState extends State<LoginPage>
               _lPass = str;
             },
           ),
+//          new Container(
+//            margin: EdgeInsets.only(right: 15),
+//            child: new Row(
+//              children: <Widget>[
+//                new Expanded(
+//                  child: new MainInput(
+//                    hint: "验证码",
+//                    iconPath: "verfiycode",
+//                    defaultStr: _lVerfiyCode,
+//                    callback: (str) {
+//                      _lVerfiyCode = str;
+//                    },
+//                  ),
+//                  flex: 2,
+//                ),
+//                InkWell(
+//                  onTap: () {
+////                          _getVerfiyCodeImg();
+//                    if (!sms) {
+//                      sms = true;
+//                      _getsms();
+//                      reGetCountdown();
+//                    }
+//                  },
+//                  child: new Text(
+//                    _codeCountdownStr,
+//                    style: TextStyle(fontSize: 13),
+//                  ),
+//                )
+////                new Expanded(
+////                  child: new GestureDetector(
+////                      onTap: () {
+////                        _getVerfiyCodeImg();
+////                      },
+////                    child: _imgbytes == null
+////                        ? new InkWell(
+////                            onTap: () {
+////                              _getVerfiyCodeImg();
+////                            },
+////                            child: new Text(
+////                              "获取验证码",
+////                              style: TextStyle(fontSize: 13),
+////                            ),
+////                          )
+////                        : Image.memory(
+////                            _imgbytes,
+////                            height: 50,
+////                          ),
+////                  flex: 1,
+////                ),
+//              ],
+//            ),
+//          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              new Row(
+                children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.only(left: 15),
+                    child: new Checkbox(
+                        value: isSave == null ? false : isSave,
+                        onChanged: (flag) {
+                          isSave = flag;
+                          setState(() {});
+                        }),
+                  ),
+                  new InkWell(
+                    onTap: () {
+                      this.isSave = !isSave;
+                      setState(() {});
+                    },
+                    child: new Text(
+                      "记住密码",
+                      style: new TextStyle(fontSize: 13),
+                    ),
+                  )
+                ],
+              ),
+//              new GestureDetector(
+//                onTap: () {
+//                  Navigator.of(context)
+//                      .push(new MaterialPageRoute(builder: (_) {
+//                    return new RegisterPage();
+//                  }));
+//                },
+//                child: new Container(
+//                  padding: EdgeInsets.only(right: 20),
+//                  child: new Text(
+//                    "用户注册",
+//                    style: TextStyle(color: Colors.blue),
+//                  ),
+//                ),
+//              )
+            ],
+          ),
+//          new Container(
+//            width: double.infinity,
+//            margin: EdgeInsets.only(left: 25, right: 25),
+//            child: new RaisedButton(
+//              color: const Color(0xff0091ea),
+//              onPressed: () {
+//                _startLogin();
+//              },
+//              child: new Text(
+//                "登录",
+//                style: new TextStyle(
+//                  color: Colors.white,
+//                ),
+//              ),
+//            ),
+//          ),
+        ],
+      ),
+    );
+    widgets.add(
+      new Column(
+        children: <Widget>[
+          new MainInput(
+            hint: "手机号",
+            defaultStr: _lPhone,
+            iconPath: "username",
+            callback: (str) {
+              _lPhone = str;
+            },
+          ),
+//          new MainInput(
+//            hint: "登录密码",
+//            iconPath: "password",
+//            defaultStr: _lPass == null ? "" : _lPass,
+//            isPass: true,
+//            callback: (str) {
+//              _lPass = str;
+//            },
+//          ),
           new Container(
             margin: EdgeInsets.only(right: 15),
             child: new Row(
@@ -331,48 +512,51 @@ class _LoginPageState extends State<LoginPage>
               ],
             ),
           ),
-          new Row(
-            children: <Widget>[
-              new Checkbox(
-                  value: isSave == null ? false : isSave,
-                  onChanged: (flag) {
-                    isSave = flag;
-                    setState(() {});
-                  }),
-              new InkWell(
-                onTap: () {
-                  this.isSave = !isSave;
-                  setState(() {});
-                },
-                child: new Text(
-                  "记住密码",
-                  style: new TextStyle(fontSize: 13),
-                ),
-              )
-            ],
-          ),
-          new Container(
-            width: double.infinity,
-            margin: EdgeInsets.only(left: 25, right: 25),
-            child: new RaisedButton(
-              color: const Color(0xff0091ea),
-              onPressed: () {
-                _startLogin();
-              },
-              child: new Text(
-                "登录",
-                style: new TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+//          Row(
+//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//            mainAxisSize: MainAxisSize.max,
+//            children: <Widget>[
+//              new Row(
+//                children: <Widget>[
+//                  new Checkbox(
+//                      value: isSave == null ? false : isSave,
+//                      onChanged: (flag) {
+//                        isSave = flag;
+//                        setState(() {});
+//                      }),
+//                  new InkWell(
+//                    onTap: () {
+//                      this.isSave = !isSave;
+//                      setState(() {});
+//                    },
+//                    child: new Text(
+//                      "记住密码",
+//                      style: new TextStyle(fontSize: 13),
+//                    ),
+//                  )
+//                ],
+//              ),
+//              new GestureDetector(
+//                onTap: () {
+//                  Navigator.of(context)
+//                      .push(new MaterialPageRoute(builder: (_) {
+//                    return new RegisterPage();
+//                  }));
+//                },
+//                child: new Container(
+//                  alignment: Alignment.centerRight,
+//                  padding: EdgeInsets.only(right: 20),
+//                  child: new Text(
+//                    "用户注册",
+//                    style: TextStyle(color: Colors.blue),
+//                  ),
+//                ),
+////              )
+////            ],
+//          ),
         ],
       ),
     );
-    widgets.add(new RegisterPage(
-      tabController: this.controller,
-    ));
     return widgets;
   }
 }

@@ -75,57 +75,69 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Column(
-      children: <Widget>[
-        new MainInput(
-          hint: "手机号",
-          iconPath: "username",
-          isPass: false,
-          callback: (str) {
-            _rPhone = str;
-          },
-        ),
-        new MainInput(
-          hint: "登录密码",
-          iconPath: "password",
-          isPass: true,
-          callback: (str) {
-            _rPass = str;
-          },
-        ),
-        new MainInput(
-          hint: "再次输入密码",
-          iconPath: "password",
-          isPass: true,
-          callback: (str) {
-            _rSubPass = str;
-          },
-        ),
-        new MainInput(
-          hint: "邀请码",
-          iconPath: "invaite",
-          isPass: false,
-          callback: (str) {
-            _rInvateCode = str;
-          },
-        ),
-        new Container(
-          width: double.infinity,
-          margin: EdgeInsets.only(top: 10, left: 25, right: 25),
-          child: new RaisedButton(
-            color: const Color(0xff0091ea),
-            onPressed: () {
-              _register();
-            },
-            child: new Text(
-              "立即注册",
-              style: new TextStyle(
-                color: Colors.white,
+    return new Scaffold(
+      appBar: new AppBar(
+        centerTitle: true,
+        title: new Text("注册"),
+      ),
+      body: new Container(
+        color: Colors.white,
+        child: new ListView(
+          children: <Widget>[
+            new Container(
+              child: new MainInput(
+                hint: "手机号",
+                iconPath: "username",
+                isPass: false,
+                callback: (str) {
+                  _rPhone = str;
+                },
+              ),
+              margin: EdgeInsets.only(top: 10),
+            ),
+            new MainInput(
+              hint: "登录密码",
+              iconPath: "password",
+              isPass: true,
+              callback: (str) {
+                _rPass = str;
+              },
+            ),
+            new MainInput(
+              hint: "再次输入密码",
+              iconPath: "password",
+              isPass: true,
+              callback: (str) {
+                _rSubPass = str;
+              },
+            ),
+            new MainInput(
+              hint: "邀请码",
+              iconPath: "invaite",
+              isPass: false,
+              callback: (str) {
+                _rInvateCode = str;
+              },
+            ),
+            new Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(top: 10, left: 15, right: 15),
+              child: new RaisedButton(
+                color: const Color(0xff0091ea),
+                onPressed: () {
+                  _register();
+                },
+                child: new Text(
+                  "立即注册",
+                  style: new TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
