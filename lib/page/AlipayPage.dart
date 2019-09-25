@@ -9,7 +9,7 @@ import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
-/**
+/*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 14:08
  * 类说明:
@@ -57,6 +57,7 @@ class _AlipayPageState extends State<AlipayPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
+        centerTitle: true,
         title: new Text(
           "支付宝管理",
           style: TextStyle(color: Colors.black),
