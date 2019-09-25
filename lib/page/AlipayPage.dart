@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -30,11 +31,17 @@ class _AlipayPageState extends State<AlipayPage>
     ..add(new Tab(text: "中银来聚财"));
 
   _bindAlipay() {
-    FormData formData = new FormData.fromMap({
-      "alipay_password": pass,
-      "alipay_account": account,
-      "type":controller.index
-    });
+    var map = HashMap<String, dynamic>();
+    if (controller.index == 0) {
+      map["alipay_password"] = pass;
+      map["alipay_account"] = account;
+    } else {
+      map["z_alipay_password"] = pass;
+      map["z_alipay_account"] = account;
+    }
+    map["type"] = controller.index;
+
+    FormData formData = new FormData.fromMap(map);
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_bindalipay, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
@@ -254,7 +261,7 @@ class _AlipayPageState extends State<AlipayPage>
             }),
 
             new Container(
-              margin: EdgeInsets.only(top: 5,right: 15,left: 15),
+              margin: EdgeInsets.only(top: 5, right: 15, left: 15),
               child: new FlatButton(
                 onPressed: () {
                   _bindAlipay();

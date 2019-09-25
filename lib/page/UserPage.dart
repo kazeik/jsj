@@ -16,7 +16,6 @@ import 'package:jsj/page/BankCardPage.dart';
 import 'package:jsj/page/ChatPage.dart';
 import 'package:jsj/page/MessagePage.dart';
 import 'package:jsj/page/ServiceProviderPage.dart';
-import 'package:jsj/page/SettingPage.dart';
 import 'package:jsj/page/SharePage.dart';
 import 'package:jsj/page/SystemMsgPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
@@ -41,9 +40,18 @@ class _UserPageState extends State<UserPage> {
     ..add("收款帐户管理")
     ..add("我的银行卡")
 //    ..add("修改密码")
-    ..add("设置")
+//    ..add("设置")
     ..add("客服消息")
-    ..add("常见问题");
+    ..add("常见问题")
+    ..add("退出登录");
+
+  List<Widget> builds = new List<Widget>()
+  ..add(new SharePage())
+  ..add(new ServiceProviderPage())
+  ..add(new AlipayPage())
+  ..add(new BankCardPage())
+  ..add(new ChatPage())
+  ..add(new MessagePage())  ;
 
   @override
   Widget build(BuildContext context) {
@@ -158,8 +166,11 @@ class _UserPageState extends State<UserPage> {
                                         title: new Text("拍照"),
                                         onTap: () async {
                                           Navigator.pop(context);
-                                          File avatar = await ImagePicker.pickImage(
-                                              maxWidth: 200, maxHeight: 200, source: ImageSource.camera);
+                                          File avatar =
+                                              await ImagePicker.pickImage(
+                                                  maxWidth: 200,
+                                                  maxHeight: 200,
+                                                  source: ImageSource.camera);
                                           _uploadUserAvatarFile(avatar);
                                         },
                                       ),
@@ -169,8 +180,11 @@ class _UserPageState extends State<UserPage> {
                                         title: new Text("相册"),
                                         onTap: () async {
                                           Navigator.pop(context);
-                                          File avatar = await ImagePicker.pickImage(
-                                              maxWidth: 200, maxHeight: 200, source: ImageSource.gallery);
+                                          File avatar =
+                                              await ImagePicker.pickImage(
+                                                  maxWidth: 200,
+                                                  maxHeight: 200,
+                                                  source: ImageSource.gallery);
                                           _uploadUserAvatarFile(avatar);
                                         },
                                       ),
@@ -275,7 +289,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  _uploadUserAvatarFile( File avatar) async {
+  _uploadUserAvatarFile(File avatar) async {
     if (avatar == null) {
       Utils.showToast("图像获取失败");
       return;
@@ -369,56 +383,55 @@ class _UserPageState extends State<UserPage> {
     List<Widget> widgets = new List<Widget>();
     for (int i = 0; i < title.length; i++) {
       widgets.add(
-        new Container(
-          child: new Column(
-            children: <Widget>[
-              new InkWell(
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    new Container(
-                      child: new Text(title[i]),
-                      margin: EdgeInsets.all(5),
-                    ),
-                    new Icon(Icons.chevron_right),
-                  ],
-                ),
-                onTap: () {
-                  switch (i) {
-                    case 0:
-                      if (ApiUtils.loginData?.status == "0")
-                        _activateAccount();
-                      else {
-                        Navigator.of(context).push(
-                          new MaterialPageRoute(builder: (_) {
-                            return new SharePage();
-                          }),
-                        );
-                      }
-                      break;
-                    case 1:
-                      if (ApiUtils.loginData?.is_service == "0") {
-                        _activateService();
-                      } else {
-                        Navigator.of(context).push(
-                          new MaterialPageRoute(builder: (_) {
-                            return new ServiceProviderPage();
-                          }),
-                        );
-                      }
-                      break;
-                    case 2:
-                      Navigator.of(context)
-                          .push(new MaterialPageRoute(builder: (_) {
-                        return new AlipayPage();
-                      }));
-                      break;
-                    case 3:
-                      Navigator.of(context)
-                          .push(new MaterialPageRoute(builder: (_) {
-                        return new BankCardPage();
-                      }));
-                      break;
+        new Column(
+          children: <Widget>[
+            new InkWell(
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  new Container(
+                    child: new Text(title[i]),
+                    margin: EdgeInsets.all(5),
+                  ),
+                  new Icon(Icons.chevron_right),
+                ],
+              ),
+              onTap: () {
+                switch (i) {
+                  case 0:
+                    if (ApiUtils.loginData?.status == "0")
+                      _activateAccount();
+                    else {
+                      Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (_) {
+                          return new SharePage();
+                        }),
+                      );
+                    }
+                    break;
+                  case 1:
+                    if (ApiUtils.loginData?.is_service == "0") {
+                      _activateService();
+                    } else {
+                      Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (_) {
+                          return new ServiceProviderPage();
+                        }),
+                      );
+                    }
+                    break;
+                  case 2:
+                    Navigator.of(context)
+                        .push(new MaterialPageRoute(builder: (_) {
+                      return new AlipayPage();
+                    }));
+                    break;
+                  case 3:
+                    Navigator.of(context)
+                        .push(new MaterialPageRoute(builder: (_) {
+                      return new BankCardPage();
+                    }));
+                    break;
 //                    case 4:
 //                      Navigator.of(context)
 //                          .push(new MaterialPageRoute(builder: (_) {
@@ -431,34 +444,38 @@ class _UserPageState extends State<UserPage> {
 //                        return new ChangePassPage();
 //                      }));
 //                      break;
-                    case 4:
-                      Navigator.of(context)
-                          .push(new MaterialPageRoute(builder: (_) {
-                        return new SettingPage();
-                      }));
-                      break;
-                    case 5:
-                      Navigator.of(context)
-                          .push(new MaterialPageRoute(builder: (_) {
-                        return new ChatPage();
-                      }));
-                      break;
-                    case 6:
-                      Navigator.of(context)
-                          .push(new MaterialPageRoute(builder: (_) {
-                        return new MessagePage();
-                      }));
-                      break;
-                  }
-                },
-              ),
-              i != title.length - 1
-                  ? new Divider()
-                  : new Container(
-                      height: 5,
-                    ),
-            ],
-          ),
+//                  先注释，下个版本要用
+//                    case 4:
+//                      Navigator.of(context)
+//                          .push(new MaterialPageRoute(builder: (_) {
+//                        return new SettingPage();
+//                      }));
+                    break;
+                  case 4:
+                    Navigator.of(context)
+                        .push(new MaterialPageRoute(builder: (_) {
+                      return new ChatPage();
+                    }));
+                    break;
+                  case 5:
+                    Navigator.of(context)
+                        .push(new MaterialPageRoute(builder: (_) {
+                      return new MessagePage();
+                    }));
+                    //--------
+                    break;
+                  case 6:
+                    _exit();
+                    break;
+                }
+              },
+            ),
+            i != title.length - 1
+                ? new Divider()
+                : new Container(
+                    height: 5,
+                  ),
+          ],
         ),
       );
     }
@@ -478,5 +495,44 @@ class _UserPageState extends State<UserPage> {
         style: TextStyle(color: Colors.white),
       ),
     );
+  }
+
+  _exit() {
+    showDialog<Null>(
+        context: context, //BuildContext对象
+        barrierDismissible: true,
+        builder: (BuildContext _context) {
+          return new AlertDialog(
+            title: new Text("退出登录"),
+            content: new Text("确定要退出登录吗"),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () {
+                  Navigator.of(_context).pop();
+                },
+                child: new Text("取消"),
+              ),
+              new FlatButton(
+                onPressed: () {
+                  Navigator.of(_context).pop();
+                  _loginOut();
+                },
+                child: new Text("确定"),
+              ),
+            ],
+          );
+        });
+  }
+
+  _loginOut() {
+    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_loginout, (str) {
+      BaseModel model = BaseModel.fromJson(jsonDecode(str));
+      if (model.status == 200) {
+        ApiUtils.loginData = null;
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/loginPage', ModalRoute.withName("/loginPage"));
+      }
+    });
   }
 }
