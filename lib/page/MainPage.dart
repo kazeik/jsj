@@ -1,11 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:jsj/model/BaseModel.dart';
+import 'package:jsj/net/HttpNet.dart';
+import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealPage.dart';
 import 'package:jsj/page/HomePage.dart';
 import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/page/PropertyPage.dart';
 import 'package:jsj/page/UserPage.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:quiver/strings.dart';
+import 'package:dio/dio.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -33,13 +41,13 @@ class _MainPageState extends State<MainPage> {
     _openNotification();
     _startupPush();
 
-    DateTime time = DateTime(2019,10,15,23,59,59);
+    DateTime time = DateTime(2019, 10, 15, 23, 59, 59);
     DateTime nowTime = DateTime.now();
     if (nowTime.isAfter(time)) {
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(builder: (context) => new LoginPage()),
-              (route) => route == null);
+          (route) => route == null);
     }
   }
 
@@ -49,8 +57,17 @@ class _MainPageState extends State<MainPage> {
         channel: "developer-default",
         production: true,
         debug: true);
-    var registerId = jpush.getRegistrationID();
-    Utils.logs("注册id = $registerId");
+    jpush.getRegistrationID().then((str) {
+      Utils.logs("注册id = $str");
+      if (isNotEmpty(str)) {
+        jpush.setAlias(str);
+        Utils.logs("开始注册推送");
+        FormData formData = new FormData.fromMap({"alias": str});
+        HttpNet.instance.request(
+            MethodTypes.POST, ApiUtils.post_alias, (str) {},
+            data: formData);
+      }
+    });
   }
 
   /*

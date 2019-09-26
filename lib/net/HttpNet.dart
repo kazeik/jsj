@@ -6,6 +6,7 @@ import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:quiver/strings.dart';
 
 class HttpNet {
   // 工厂模式
@@ -63,14 +64,16 @@ class HttpNet {
 
     sValue.then((value) {
       if (path != ApiUtils.post_upload_img && path != ApiUtils.post_sendsms) {
-        if (path == ApiUtils.post_login) {
-          Utils.logs("headers = ${value.headers.toString()}");
-        }
-        BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
-        if (model.status == 200) {
-          success(value.data);
-        } else {
-          Utils.showToast(model.msg);
+//        if (path == ApiUtils.post_login) {
+//          Utils.logs("headers = ${value.headers.toString()}");
+//        }
+        if (value != null && isNotEmpty(value.data)) {
+          BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
+          if (model.status == 200) {
+            success(value.data);
+          } else {
+            Utils.showToast(model.msg);
+          }
         }
       } else {
         success(value.data);
