@@ -1,3 +1,4 @@
+import 'package:jsj/utils/Utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'package:path/path.dart';
@@ -8,22 +9,20 @@ import 'package:path/path.dart';
  */
 
 class SqlManager {
-
   static const _VERSION = 1;
 
   static const _NAME = "jsj.db";
 
   static Database _database;
 
-
   ///初始化
   static init() async {
     var databasesPath = await getDatabasesPath();
 
     String path = join(databasesPath, _NAME);
-
-    _database = await openDatabase(
-        path, version: _VERSION, onCreate: (Database db, int version) async {});
+    Utils.logs("开始创建数据库 = $path");
+    _database = await openDatabase(path,
+        version: _VERSION, onCreate: (Database db, int version) async {});
   }
 
   ///判断表是否存在

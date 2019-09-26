@@ -1,5 +1,6 @@
 import 'package:jsj/db/BaseDbProvider.dart';
 import 'package:jsj/db/pojo/AccountPojo.dart';
+import 'package:jsj/utils/Utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 /*
@@ -79,7 +80,9 @@ class AccountDbProvider extends BaseDbProvider {
   }
 
   Future<void> updateStateBySql(String sql) async {
+    Utils.logs("开始更新数据库");
     Database database = await getDataBase();
+    Utils.logs("开始更新操作数据库");
     await database.rawUpdate(sql);
   }
 

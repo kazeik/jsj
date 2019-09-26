@@ -34,7 +34,8 @@ class HttpNet {
     dio.options.receiveTimeout = 15 * 1000;
     dio.options.baseUrl = ApiUtils.baseUrl;
     dio.options.responseType = ResponseType.json;
-    dio.interceptors.add(LogInterceptor(responseBody: Utils.isDebug)); //开启请求日志
+    if (Utils.isDebug)
+      dio.interceptors.add(LogInterceptor(responseBody: true)); //开启请求日志
   }
 
   request(MethodTypes methodTypes, String path, Function(String) success,

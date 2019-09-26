@@ -13,7 +13,7 @@ import 'package:quiver/strings.dart';
  */
 class Utils {
   static String cookie;
-  static bool isDebug = false;
+  static bool isDebug = true;
 
   static String getImgPath(String name, {String format: 'png'}) {
     return 'assets/images/$name.$format';

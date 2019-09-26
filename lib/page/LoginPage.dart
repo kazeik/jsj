@@ -50,9 +50,10 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
-    jpush.setBadge(0);
+    if (Platform.isIOS) jpush.setBadge(0);
     jpush.clearAllNotifications();
-    jpush.applyPushAuthority(new NotificationSettingsIOS( sound: true, alert: true, badge: true));
+    jpush.applyPushAuthority(
+        new NotificationSettingsIOS(sound: true, alert: true, badge: true));
     controller =
         TabController(initialIndex: 0, length: tabs.length, vsync: this);
 
@@ -128,7 +129,6 @@ class _LoginPageState extends State<LoginPage>
         ApiUtils.cookieValue = cookieItem.value;
         Utils.saveInfo("token", cookieItem.value);
         Utils.saveInfo("tokenKey", cookieItem.name);
-        Utils.logs("获取到的token = $cookieItem");
       });
 
       var imgbyte = await consolidateHttpClientResponseBytes(response);
@@ -151,11 +151,7 @@ class _LoginPageState extends State<LoginPage>
     });
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_sendsms, (data) {
       SmsModel model = SmsModel.fromJson(jsonDecode(data));
-      if (model.status == "success") {
-        Utils.showToast("获取验证码成功");
-      } else {
-        Utils.showToast("获取验证码失败");
-      }
+      Utils.showToast(model.status == "success" ? "获取验证码成功" : "获取验证码失败");
     }, data: formData);
   }
 

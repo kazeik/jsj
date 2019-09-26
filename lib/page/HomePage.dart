@@ -69,24 +69,26 @@ class _HomePageState extends State<HomePage> {
       setState(() {});
 
       AccountDbProvider provider = new AccountDbProvider();
-      provider.updateStateBySql(
-          "update ${provider.name} set ${provider.columnCurrent}=0");
-
-      provider.getPersonProvider(model.data?.id).then((maps) {
-        if (maps == null) {
-          AccountPojo pojo = new AccountPojo();
-          pojo.cookieValue = ApiUtils.cookieValue;
-          pojo.cookieKey = ApiUtils.cookieKey;
-          pojo.pass = ApiUtils.pass;
-          pojo.mobile = ApiUtils.phone;
-          pojo.id = model.data.id;
-          pojo.avatar = model.data?.avatar;
-          pojo.current = 1;
-          provider.insert(pojo);
-        } else {
-          provider.updateStateBySql(
-              "update ${provider.name} set ${provider.columnCurrent}=0 where id=${model.data?.id}");
-        }
+      provider
+          .updateStateBySql(
+              "update ${provider.name} set ${provider.columnCurrent}=0")
+          .then((_) {
+        provider.getPersonProvider(model.data?.id).then((maps) {
+          if (maps == null) {
+            AccountPojo pojo = new AccountPojo();
+            pojo.cookieValue = ApiUtils.cookieValue;
+            pojo.cookieKey = ApiUtils.cookieKey;
+            pojo.pass = ApiUtils.pass;
+            pojo.mobile = ApiUtils.phone;
+            pojo.id = model.data.id;
+            pojo.avatar = model.data?.avatar;
+            pojo.current = 1;
+            provider.insert(pojo);
+          } else {
+            provider.updateStateBySql(
+                "update ${provider.name} set ${provider.columnCurrent}=0 where id=${model.data?.id}");
+          }
+        });
       });
     });
   }
