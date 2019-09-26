@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -64,14 +65,13 @@ class _AddCardPageState extends State<AddCardPage> {
       Utils.showToast("手机号不能为空");
       return;
     }
-
-    FormData formData = new FormData.fromMap({
-      "bank_name": bankname,
-      "bank_account": cardNo,
-      "user_name": cardName,
-      "id_number": cardNameId,
-      "bind_phone": phone,
-    });
+    var map = HashMap<String, dynamic>();
+    map["bank_name"] = bankname;
+    map["bank_account"] = cardNo;
+    map["user_name"] = cardName;
+    map["id_number"] = cardNameId;
+    map["bind_phone"] = phone;
+    if (null != widget.bankModel) map["id"] = widget.bankModel?.data[0].id;
 
     HttpNet.instance.request(
         MethodTypes.POST,
@@ -84,7 +84,7 @@ class _AddCardPageState extends State<AddCardPage> {
       } else {
         Utils.showToast("操作失败，请重试");
       }
-    }, data: formData);
+    }, data: new FormData.fromMap(map));
   }
 
   @override

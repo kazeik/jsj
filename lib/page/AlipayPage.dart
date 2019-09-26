@@ -46,6 +46,7 @@ class _AlipayPageState extends State<AlipayPage>
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
       if (model.status == 200) {
+        Utils.showToast("绑定成功");
         _getHomeData();
       }
     }, data: formData);
