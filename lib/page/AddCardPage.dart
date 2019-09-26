@@ -92,7 +92,7 @@ class _AddCardPageState extends State<AddCardPage> {
     return Scaffold(
       appBar: new AppBar(
         title: new Text(
-          "添加银行卡",
+          widget.bankModel != null ? "修改银行卡" : "添加银行卡",
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
@@ -124,7 +124,9 @@ class _AddCardPageState extends State<AddCardPage> {
           ),
           new Container(
             child: new Text(
-              "提醒:后续只能通过该卡提现，且不可修改",
+              widget.bankModel != null
+                  ? "提醒：后续只能绑定该持卡人的银行卡"
+                  : "提醒:后续只能通过该卡提现，且不可修改",
               style: TextStyle(color: Colors.blue),
               textAlign: TextAlign.center,
             ),
