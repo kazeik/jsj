@@ -65,10 +65,12 @@ class _BankCardPageState extends State<BankCardPage> {
     );
   }
 
-  _addCardBind({bool change = false}) async {
+  _addCardBind({bool change = false, BankListModel bankModel}) async {
     await Navigator.of(context).push(
       new MaterialPageRoute(builder: (_) {
-        return new AddCardPage();
+        return new AddCardPage(
+          bankModel: bankModel,
+        );
       }),
     );
     _getBankList();
@@ -145,7 +147,7 @@ class _BankCardPageState extends State<BankCardPage> {
                   ),
                   onTap: () {
 //                    _deleteCard();
-                    _addCardBind(change: true);
+                    _addCardBind(change: true, bankModel: model);
                   },
                 ),
               )

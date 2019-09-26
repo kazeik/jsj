@@ -60,7 +60,7 @@ class _ChatPageState extends State<ChatPage> {
       });
     }
 
-    _scrollController.addListener(() {});
+//    _scrollController.addListener(() {});
   }
 
   _getMessageList() {
@@ -74,6 +74,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    Timer(Duration(milliseconds: 100), () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent));
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("客服消息"),
@@ -83,7 +84,7 @@ class _ChatPageState extends State<ChatPage> {
         children: <Widget>[
           new Flexible(
             child: SmartRefresher(
-              enablePullDown: true,
+              enablePullDown: false,
               enablePullUp: false,
               header: ClassicHeader(
                   refreshingText: "刷新中",
