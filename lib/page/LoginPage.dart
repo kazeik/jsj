@@ -52,9 +52,6 @@ class _LoginPageState extends State<LoginPage>
     super.initState();
     if (Platform.isIOS) jpush.setBadge(0);
     jpush.clearAllNotifications();
-    jpush.applyPushAuthority(
-        new NotificationSettingsIOS(sound: true, alert: true, badge: true));
-    jpush.resumePush();
     controller =
         TabController(initialIndex: 0, length: tabs.length, vsync: this);
 

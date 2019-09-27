@@ -1,7 +1,6 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:jsj/model/BaseModel.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealPage.dart';
@@ -11,9 +10,7 @@ import 'package:jsj/page/PropertyPage.dart';
 import 'package:jsj/page/UserPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
-import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:quiver/strings.dart';
-import 'package:dio/dio.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -57,6 +54,9 @@ class _MainPageState extends State<MainPage> {
         channel: "developer-default",
         production: true,
         debug: true);
+    jpush.applyPushAuthority(
+        new NotificationSettingsIOS(sound: true, alert: true, badge: true));
+    jpush.resumePush();
     jpush.getRegistrationID().then((str) {
       Utils.logs("注册id = $str");
       if (isNotEmpty(str)) {
