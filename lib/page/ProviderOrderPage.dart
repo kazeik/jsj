@@ -27,7 +27,7 @@ class ProviderOrderPage extends StatefulWidget {
 
 class _ProviderOrderPageState extends State<ProviderOrderPage> {
   List<OrderDataModel> allItems = new List();
-  String buyMoney = "0";
+  String buyMoney = "";
 
   @override
   void initState() {
@@ -105,7 +105,7 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
                         onPressed: () {
                           Navigator.of(_context).pop();
                           _providerSureCoin(dataModel?.id,
-                              buyMoney ?? dataModel?.real_amount);
+                              isEmpty(buyMoney) ? dataModel?.real_amount : buyMoney);
                         },
                         child: new Text("确定"),
                       ),
