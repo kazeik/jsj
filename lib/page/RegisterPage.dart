@@ -27,10 +27,13 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String _rPhone = "";
-  String _rPass = "";
-  String _rSubPass = "";
-  String _rInvateCode = "";
+  String _rPhone;
+
+  String _rPass;
+
+  String _rSubPass;
+
+  String _rInvateCode;
 
   _register() {
     if (isEmpty(_rPhone)) {
@@ -88,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: new MainInput(
                 hint: "手机号",
                 iconPath: "username",
-                isPass: false,
+                defaultStr: _rPhone,
                 callback: (str) {
                   _rPhone = str;
                 },
@@ -99,6 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
               hint: "登录密码",
               iconPath: "password",
               isPass: true,
+              defaultStr: _rPass,
               callback: (str) {
                 _rPass = str;
               },
@@ -107,6 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
               hint: "再次输入密码",
               iconPath: "password",
               isPass: true,
+              defaultStr: _rSubPass,
               callback: (str) {
                 _rSubPass = str;
               },
@@ -114,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
             new MainInput(
               hint: "邀请码",
               iconPath: "invaite",
-              isPass: false,
+              defaultStr: _rInvateCode,
               callback: (str) {
                 _rInvateCode = str;
               },
