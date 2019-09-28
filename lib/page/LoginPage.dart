@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:jsj/model/HomeDataModel.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:jsj/model/SmsModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
@@ -17,7 +17,6 @@ import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/MainInput.dart';
 import 'package:quiver/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:jpush_flutter/jpush_flutter.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -140,9 +139,7 @@ class _LoginPageState extends State<LoginPage>
       if (null == imgbyte) {
         Utils.showToast("图片获取失败");
       }
-      setState(() {
-//        this._imgbytes = imgbyte;
-      });
+      if (mounted) setState(() {});
     } on Error catch (e) {
       Utils.showToast("图片获取失败1 $e");
       Utils.logs("$e");
@@ -269,30 +266,31 @@ class _LoginPageState extends State<LoginPage>
   Timer _countdownTimer;
   String _codeCountdownStr = '获取验证码';
   int _countdownNum = 59;
-
   void reGetCountdown() {
-    setState(() {
-      if (_countdownTimer != null) {
-        return;
-      }
-      // Timer的第一秒倒计时是有一点延迟的，为了立刻显示效果可以添加下一行。
-      _codeCountdownStr = '${_countdownNum--}秒重新获取';
-      _countdownTimer = new Timer.periodic(new Duration(seconds: 1), (timer) {
-        setState(() {
-          if (_countdownNum > 0) {
-            _codeCountdownStr = '${_countdownNum--}秒重新获取';
-          } else {
-            _codeCountdownStr = '获取验证码';
-            _countdownNum = 59;
-            _countdownTimer.cancel();
-            _countdownTimer = null;
-            setState(() {
-              sms = false;
-            });
-          }
+    if (mounted) {
+      setState(() {
+        if (_countdownTimer != null) {
+          return;
+        }
+        // Timer的第一秒倒计时是有一点延迟的，为了立刻显示效果可以添加下一行。
+        _codeCountdownStr = '${_countdownNum--}秒重新获取';
+        _countdownTimer = new Timer.periodic(new Duration(seconds: 1), (timer) {
+          setState(() {
+            if (_countdownNum > 0) {
+              _codeCountdownStr = '${_countdownNum--}秒重新获取';
+            } else {
+              _codeCountdownStr = '获取验证码';
+              _countdownNum = 59;
+              _countdownTimer.cancel();
+              _countdownTimer = null;
+              setState(() {
+                sms = false;
+              });
+            }
+          });
         });
       });
-    });
+    }
   }
 
   @override
@@ -336,12 +334,14 @@ class _LoginPageState extends State<LoginPage>
                         value: isSave == null ? false : isSave,
                         onChanged: (flag) {
                           isSave = flag;
+                          if (mounted)
                           setState(() {});
                         }),
                   ),
                   new InkWell(
                     onTap: () {
                       this.isSave = !isSave;
+                      if (mounted)
                       setState(() {});
                     },
                     child: new Text(
@@ -384,7 +384,6 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 InkWell(
                   onTap: () {
-//                          _getVerfiyCodeImg();
                     if (!sms) {
                       sms = true;
                       _getsms();
@@ -396,72 +395,9 @@ class _LoginPageState extends State<LoginPage>
                     style: TextStyle(fontSize: 13),
                   ),
                 )
-//                new Expanded(
-//                  child: new GestureDetector(
-//                      onTap: () {
-//                        _getVerfiyCodeImg();
-//                      },
-//                    child: _imgbytes == null
-//                        ? new InkWell(
-//                            onTap: () {
-//                              _getVerfiyCodeImg();
-//                            },
-//                            child: new Text(
-//                              "获取验证码",
-//                              style: TextStyle(fontSize: 13),
-//                            ),
-//                          )
-//                        : Image.memory(
-//                            _imgbytes,
-//                            height: 50,
-//                          ),
-//                  flex: 1,
-//                ),
               ],
             ),
           ),
-//          Row(
-//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//            mainAxisSize: MainAxisSize.max,
-//            children: <Widget>[
-//              new Row(
-//                children: <Widget>[
-//                  new Checkbox(
-//                      value: isSave == null ? false : isSave,
-//                      onChanged: (flag) {
-//                        isSave = flag;
-//                        setState(() {});
-//                      }),
-//                  new InkWell(
-//                    onTap: () {
-//                      this.isSave = !isSave;
-//                      setState(() {});
-//                    },
-//                    child: new Text(
-//                      "记住密码",
-//                      style: new TextStyle(fontSize: 13),
-//                    ),
-//                  )
-//                ],
-//              ),
-//              new GestureDetector(
-//                onTap: () {
-//                  Navigator.of(context)
-//                      .push(new MaterialPageRoute(builder: (_) {
-//                    return new RegisterPage();
-//                  }));
-//                },
-//                child: new Container(
-//                  alignment: Alignment.centerRight,
-//                  padding: EdgeInsets.only(right: 20),
-//                  child: new Text(
-//                    "用户注册",
-//                    style: TextStyle(color: Colors.blue),
-//                  ),
-//                ),
-////              )
-////            ],
-//          ),
         ],
       ),
     );

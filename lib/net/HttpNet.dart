@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
@@ -47,7 +48,7 @@ class HttpNet {
       dynamic data,
       HashMap<String, dynamic> headers}) {
     if (headers == null) headers = new HashMap();
-    headers['Cookie'] = "${ApiUtils.cookieKey}=${ApiUtils.cookieValue}";
+//    headers['Cookie'] = "${ApiUtils.cookieKey}=${ApiUtils.cookieValue}";
     var options = new Options(headers: headers);
 
     Future<Response<String>> sValue;
@@ -97,4 +98,5 @@ class HttpNet {
       }
     });
   }
+
 }

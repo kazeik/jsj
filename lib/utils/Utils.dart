@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jsj/page/LoginPage.dart';
+import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/views/LoadingDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quiver/strings.dart';
@@ -75,11 +76,14 @@ class Utils {
   }
 
   static relogin(BuildContext context) {
-    if (isRelogin) return;
-    Navigator.of(context).push(
-      new MaterialPageRoute(builder: (_) {
-        return new LoginPage();
-      }),
+    ApiUtils.loginData = null;
+    ApiUtils.cookieKey = null;
+    ApiUtils.cookieValue = null;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (BuildContext context) => new LoginPage()),
+      ModalRoute.withName('/'),
     );
   }
 
