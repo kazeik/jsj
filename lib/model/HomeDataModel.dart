@@ -38,6 +38,9 @@ class HomeDataModel {
   String invite_code;
   String invite_id;
 
+  String z_alipay_account;
+  String z_alipay_password;
+
   /*
    * 是否为供应商 0 1
    */
@@ -90,7 +93,9 @@ class HomeDataModel {
       this.create_time,
       this.has_bank,
       this.id,
-        this.avatar,
+      this.avatar,
+      this.z_alipay_account,
+      this.z_alipay_password,
       this.invite_code,
       this.invite_id,
       this.is_service,
@@ -116,6 +121,8 @@ class HomeDataModel {
       create_time: json['create_time'],
       has_bank: json['has_bank'],
       id: json['id'],
+      z_alipay_password: json['z_alipay_password'],
+      z_alipay_account: json['z_alipay_account'],
       invite_code: json['invite_code'],
       invite_id: json['invite_id'],
       is_service: json['is_service'],

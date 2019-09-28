@@ -10,6 +10,8 @@ import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
+import 'package:quiver/strings.dart';
+
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
  * 2019-09-03 14:08
@@ -25,6 +27,8 @@ class _AlipayPageState extends State<AlipayPage>
     with SingleTickerProviderStateMixin {
   String account;
   String pass;
+  String zaccount;
+  String zpass;
   TabController controller;
   List<Tab> tabs = new List<Tab>()
     ..add(new Tab(text: "支付宝"))
@@ -36,8 +40,8 @@ class _AlipayPageState extends State<AlipayPage>
       map["alipay_password"] = pass;
       map["alipay_account"] = account;
     } else {
-      map["z_alipay_password"] = pass;
-      map["z_alipay_account"] = account;
+      map["z_alipay_password"] = zpass;
+      map["z_alipay_account"] = zaccount;
     }
     map["type"] = controller.index;
 
@@ -49,15 +53,24 @@ class _AlipayPageState extends State<AlipayPage>
         Utils.showToast("绑定成功");
         _getHomeData();
       }
+    }, () {
+      Utils.relogin(context);
     }, data: formData);
   }
 
   _getHomeData() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
-      HomeModel model = HomeModel.fromJson(jsonDecode(str));
-      ApiUtils.loginData = model.data;
-      setState(() {});
-    });
+    HttpNet.instance.request(
+      MethodTypes.GET,
+      ApiUtils.get_homePage,
+      (str) {
+        HomeModel model = HomeModel.fromJson(jsonDecode(str));
+        ApiUtils.loginData = model.data;
+        setState(() {});
+      },
+      () {
+        Utils.relogin(context);
+      },
+    );
   }
 
   @override
@@ -69,6 +82,8 @@ class _AlipayPageState extends State<AlipayPage>
 
     account = ApiUtils.loginData?.alipay_account;
     pass = ApiUtils.loginData?.alipay_password;
+    zaccount = ApiUtils.loginData?.z_alipay_account;
+    zpass = ApiUtils.loginData?.z_alipay_password;
   }
 
   @override
@@ -85,71 +100,6 @@ class _AlipayPageState extends State<AlipayPage>
         brightness: Brightness.light,
         elevation: 0,
       ),
-//      body: new Container(
-//        color: Colors.white,
-//        child: new ListView(
-//          children: <Widget>[
-//            new Container(
-//              margin: EdgeInsets.all(15),
-//              child: new Text("请注册并填入店员支付宝帐号及密码"),
-//            ),
-//            _buildInput("帐号", "username", false, account, (str) {
-//              account = str;
-//            }),
-//            _buildInput("密码", "password", true, pass, (str) {
-//              pass = str;
-//            }),
-//            new Container(
-//              margin: EdgeInsets.only(left: 10, right: 10),
-//              child: new Row(
-//                children: <Widget>[
-//                  new Expanded(
-//                    child: new Container(
-//                      margin: EdgeInsets.all(5),
-//                      child: new FlatButton(
-//                        onPressed: () {
-//                          _bindAlipay();
-//                        },
-//                        child: new Text("修改"),
-//                        color: Colors.blue,
-//                        textColor: Colors.white,
-//                      ),
-//                    ),
-//                    flex: 1,
-//                  ),
-//                  new Expanded(
-//                    child: new Container(
-//                      margin: EdgeInsets.all(5),
-//                      child: new FlatButton(
-//                        onPressed: () {
-//                          _bindAlipay();
-//                        },
-//                        child: new Text("保存"),
-//                        color: Colors.blue,
-//                        textColor: Colors.white,
-//                      ),
-//                    ),
-//                    flex: 1,
-//                  ),
-//                ],
-//                mainAxisSize: MainAxisSize.max,
-//                mainAxisAlignment: MainAxisAlignment.spaceAround,
-//              ),
-//            ),
-////            new Container(
-////              margin: EdgeInsets.only(top: 15),
-////              color: Colors.white,
-////              width: double.infinity,
-////              alignment: Alignment.center,
-////              child: new Text(
-////                "店员支付宝帐号设置教程",
-////                style: new TextStyle(color: Colors.blue),
-////              ),
-////            )
-//          ],
-//        ),
-//      ),
-
       body: new Container(
         color: Colors.white,
         child: new Column(
@@ -230,16 +180,6 @@ class _AlipayPageState extends State<AlipayPage>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
               ),
             ),
-//            new Container(
-//              margin: EdgeInsets.only(top: 15),
-//              color: Colors.white,
-//              width: double.infinity,
-//              alignment: Alignment.center,
-//              child: new Text(
-//                "店员支付宝帐号设置教程",
-//                style: new TextStyle(color: Colors.blue),
-//              ),
-//            )
           ],
         ),
       ),
@@ -254,13 +194,12 @@ class _AlipayPageState extends State<AlipayPage>
               margin: EdgeInsets.all(15),
               child: new Text("请注册并填入中银来聚财账号及密码"),
             ),
-            _buildInput("帐号", "username", false, account, (str) {
-              account = str;
+            _buildInput("帐号", "username", false, zaccount, (str) {
+              zaccount = str;
             }),
-            _buildInput("密码", "password", true, pass, (str) {
-              pass = str;
+            _buildInput("密码", "password", true, zpass, (str) {
+              zaccount = str;
             }),
-
             new Container(
               margin: EdgeInsets.only(top: 5, right: 15, left: 15),
               child: new FlatButton(
@@ -272,53 +211,6 @@ class _AlipayPageState extends State<AlipayPage>
                 textColor: Colors.white,
               ),
             )
-//            new Container(
-//              margin: EdgeInsets.only(left: 10, right: 10),
-//              child: new Row(
-//                children: <Widget>[
-//                  new Expanded(
-//                    child: new Container(
-//                      margin: EdgeInsets.all(5),
-//                      child: new FlatButton(
-//                        onPressed: () {
-//                          _bindAlipay();
-//                        },
-//                        child: new Text("修改"),
-//                        color: Colors.blue,
-//                        textColor: Colors.white,
-//                      ),
-//                    ),
-//                    flex: 1,
-//                  ),
-//                  new Expanded(
-//                    child: new Container(
-//                      margin: EdgeInsets.all(5),
-//                      child: new FlatButton(
-//                        onPressed: () {
-//                          _bindAlipay();
-//                        },
-//                        child: new Text("保存"),
-//                        color: Colors.blue,
-//                        textColor: Colors.white,
-//                      ),
-//                    ),
-//                    flex: 1,
-//                  ),
-//                ],
-//                mainAxisSize: MainAxisSize.max,
-//                mainAxisAlignment: MainAxisAlignment.spaceAround,
-//              ),
-//            ),
-//            new Container(
-//              margin: EdgeInsets.only(top: 15),
-//              color: Colors.white,
-//              width: double.infinity,
-//              alignment: Alignment.center,
-//              child: new Text(
-//                "店员支付宝帐号设置教程",
-//                style: new TextStyle(color: Colors.blue),
-//              ),
-//            )
           ],
         ),
       ),
@@ -328,6 +220,7 @@ class _AlipayPageState extends State<AlipayPage>
 
   Widget _buildInput(String hint, String iconPath, bool isPass,
       String defaultStr, Function(String) callback) {
+    Utils.logs("defaultStr = $defaultStr");
     return new Container(
       child: new TextField(
         decoration: new InputDecoration(
@@ -352,11 +245,12 @@ class _AlipayPageState extends State<AlipayPage>
         controller: TextEditingController.fromValue(
           TextEditingValue(
             // 设置内容
-            text: defaultStr,
+            text: isEmpty(defaultStr) ? "" : defaultStr,
             // 保持光标在最后
             selection: TextSelection.fromPosition(
               TextPosition(
-                  affinity: TextAffinity.downstream, offset: defaultStr.length),
+                  affinity: TextAffinity.downstream,
+                  offset: isEmpty(defaultStr) ? 0 : defaultStr.length),
             ),
           ),
         ),

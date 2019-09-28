@@ -1,7 +1,9 @@
 import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/model/HomeDataModel.dart';
 
-class HomeModel extends BaseModel {
+class HomeModel {
+  String msg;
+  int status;
   HomeDataModel data;
   HomeModel({this.data}) : super();
 
