@@ -37,6 +37,8 @@ class _DealPayPageState extends State<DealPayPage> {
   SaleOrderModel model;
   bool isSure = false;
 
+  bool isSendDeal = false;
+
   FocusNode _contentFocusNode = FocusNode();
 
   @override
@@ -231,6 +233,8 @@ class _DealPayPageState extends State<DealPayPage> {
                     EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
                 child: new FlatButton(
                   onPressed: () {
+                    if (isSendDeal) return;
+                    isSendDeal = true;
                     if (!isSale) {
                       sellController.text = _sellMoney;
                       _sellCoin();
@@ -269,7 +273,7 @@ class _DealPayPageState extends State<DealPayPage> {
       }
     }, () {
       Utils.relogin(context);
-    },data: formData);
+    }, data: formData);
   }
 
   _sellCoin() {
@@ -293,47 +297,55 @@ class _DealPayPageState extends State<DealPayPage> {
       } else {
         Utils.showToast(model.msg);
       }
-    },() {
+    }, () {
       Utils.relogin(context);
     }, data: formData);
   }
 
   _getCurrentOrder() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processSaleOrder,
-        (str) {
-      model = SaleOrderModel.fromJson(jsonDecode(str));
-      if (model?.data == null) {
-        isDeal = false;
-        orderId = "";
-      } else {
-        orderId = model?.data?.id;
-        if (isNotEmpty(orderId)) {
-          isDeal = true;
-        }
-        if (model.data?.status == "2") {
+    HttpNet.instance.request(
+      MethodTypes.GET,
+      ApiUtils.get_processSaleOrder,
+      (str) {
+        model = SaleOrderModel.fromJson(jsonDecode(str));
+        if (model?.data == null) {
           isDeal = false;
           orderId = "";
-        } else if (model.data?.status == "1") {
-          _getProcessBuyCoinInfo();
-        } else if (model.data?.status == "0") {
-          isSale = true;
+        } else {
+          orderId = model?.data?.id;
+          if (isNotEmpty(orderId)) {
+            isDeal = true;
+          }
+          if (model.data?.status == "2") {
+            isDeal = false;
+            orderId = "";
+          } else if (model.data?.status == "1") {
+            _getProcessBuyCoinInfo();
+          } else if (model.data?.status == "0") {
+            isSale = true;
+          }
         }
-      }
-      setState(() {});
-    },() {
+        setState(() {});
+      },
+      () {
         Utils.relogin(context);
-      },);
+      },
+    );
   }
 
   _getProcessBuyCoinInfo() {
     HashMap<String, Object> params = new HashMap();
     params['id'] = orderId;
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processBuyCoinInfo,
-        (str) {
-      _bankDataModel = BankDataModel.fromJson(jsonDecode(str));
-      setState(() {});
-    },() {
+    HttpNet.instance.request(
+      MethodTypes.GET,
+      ApiUtils.get_processBuyCoinInfo,
+      (str) {
+        _bankDataModel = BankDataModel.fromJson(jsonDecode(str));
+        setState(() {});
+      },
+      () {
         Utils.relogin(context);
-      },);
+      },
+    );
   }
 }

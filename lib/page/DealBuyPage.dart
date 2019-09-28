@@ -41,7 +41,7 @@ class _DealBuyPageState extends State<DealBuyPage> {
   bool isDeal = false;
 
   bool isSure = false;
-
+  bool isSendDeal = false;
   FocusNode _contentFocusNode = FocusNode();
 
   @override
@@ -52,46 +52,59 @@ class _DealBuyPageState extends State<DealBuyPage> {
   }
 
   _getServiceList() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_service, (str) {
-      serviceListModel = ServiceListModel.fromJson(jsonDecode(str));
-      setState(() {});
-    },() {
-      Utils.relogin(context);
-    },);
+    HttpNet.instance.request(
+      MethodTypes.GET,
+      ApiUtils.get_service,
+      (str) {
+        serviceListModel = ServiceListModel.fromJson(jsonDecode(str));
+        setState(() {});
+      },
+      () {
+        Utils.relogin(context);
+      },
+    );
   }
 
   _getCurrentOrder() {
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processbuycoin,
-        (str) {
-      model = BuyCoinModel.fromJson(jsonDecode(str));
-      if (null != model && null != model.data) {
-        orderId = model?.data?.id;
-        if (isNotEmpty(orderId)) {
-          isDeal = true;
+    HttpNet.instance.request(
+      MethodTypes.GET,
+      ApiUtils.get_processbuycoin,
+      (str) {
+        model = BuyCoinModel.fromJson(jsonDecode(str));
+        if (null != model && null != model.data) {
+          orderId = model?.data?.id;
+          if (isNotEmpty(orderId)) {
+            isDeal = true;
+          }
+          if (model.data?.status == "2") {
+            isDeal = false;
+            orderId = "";
+          } else if (model.data?.status == "1") {
+            _getProcessBuyCoinInfo();
+          }
+          setState(() {});
         }
-        if (model.data?.status == "2") {
-          isDeal = false;
-          orderId = "";
-        } else if (model.data?.status == "1") {
-          _getProcessBuyCoinInfo();
-        }
-        setState(() {});
-      }
-    },() {
+      },
+      () {
         Utils.relogin(context);
-      },);
+      },
+    );
   }
 
   _getProcessBuyCoinInfo() {
     HashMap<String, Object> params = new HashMap();
     params['id'] = orderId;
-    HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_processBuyCoinInfo,
-        (str) {
-      _bankDataModel = BankDataModel.fromJson(jsonDecode(str));
-      setState(() {});
-    },() {
+    HttpNet.instance.request(
+      MethodTypes.GET,
+      ApiUtils.get_processBuyCoinInfo,
+      (str) {
+        _bankDataModel = BankDataModel.fromJson(jsonDecode(str));
+        setState(() {});
+      },
+      () {
         Utils.relogin(context);
-      },);
+      },
+    );
   }
 
   @override
@@ -281,9 +294,8 @@ class _DealBuyPageState extends State<DealBuyPage> {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_paycoin, (str) {
       isSure = true;
       setState(() {});
-    },() {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          '/loginPage', ModalRoute.withName("/loginPage"));
+    }, () {
+      Utils.relogin(context);
     }, params: params);
   }
 
@@ -293,6 +305,8 @@ class _DealBuyPageState extends State<DealBuyPage> {
         margin: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
         child: new FlatButton(
           onPressed: () {
+            if (isSendDeal) return;
+            isSendDeal = true;
             _buyCoin();
           },
           color: Colors.blue,
@@ -363,9 +377,8 @@ class _DealBuyPageState extends State<DealBuyPage> {
         isDeal = false;
         setState(() {});
       }
-    },() {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          '/loginPage', ModalRoute.withName("/loginPage"));
+    }, () {
+      Utils.relogin(context);
     }, params: params);
   }
 
@@ -380,9 +393,8 @@ class _DealBuyPageState extends State<DealBuyPage> {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
       _getCurrentOrder();
-    },() {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          '/loginPage', ModalRoute.withName("/loginPage"));
+    }, () {
+      Utils.relogin(context);
     }, data: formData);
   }
 
