@@ -8,6 +8,7 @@ import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/ChangeAccountPage.dart';
 import 'package:jsj/page/MessagePage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
 
 /**
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -100,10 +101,14 @@ class _SettingPageState extends State<SettingPage> {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       if (model.status == 200) {
         ApiUtils.loginData = null;
+        ApiUtils.cookieKey = null;
+        ApiUtils.cookieValue = null;
 
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/loginPage', ModalRoute.withName("/loginPage"));
       }
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 }

@@ -54,7 +54,9 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
           return;
         }
         setState(() {});
-      },
+      },() {
+      Utils.relogin(context);
+    },
       params: params,
     );
   }
@@ -194,13 +196,12 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_upload_img, (str) {
       UploadFileModel model = UploadFileModel.fromJson(jsonDecode(str));
       if (model != null) {
-        Utils.showToast("上传成功");
-//        _goOtherPage(
-//            model.file_info?.file_path, selectOrder.amount, selectOrder.id);
         _sureMoney(selectOrder.amount, selectOrder.id,
             image: model?.file_info?.file_path);
       }
-    }, data: formData);
+    }, () {
+      Utils.relogin(context);
+    },data: formData);
   }
 
   _goOtherPage(String filePath, String amount, String orderId) async {
@@ -234,6 +235,8 @@ class _ProviderOrderingPageState extends State<ProviderOrderingPage> {
 //        setState(() {});
         _getOrderListByStatus();
       }
-    }, data: formData);
+    },() {
+          Utils.relogin(context);
+        }, data: formData);
   }
 }

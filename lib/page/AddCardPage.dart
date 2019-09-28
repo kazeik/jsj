@@ -84,6 +84,8 @@ class _AddCardPageState extends State<AddCardPage> {
       } else {
         Utils.showToast("操作失败，请重试");
       }
+    },() {
+      Utils.relogin(context);
     }, data: new FormData.fromMap(map));
   }
 

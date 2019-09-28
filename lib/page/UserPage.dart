@@ -302,7 +302,10 @@ class _UserPageState extends State<UserPage> {
         if (model != null) {
           _uploadUserAvatar(model.file_info.file_path);
         }
-      },
+      },() {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/loginPage', ModalRoute.withName("/loginPage"));
+    },
       data: new FormData.fromMap({
         "file": await MultipartFile.fromFile(avatar.path),
       }),
@@ -319,7 +322,10 @@ class _UserPageState extends State<UserPage> {
           Utils.showToast("上传成功");
           _getHomeData();
         }
-      },
+      },() {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/loginPage', ModalRoute.withName("/loginPage"));
+    },
       data: new FormData.fromMap({
         "avatar": avatarPath,
       }),
@@ -349,7 +355,9 @@ class _UserPageState extends State<UserPage> {
       HomeModel model = HomeModel.fromJson(jsonDecode(str));
       ApiUtils.loginData = model.data;
       setState(() {});
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   Widget _buildInfo(String title, String status) {
@@ -533,6 +541,8 @@ class _UserPageState extends State<UserPage> {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/loginPage', ModalRoute.withName("/loginPage"));
       }
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 }

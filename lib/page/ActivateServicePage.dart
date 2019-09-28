@@ -197,6 +197,8 @@ class _activateServicePageState extends State<ActivateServicePage> {
       } else {
         Utils.showToast(model.msg);
       }
-    }, data: formData);
+    },() {
+          Utils.relogin(context);
+        }, data: formData);
   }
 }

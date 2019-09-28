@@ -231,7 +231,9 @@ class _ShatePageState extends State<SharePage> {
       HomeModel model = HomeModel.fromJson(jsonDecode(str));
       ApiUtils.loginData = model.data;
       setState(() {});
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   @override

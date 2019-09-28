@@ -152,6 +152,8 @@ class _WithDrawPageState extends State<WithDrawPage> {
       } else {
         Utils.showToast(model.msg);
       }
+    }, () {
+      Utils.relogin(context);
     }, data: formData);
   }
 }

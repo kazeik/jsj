@@ -149,6 +149,8 @@ class _WaitOutPageState extends State<WaitOutPage> {
           }),
         );
       }
-    }, data: formData);
+    },() {
+          Utils.relogin(context);
+        }, data: formData);
   }
 }

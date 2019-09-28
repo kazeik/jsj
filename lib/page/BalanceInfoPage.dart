@@ -9,6 +9,7 @@ import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/BalanceExpendPage.dart';
 import 'package:jsj/page/BalanceIncommPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
 
 import 'BalanceAllPage.dart';
 
@@ -113,6 +114,8 @@ class _BalanceInfoPageState extends State<BalanceInfoPage>
       setState(() {
 
       });
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 }

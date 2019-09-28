@@ -30,6 +30,7 @@ class HttpNet {
   }
 
   _initDio() {
+    CancelToken token = new CancelToken();
     dio = new Dio();
     dio.options.connectTimeout = 15 * 1000;
     dio.options.receiveTimeout = 15 * 1000;
@@ -40,6 +41,7 @@ class HttpNet {
   }
 
   request(MethodTypes methodTypes, String path, Function(String) success,
+      Function relogin,
       {HashMap<String, dynamic> params,
       Function(String) errorCallback,
       dynamic data,
@@ -64,16 +66,17 @@ class HttpNet {
 
     sValue.then((value) {
       if (path != ApiUtils.post_upload_img && path != ApiUtils.post_sendsms) {
-//        if (path == ApiUtils.post_login) {
-//          Utils.logs("headers = ${value.headers.toString()}");
-//        }
+        BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
         if (value != null && isNotEmpty(value.data)) {
-          BaseModel model = BaseModel.fromJson(jsonDecode(value.data));
           if (model.status == 200) {
             success(value.data);
+          } else if (model.status == 302) {
+            relogin();
           } else {
             Utils.showToast(model.msg);
           }
+        } else {
+          errorCallback("");
         }
       } else {
         success(value.data);

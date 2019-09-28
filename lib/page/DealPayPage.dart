@@ -267,7 +267,9 @@ class _DealPayPageState extends State<DealPayPage> {
         isSale = false;
         _getCurrentOrder();
       }
-    }, data: formData);
+    }, () {
+      Utils.relogin(context);
+    },data: formData);
   }
 
   _sellCoin() {
@@ -291,6 +293,8 @@ class _DealPayPageState extends State<DealPayPage> {
       } else {
         Utils.showToast(model.msg);
       }
+    },() {
+      Utils.relogin(context);
     }, data: formData);
   }
 
@@ -316,7 +320,9 @@ class _DealPayPageState extends State<DealPayPage> {
         }
       }
       setState(() {});
-    });
+    },() {
+        Utils.relogin(context);
+      },);
   }
 
   _getProcessBuyCoinInfo() {
@@ -326,6 +332,8 @@ class _DealPayPageState extends State<DealPayPage> {
         (str) {
       _bankDataModel = BankDataModel.fromJson(jsonDecode(str));
       setState(() {});
-    });
+    },() {
+        Utils.relogin(context);
+      },);
   }
 }

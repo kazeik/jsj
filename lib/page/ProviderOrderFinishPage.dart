@@ -8,6 +8,7 @@ import 'package:jsj/model/OrderModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
 import 'package:quiver/strings.dart';
 
 /*
@@ -41,7 +42,9 @@ class _ProviderOrderFinishPageState extends State<ProviderOrderFinishPage> {
         allItems.clear();
         allItems.addAll(model.data);
         setState(() {});
-      },
+      },() {
+      Utils.relogin(context);
+    },
       params: params,
     );
   }

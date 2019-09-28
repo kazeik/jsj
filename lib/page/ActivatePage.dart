@@ -6,6 +6,7 @@ import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/AlipayPage.dart';
+import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/MainInput.dart';
@@ -83,6 +84,8 @@ class _activatePageState extends State<ActivatePage> {
       } else {
         Utils.showToast(model.msg);
       }
+    }, () {
+      Utils.relogin(context);
     });
   }
 }

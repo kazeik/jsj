@@ -73,6 +73,9 @@ class _RegisterPageState extends State<RegisterPage> {
           widget.tabController.index = 0;
         }
       }
+    },() {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/loginPage', ModalRoute.withName("/loginPage"));
     }, data: formData);
   }
 

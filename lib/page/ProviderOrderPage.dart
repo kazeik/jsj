@@ -44,7 +44,9 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
         OrderModel model = OrderModel.fromJson(jsonDecode(str));
         allItems.addAll(model.data);
         setState(() {});
-      },
+      },() {
+      Utils.relogin(context);
+    },
     );
   }
 
@@ -194,7 +196,9 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
       if (model.status == 200) {
         _getOrderList();
       }
-    }, params: params);
+    }, () {
+      Utils.relogin(context);
+    },params: params);
   }
 
   _userSureCoin(String id) {
@@ -205,6 +209,8 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
       if (model.status == 200) {
         Utils.showToast("交易成功");
       }
+    },() {
+      Utils.relogin(context);
     }, params: params);
   }
 
@@ -219,6 +225,8 @@ class _ProviderOrderPageState extends State<ProviderOrderPage> {
       if (model.status == 200) {
         _getOrderList();
       }
+    },() {
+      Utils.relogin(context);
     }, data: formData);
   }
 }

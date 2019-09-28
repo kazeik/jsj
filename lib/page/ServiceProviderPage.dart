@@ -45,7 +45,9 @@ class _ServiceProviderPageState extends State<ServiceProviderPage>
       HomeModel model = HomeModel.fromJson(jsonDecode(str));
       ApiUtils.loginData = model.data;
       setState(() {});
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   @override

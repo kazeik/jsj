@@ -69,7 +69,9 @@ class _ChatPageState extends State<ChatPage> {
       _messages.clear();
       _messages.addAll(model.data);
       setState(() {});
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   @override
@@ -182,6 +184,8 @@ class _ChatPageState extends State<ChatPage> {
         Utils.showToast("上传成功");
         _submitFile(model.file_info.file_path);
       }
+    },() {
+      Utils.relogin(context);
     }, data: formData);
   }
 
@@ -191,7 +195,9 @@ class _ChatPageState extends State<ChatPage> {
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_sendmsg, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       if (model.status == 200) {}
-    }, data: formData);
+    }, () {
+      Utils.relogin(context);
+    },data: formData);
   }
 
   List<Widget> _getWidgetList() {
@@ -476,7 +482,9 @@ class _ChatPageState extends State<ChatPage> {
       if (model.status == 200) {
         _textController.clear();
       }
-    }, data: formData);
+    }, () {
+      Utils.relogin(context);
+    },data: formData);
   }
 
   Widget _buildTextComposer() {

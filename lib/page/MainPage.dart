@@ -38,14 +38,14 @@ class _MainPageState extends State<MainPage> {
     _openNotification();
     _startupPush();
 
-    DateTime time = DateTime(2019, 10, 15, 23, 59, 59);
-    DateTime nowTime = DateTime.now();
-    if (nowTime.isAfter(time)) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          new MaterialPageRoute(builder: (context) => new LoginPage()),
-          (route) => route == null);
-    }
+//    DateTime time = DateTime(2019, 10, 15, 23, 59, 59);
+//    DateTime nowTime = DateTime.now();
+//    if (nowTime.isAfter(time)) {
+//      Navigator.pushAndRemoveUntil(
+//          context,
+//          new MaterialPageRoute(builder: (context) => new LoginPage()),
+//          (route) => route == null);
+//    }
   }
 
   void _startupPush() async {
@@ -64,7 +64,10 @@ class _MainPageState extends State<MainPage> {
         Utils.logs("开始注册推送");
         FormData formData = new FormData.fromMap({"alias": str});
         HttpNet.instance.request(
-            MethodTypes.POST, ApiUtils.post_alias, (str) {},
+            MethodTypes.POST, ApiUtils.post_alias, (str) {},() {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              '/loginPage', ModalRoute.withName("/loginPage"));
+        },
             data: formData);
       }
     });

@@ -8,6 +8,7 @@ import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
 import 'package:quiver/strings.dart';
 
 /*
@@ -39,10 +40,10 @@ class _PropertyPageState extends State<PropertyPage> {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_homePage, (str) {
       HomeModel model = HomeModel.fromJson(jsonDecode(str));
       ApiUtils.loginData = model.data;
-      setState(() {
-
-      });
-    });
+      setState(() { });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   _getLastMoney() {
@@ -57,7 +58,9 @@ class _PropertyPageState extends State<PropertyPage> {
         }
       });
       setState(() {});
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   @override
@@ -88,9 +91,9 @@ class _PropertyPageState extends State<PropertyPage> {
                     child: new Column(
                       children: <Widget>[
                         new Text(
-                          isEmpty(ApiUtils.loginData.balance)
+                          isEmpty(ApiUtils.loginData?.balance)
                               ? "0.00"
-                              : ApiUtils.loginData.balance,
+                              : ApiUtils.loginData?.balance,
                           style: new TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18.0),
                         ),
@@ -106,9 +109,9 @@ class _PropertyPageState extends State<PropertyPage> {
                     child: new Column(
                       children: <Widget>[
                         new Text(
-                          isEmpty(ApiUtils.loginData.lock_balance)
+                          isEmpty(ApiUtils.loginData?.lock_balance)
                               ? "0.00"
-                              : ApiUtils.loginData.lock_balance,
+                              : ApiUtils.loginData?.lock_balance,
                           style: new TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18.0),
                         ),

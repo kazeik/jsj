@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/views/LoadingDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quiver/strings.dart';
@@ -14,6 +15,7 @@ import 'package:quiver/strings.dart';
 class Utils {
   static String cookie;
   static bool isDebug = true;
+  static bool isRelogin = false;
 
   static String getImgPath(String name, {String format: 'png'}) {
     return 'assets/images/$name.$format';
@@ -70,6 +72,15 @@ class Utils {
             text: _text,
           );
         });
+  }
+
+  static relogin(BuildContext context) {
+    if (isRelogin) return;
+    Navigator.of(context).push(
+      new MaterialPageRoute(builder: (_) {
+        return new LoginPage();
+      }),
+    );
   }
 
   /*

@@ -14,6 +14,7 @@ import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/NewInfoPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
+import 'package:jsj/utils/Utils.dart';
 import 'package:jsj/views/LoadingCustomPainter.dart';
 import 'package:jsj/views/RhombusCustomPainter.dart';
 
@@ -50,7 +51,9 @@ class _HomePageState extends State<HomePage> {
       NewsModel model = NewsModel.fromJson(jsonDecode(str));
       allItems.add(model.data);
       setState(() {});
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   _getImages() {
@@ -58,7 +61,9 @@ class _HomePageState extends State<HomePage> {
       ImagesModel model = ImagesModel.fromJson(jsonDecode(str));
       allImages.addAll(model.data);
       setState(() {});
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   _getHomeData() async {
@@ -90,7 +95,9 @@ class _HomePageState extends State<HomePage> {
           }
         });
       });
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   _getBanner() {
@@ -98,7 +105,9 @@ class _HomePageState extends State<HomePage> {
       ImagesModel model = ImagesModel.fromJson(jsonDecode(str));
       allBanner.addAll(model.data);
       setState(() {});
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   @override

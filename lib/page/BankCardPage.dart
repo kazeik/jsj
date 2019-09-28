@@ -86,7 +86,9 @@ class _BankCardPageState extends State<BankCardPage> {
     HttpNet.instance.request(MethodTypes.GET, ApiUtils.get_banklist, (str) {
       model = BankListModel.fromJson(jsonDecode(str));
       setState(() {});
-    });
+    },() {
+      Utils.relogin(context);
+    },);
   }
 
   Widget _buildCard() {
@@ -171,6 +173,9 @@ class _BankCardPageState extends State<BankCardPage> {
         setState(() {});
 //        _getHomeData();
       }
+    },() {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/loginPage', ModalRoute.withName("/loginPage"));
     }, params: map);
   }
 

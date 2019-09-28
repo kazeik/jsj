@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:jsj/model/HomeDataModel.dart';
 import 'package:jsj/model/SmsModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
@@ -90,6 +91,7 @@ class _LoginPageState extends State<LoginPage>
       }
     }
 
+    Utils.loading(context);
     var map = HashMap<String, String>();
     map["phone"] = _lPhone;
     if (controller.index == 0) {
@@ -100,6 +102,7 @@ class _LoginPageState extends State<LoginPage>
 
     FormData formData = new FormData.fromMap(map);
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_login, (model) {
+      Navigator.of(context).pop();
       ApiUtils.phone = _lPhone;
       ApiUtils.pass = _lPass;
       Utils.saveInfo("phone", _lPhone);
@@ -108,10 +111,13 @@ class _LoginPageState extends State<LoginPage>
         Utils.saveInfo("pass", _lPass);
       }
       Utils.showToast("登录成功");
+      Utils.isRelogin = false;
       Navigator.pushAndRemoveUntil(
           context,
           new MaterialPageRoute(builder: (context) => new MainPage()),
           (route) => route == null);
+    }, () {
+      Utils.relogin(context);
     }, data: formData);
   }
 
@@ -147,9 +153,13 @@ class _LoginPageState extends State<LoginPage>
     FormData formData = new FormData.fromMap({
       "phone": _lPhone,
     });
+    Utils.loading(context);
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_sendsms, (data) {
+      Navigator.of(context).pop();
       SmsModel model = SmsModel.fromJson(jsonDecode(data));
       Utils.showToast(model.status == "success" ? "获取验证码成功" : "获取验证码失败");
+    }, () {
+      Utils.relogin(context);
     }, data: formData);
   }
 
@@ -251,15 +261,6 @@ class _LoginPageState extends State<LoginPage>
               ),
             ),
           ),
-//          new Container(
-//            alignment: Alignment.topRight,
-//            child: new Image(
-//              height: 200,
-//              image: AssetImage(
-//                Utils.getImgPath("login_icon"),
-//              ),
-//            ),
-//          ),
         ],
       ),
     );
@@ -323,59 +324,6 @@ class _LoginPageState extends State<LoginPage>
               _lPass = str;
             },
           ),
-//          new Container(
-//            margin: EdgeInsets.only(right: 15),
-//            child: new Row(
-//              children: <Widget>[
-//                new Expanded(
-//                  child: new MainInput(
-//                    hint: "验证码",
-//                    iconPath: "verfiycode",
-//                    defaultStr: _lVerfiyCode,
-//                    callback: (str) {
-//                      _lVerfiyCode = str;
-//                    },
-//                  ),
-//                  flex: 2,
-//                ),
-//                InkWell(
-//                  onTap: () {
-////                          _getVerfiyCodeImg();
-//                    if (!sms) {
-//                      sms = true;
-//                      _getsms();
-//                      reGetCountdown();
-//                    }
-//                  },
-//                  child: new Text(
-//                    _codeCountdownStr,
-//                    style: TextStyle(fontSize: 13),
-//                  ),
-//                )
-////                new Expanded(
-////                  child: new GestureDetector(
-////                      onTap: () {
-////                        _getVerfiyCodeImg();
-////                      },
-////                    child: _imgbytes == null
-////                        ? new InkWell(
-////                            onTap: () {
-////                              _getVerfiyCodeImg();
-////                            },
-////                            child: new Text(
-////                              "获取验证码",
-////                              style: TextStyle(fontSize: 13),
-////                            ),
-////                          )
-////                        : Image.memory(
-////                            _imgbytes,
-////                            height: 50,
-////                          ),
-////                  flex: 1,
-////                ),
-//              ],
-//            ),
-//          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
@@ -403,39 +351,8 @@ class _LoginPageState extends State<LoginPage>
                   )
                 ],
               ),
-//              new GestureDetector(
-//                onTap: () {
-//                  Navigator.of(context)
-//                      .push(new MaterialPageRoute(builder: (_) {
-//                    return new RegisterPage();
-//                  }));
-//                },
-//                child: new Container(
-//                  padding: EdgeInsets.only(right: 20),
-//                  child: new Text(
-//                    "用户注册",
-//                    style: TextStyle(color: Colors.blue),
-//                  ),
-//                ),
-//              )
             ],
           ),
-//          new Container(
-//            width: double.infinity,
-//            margin: EdgeInsets.only(left: 25, right: 25),
-//            child: new RaisedButton(
-//              color: const Color(0xff0091ea),
-//              onPressed: () {
-//                _startLogin();
-//              },
-//              child: new Text(
-//                "登录",
-//                style: new TextStyle(
-//                  color: Colors.white,
-//                ),
-//              ),
-//            ),
-//          ),
         ],
       ),
     );
@@ -450,15 +367,6 @@ class _LoginPageState extends State<LoginPage>
               _lPhone = str;
             },
           ),
-//          new MainInput(
-//            hint: "登录密码",
-//            iconPath: "password",
-//            defaultStr: _lPass == null ? "" : _lPass,
-//            isPass: true,
-//            callback: (str) {
-//              _lPass = str;
-//            },
-//          ),
           new Container(
             margin: EdgeInsets.only(right: 15),
             child: new Row(

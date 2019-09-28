@@ -40,6 +40,8 @@ class _AboutPageState extends State<DealInfoPage> {
       _time =
           "${time.year}-${time.month}-${time.day} ${time.hour}:${time.minute}:${time.second}";
       setState(() {});
+    },() {
+      Utils.relogin(context);
     }, params: params);
   }
 

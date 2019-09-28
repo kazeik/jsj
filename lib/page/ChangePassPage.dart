@@ -97,6 +97,8 @@ class _ChangePassPageState extends State<ChangePassPage> {
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_changepass, (str) {
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
+    },() {
+      Utils.relogin(context);
     }, data: formData);
   }
 }
