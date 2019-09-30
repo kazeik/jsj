@@ -60,7 +60,7 @@ class _MainPageState extends State<MainPage> {
     jpush.getRegistrationID().then((str) {
       Utils.logs("注册id = $str");
       if (isNotEmpty(str)) {
-        jpush.setAlias(str);
+//        jpush.setAlias(str);
         Utils.logs("开始注册推送");
         FormData formData = new FormData.fromMap({"alias": str});
         HttpNet.instance.request(
