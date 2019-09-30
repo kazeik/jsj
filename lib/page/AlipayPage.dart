@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:jsj/model/AccountQrcodeInfoModel.dart';
 import 'package:jsj/model/AccountQrcodeModel.dart';
 import 'package:jsj/model/BaseModel.dart';
@@ -15,7 +16,6 @@ import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/utils/ApiUtils.dart';
 import 'package:jsj/utils/Utils.dart';
 import 'package:quiver/strings.dart';
-import 'package:image_picker/image_picker.dart';
 
 /*
  * @author jingsong.chen, QQ:77132995, email:kazeik@163.com
@@ -177,15 +177,18 @@ class _AlipayPageState extends State<AlipayPage>
         physics: new NeverScrollableScrollPhysics(),
         children: <Widget>[
           new Center(
-            child: new Image(
-              image: isEmpty(path)
-                  ? AssetImage(
-                      Utils.getImgPath("jsjlogo"),
-                    )
-                  : NetworkImage(path),
-              width: 200,
-              height: 200,
-              fit: BoxFit.none,
+            child: new Container(
+              margin: EdgeInsets.all(15),
+              child: new Image(
+                image: isEmpty(path)
+                    ? AssetImage(
+                        Utils.getImgPath("jsjlogo"),
+                      )
+                    : NetworkImage(path),
+                width: 200,
+                height: 200,
+                fit: BoxFit.none,
+              ),
             ),
           ),
           new Container(
