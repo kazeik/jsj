@@ -63,12 +63,11 @@ class _MainPageState extends State<MainPage> {
 //        jpush.setAlias(str);
         Utils.logs("开始注册推送");
         FormData formData = new FormData.fromMap({"alias": str});
-        HttpNet.instance.request(
-            MethodTypes.POST, ApiUtils.post_alias, (str) {},() {
+        HttpNet.instance
+            .request(MethodTypes.POST, ApiUtils.post_alias, (str) {}, () {
           Navigator.of(context).pushNamedAndRemoveUntil(
               '/loginPage', ModalRoute.withName("/loginPage"));
-        },
-            data: formData);
+        }, data: formData);
       }
     });
   }
@@ -82,6 +81,11 @@ class _MainPageState extends State<MainPage> {
       // 接收通知回调方法。
       onReceiveNotification: (Map<String, dynamic> message) async {
         print("flutter onReceiveNotification: $message");
+//        jpush.sendLocalNotification(new LocalNotification(
+//            id: 1,
+//            title: message["title"],
+//            content: message["alert"],
+//            fireTime: DateTime.now()));
       },
       // 点击通知回调方法。
       onOpenNotification: (Map<String, dynamic> message) async {
