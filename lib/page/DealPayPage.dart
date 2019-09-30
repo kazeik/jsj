@@ -288,7 +288,9 @@ class _DealPayPageState extends State<DealPayPage> {
     FormData formData = new FormData.fromMap({
       "amount": _sellMoney,
     });
+    Utils.loading(context);
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_salecoin, (str) {
+      Navigator.of(context).pop();
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       if (model.status == 200) {
         isSale = true;
@@ -298,6 +300,7 @@ class _DealPayPageState extends State<DealPayPage> {
         Utils.showToast(model.msg);
       }
     }, () {
+      Navigator.of(context).pop();
       Utils.relogin(context);
     }, data: formData);
   }
