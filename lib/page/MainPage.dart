@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:jsj/model/BaseModel.dart';
 import 'package:jsj/net/HttpNet.dart';
 import 'package:jsj/net/MethodTyps.dart';
 import 'package:jsj/page/DealPage.dart';
 import 'package:jsj/page/HomePage.dart';
-import 'package:jsj/page/LoginPage.dart';
 import 'package:jsj/page/PropertyPage.dart';
 import 'package:jsj/page/UserPage.dart';
 import 'package:jsj/utils/ApiUtils.dart';
@@ -61,13 +61,16 @@ class _MainPageState extends State<MainPage> {
       Utils.logs("注册id = $str");
       if (isNotEmpty(str)) {
 //        jpush.setAlias(str);
-        Utils.logs("开始注册推送");
         FormData formData = new FormData.fromMap({"alias": str});
-        HttpNet.instance
-            .request(MethodTypes.POST, ApiUtils.post_alias, (str) {}, () {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              '/loginPage', ModalRoute.withName("/loginPage"));
-        }, data: formData);
+        Utils.logs("开始注册推送");
+        HttpNet.instance.request(
+            MethodTypes.POST,
+            ApiUtils.post_alias,
+            (str) {},
+            () {
+              Utils.relogin(context);
+            },
+            data: formData);
       }
     });
   }

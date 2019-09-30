@@ -387,16 +387,13 @@ class _DealBuyPageState extends State<DealBuyPage> {
       Utils.showToast("购买金额不能为空");
       return;
     }
-    Utils.loading(context);
     FormData formData =
         new FormData.fromMap({"amount": _buyMoney, "service_id": serviceValue});
     HttpNet.instance.request(MethodTypes.POST, ApiUtils.post_buycoin, (str) {
-      Navigator.of(context).pop();
       BaseModel model = BaseModel.fromJson(jsonDecode(str));
       Utils.showToast(model.msg);
       _getCurrentOrder();
     }, () {
-      Navigator.of(context).pop();
       Utils.relogin(context);
     }, data: formData);
   }

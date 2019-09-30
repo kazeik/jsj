@@ -187,7 +187,7 @@ class _AlipayPageState extends State<AlipayPage>
                     : NetworkImage(path),
                 width: 200,
                 height: 200,
-                fit: BoxFit.none,
+                fit: BoxFit.fill,
               ),
             ),
           ),

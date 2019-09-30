@@ -36,13 +36,14 @@ class HttpNet {
     _dio.options.baseUrl = ApiUtils.baseUrl;
     _dio.options.responseType = ResponseType.json;
     if (Utils.isDebug)
-      _dio.interceptors.add(LogInterceptor(responseBody: Utils.isDebug)); //开启请求日志
+      _dio.interceptors
+          .add(LogInterceptor(responseBody: Utils.isDebug)); //开启请求日志
   }
 
   request(MethodTypes methodTypes, String path, Function(String) success,
       Function relogin,
       {HashMap<String, dynamic> params,
-      Function(String) errorCallback,
+      Function(dynamic) errorCallback,
       dynamic data,
       HashMap<String, dynamic> headers}) async {
     CancelToken token = new CancelToken();
@@ -76,8 +77,10 @@ class HttpNet {
 
     try {
       if (path != ApiUtils.post_upload_img && path != ApiUtils.post_sendsms) {
-        BaseModel model = BaseModel.fromJson(jsonDecode(sValue.data));
-        if (sValue != null && isNotEmpty(sValue.data)) {
+        if (sValue != null &&
+            isNotEmpty(sValue.data) &&
+            sValue.data != "null") {
+          BaseModel model = BaseModel.fromJson(jsonDecode(sValue.data));
           if (model.status == 200) {
             success(sValue.data);
           } else if (model.status == 302) {
@@ -85,6 +88,8 @@ class HttpNet {
             relogin();
           } else {
             Utils.showToast(model.msg);
+            Utils.logs("当前状态码 ${model.status} 接口：$path");
+            errorCallback(model);
           }
         } else {
           errorCallback("");
